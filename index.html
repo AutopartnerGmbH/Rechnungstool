@@ -216,8 +216,14 @@ dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');ad
 document.getElementById('fi').addEventListener('change',e=>{addFiles([...e.target.files]);e.target.value=''});
 
 function addFiles(nf){
-  nf.forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size))files.push(f)});
+  const newOnes=[];
+  nf.forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size)){files.push(f);newOnes.push(files.length-1)}});
   renderList();
+  if(newOnes.length){
+    if(!getKey()){toast('Bitte zuerst den API Key unter Einstellungen eintragen.','te');showPage('einstellungen');return}
+    newOnes.forEach(i=>{results[i]={analyzing:true};reRender(i)});
+    Promise.all(newOnes.map(i=>analyseOne(i))).then(()=>toast('Analyse abgeschlossen.','ts'));
+  }
 }
 function removeFile(i){
   files.splice(i,1);
@@ -348,13 +354,15 @@ function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').repla
 // ── FORMAT AMOUNT ─────────────────────────────────────────
 function formatBetrag(raw){
   if(!raw) return '';
-  // extract numeric value
-  const clean=raw.replace(/\./g,'').replace(',','.');
-  const num=parseFloat(clean.replace(/[^0-9.]/g,''));
+  // strip everything except digits and comma/dot
+  let s=raw.replace(/[^\d,\.]/g,'').trim();
+  // German format: dots as thousands sep, comma as decimal
+  // Remove any dots (thousands), replace comma with dot for parseFloat
+  s=s.replace(/\./g,'').replace(',','.');
+  const num=parseFloat(s);
   if(isNaN(num)) return raw;
-  // format with german thousands separator
-  const formatted=num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2});
-  return formatted+'€';
+  // re-format with German locale (dot=thousands, comma=decimal)
+  return num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+'€';
 }
 
 function buildName(typ,nr,steller,datum,betrag){
