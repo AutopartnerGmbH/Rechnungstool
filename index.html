@@ -530,7 +530,16 @@ function exportXML() {
   a.download = 'Ueberweisungen_' + new Date().toISOString().slice(0,10) + '.xml';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
-  toast('XML exportiert (' + txs.length + ' Überweisungen).', 'tok');
+  // Bestätigungsmeldung und Tabelle leeren
+  var wrap = document.getElementById('xml-table-wrap');
+  if(wrap){
+    wrap.innerHTML = '<div style="background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:16px 20px;text-align:center">'
+      + '<div style="font-size:1.1rem;color:var(--ok);font-weight:600;margin-bottom:6px">✅ XML erfolgreich erstellt und heruntergeladen</div>'
+      + '<div style="font-size:.83rem;color:var(--mut)">' + txs.length + ' Überweisung(en) · ' + a.download + '</div>'
+      + '</div>';
+  }
+  document.getElementById('btn-xml-export').disabled = true;
+  toast('✅ XML mit ' + txs.length + ' Überweisung(en) exportiert.', 'tok');
 }
 
 function toISODate(ddmmyyyy) {
@@ -684,13 +693,19 @@ async function dlOne(i){
     toast('⬇️ '+name,'tok');
     var el=document.getElementById('item-'+i);
     if(el){
-      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:9px 14px">'
-        +'<span style="font-size:.79rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">✅ '+esc(name)+'</span>'
+      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;">'
+        +'<span style="font-size:.85rem;color:var(--ok);font-weight:500">✅ Erfolgreich heruntergeladen &mdash; </span>'
+        +'<span style="font-size:.78rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</span>'
         +(r.sepa?'<span class="bdg bdg-sepa">🔄 SEPA</span>':'<span class="bdg bdg-uew">💸 Überweisen</span>')
-        +'<button class="btn btn-sm" onclick="expandItem('+i+')">↕</button>'
-        +'<button class="btn btn-sm btn-er" onclick="removeFile('+i+')">🗑️</button>'
         +'</div>';
       el.className='fitem s-ok';
+      el.style.transition='opacity 0.4s';
+      (function(el,idx){
+        setTimeout(function(){
+          el.style.opacity='0';
+          setTimeout(function(){ removeFile(idx); },420);
+        },2000);
+      })(el,i);
     }
   }catch(e){toast('Download fehlgeschlagen.','ter');}
 }
