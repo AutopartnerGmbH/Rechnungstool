@@ -93,12 +93,15 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
 .xml-table td input:focus{border-color:var(--acc)}
 .xml-empty{text-align:center;padding:24px;color:var(--mut);font-size:.88rem}
 /* SUPPLIER PAGE */
-.srow{display:flex;gap:7px;align-items:center;padding:8px 0;border-bottom:1px solid var(--brd)}
-.srow:last-child{border-bottom:none}
-.sin{flex:1;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:6px 9px;color:var(--txt);font-size:.83rem;font-family:inherit;outline:none;transition:border-color .15s}
+.srow{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.srow:last-child{margin-bottom:0}
+.srow-top{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+.srow-bot{display:grid;grid-template-columns:1fr 120px 120px;gap:8px}
+.sin{flex:1;background:var(--sur3);border:1px solid var(--brd);border-radius:var(--rs);padding:6px 9px;color:var(--txt);font-size:.83rem;font-family:inherit;outline:none;transition:border-color .15s;width:100%}
 .sin:focus{border-color:var(--acc)}
 .sin-mono{font-family:'Consolas',monospace;font-size:.78rem}
 .sin-sm{max-width:120px}
+.slabel{font-size:.68rem;color:var(--mut);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
 .empty{text-align:center;padding:32px;color:var(--mut);font-size:.88rem}
 /* SETTINGS */
 .slbl{font-size:.82rem;color:var(--mut);margin-bottom:6px;display:block}
@@ -163,7 +166,7 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
   <div class="pg" id="pg-lieferanten">
     <div class="card">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div class="ctitle" style="margin-bottom:0">🏪 Gespeicherte Lieferanten</div><div id="sup-uew-counter" style="font-size:.78rem;color:var(--mut)"></div></div>
-      <p style="font-size:.83rem;color:var(--mut);margin-bottom:8px">IBAN und BIC werden automatisch aus der Rechnung gelesen und hier gespeichert.</p><div style="display:flex;gap:7px;font-size:.7rem;color:var(--mut);padding:0 0 6px 0;border-bottom:1px solid var(--brd);margin-bottom:4px"><span style="flex:1;min-width:130px">Name auf Rechnung</span><span style="width:4px"></span><span style="max-width:110px;flex:1">Kurzname</span><span style="max-width:44px">Typ</span><span style="max-width:120px">Zahlungsart</span><span style="flex:1">IBAN</span><span style="max-width:90px">BIC</span><span style="max-width:100px">Kd-Nr.</span><span style="width:36px"></span></div>
+      <p style="fonttom:14px">IBAN, BIC und Kundennummer werden automatisch aus der Rechnung gelesen. Zahlungsart überschreibt die KI-Erkennung.</p>
       <div id="slist"></div>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-sm" onclick="addSupManual()">➕ Hinzufügen</button>
@@ -307,7 +310,7 @@ function renderItem(f, i) {
   var badge = '<span class="bdg bdg-pend">⏳ Ausstehend</span>';
   var sc = 'fitem';
   if (r) {
-    if (r.analyzing) { badge = '<span class="bdg bdg-anlz"><span class="spin"></span> Analysiere…</span>'; sc = 'fitem s-anlz'; }
+    if (r.analyzing) { badge = r.retrying ? '<span class="bdg bdg-anlz"><span class="spin"></span> Erneuter Versuch…</span>' : '<span class="bdg bdg-anlz"><span class="spin"></span> Analysiere…</span>'; sc = 'fitem s-anlz'; }
     else if (r.error) { badge = '<span class="bdg bdg-err">❌ Fehler</span>'; sc = 'fitem s-err'; }
     else if (r.pendingSup && !r.supSaved) { badge = '<span class="bdg bdg-new">🆕 Neuer Lieferant</span>'; sc = 'fitem s-new'; }
     else if (!r.confirmed) { badge = '<span class="bdg bdg-conf">👀 Bitte bestätigen</span>'; sc = 'fitem s-conf'; }
@@ -677,20 +680,28 @@ function updateSupBank(short,iban,bic,kundennr){
 }
 
 // ── ANALYSE ───────────────────────────────────────────────
-async function analyseOne(i){
+async function analyseOne(i, attempt){
+  if(!attempt) attempt = 1;
   try{
     var b64=await toB64(files[i]);
     var prompt='Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurueck, ohne Erklaerungen:\n'
       +'{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung)","nr":"Rechnungsnummer","steller_roh":"Firmenname Rechnungssteller exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Brutto-Gesamtbetrag z.B. 238,00EUR","sepa":true oder false,"sepa_info":"Kurzer Hinweis falls SEPA z.B. Abbuchung am 13.06.2026 oder leer","iban":"IBAN des Lieferanten falls auf Rechnung angegeben sonst leer","bic":"BIC des Lieferanten falls auf Rechnung angegeben sonst leer","kundennr":"Kundennummer von Autopartner beim Lieferanten falls erkennbar sonst leer"}';
 
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[
-        {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
-        {type:'text',text:prompt}
-      ]}]})
-    });
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); }, 30000);
+    var resp;
+    try {
+      resp=await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST',
+        signal:controller.signal,
+        headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[
+          {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
+          {type:'text',text:prompt}
+        ]}]})
+      });
+    } finally { clearTimeout(timeout); }
+    if(!resp.ok) throw new Error('Server-Fehler: '+resp.status);
     var data=await resp.json();
     if(data.error) throw new Error(data.error.message);
     var rawText=(data.content||[]).map(function(c){return c.text||'';}).join('');
@@ -714,7 +725,16 @@ async function analyseOne(i){
       reRender(i);
     }
   }catch(e){
-    results[i]={error:'Analysefehler: '+e.message};
+    if(e.name === 'AbortError' && attempt < 2){
+      // erster Timeout: automatisch nochmal versuchen
+      results[i]={analyzing:true,retrying:true};
+      reRender(i);
+      return analyseOne(i, 2);
+    }
+    var msg = e.name === 'AbortError'
+      ? 'Zeitüberschreitung nach 2 Versuchen — bitte Verbindung prüfen.'
+      : 'Analysefehler: '+e.message;
+    results[i]={error:msg};
     reRender(i);
   }
 }
@@ -821,20 +841,34 @@ function renderSups(){
     + ' &nbsp;·&nbsp; <span style="color:var(--acc)">🔄 ' + sepaSups + ' SEPA</span>'
     + ' &nbsp;·&nbsp; <span>🤖 ' + autoSups + ' Auto</span>';
   list.innerHTML=sups.map(function(s,i){
+    var zahlBadge = s.zahlart==='uew'
+      ? '<span style="color:var(--pu);font-size:.75rem">💸 Überweisung</span>'
+      : s.zahlart==='sepa'
+        ? '<span style="color:var(--acc);font-size:.75rem">🔄 SEPA</span>'
+        : '<span style="color:var(--mut);font-size:.75rem">🤖 Auto</span>';
     return '<div class="srow">'
-      +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung" style="min-width:130px">'
-      +'<span style="color:var(--mut);flex-shrink:0;font-size:.8rem">→</span>'
-      +'<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" style="max-width:110px">'
-      +'<select class="sin st sin-sm" title="Dokumenttyp"><option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option><option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option></select>'
-      +'<select class="sin sz sin-sm" title="Zahlungsart" style="max-width:120px">'
+      // TOP ROW: name → short, typ, zahlart, delete
+      +'<div class="srow-top">'
+      +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung (Erkennungsname)">'
+      +'<span style="color:var(--mut);flex-shrink:0;font-size:.85rem">→</span>'
+      +'<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" style="max-width:140px">'
+      +'<select class="sin st" style="max-width:70px" title="Dokumenttyp">'
+      +'<option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option>'
+      +'<option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option>'
+      +'</select>'
+      +'<select class="sin sz" style="max-width:150px" title="Zahlungsart">'
       +'<option value="auto"'+((!s.zahlart||s.zahlart==='auto')?' selected':'')+'>🤖 Auto</option>'
       +'<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
       +'<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA-Abbuchung</option>'
       +'</select>'
-      +'<input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="IBAN">'
-      +'<input class="sin sb sin-mono sin-sm" value="'+esc(s.bic||'')+'" placeholder="BIC">'
-      +'<input class="sin sk sin-sm" value="'+esc(s.kundennr||'')+'" placeholder="Kd-Nr." style="max-width:100px">'
-      +'<button class="btn btn-sm btn-er" onclick="delSup('+i+')">🗑️</button>'
+      +'<button class="btn btn-sm btn-er" style="flex-shrink:0" onclick="delSup('+i+')">🗑️</button>'
+      +'</div>'
+      // BOTTOM ROW: IBAN, BIC, Kd-Nr
+      +'<div class="srow-bot">'
+      +'<div><div class="slabel">IBAN</div><input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="DE12 3456 …"></div>'
+      +'<div><div class="slabel">BIC</div><input class="sin sb sin-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX"></div>'
+      +'<div><div class="slabel">Kunden-Nr.</div><input class="sin sk" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21"></div>'
+      +'</div>'
       +'</div>';
   }).join('');
 }
