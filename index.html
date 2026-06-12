@@ -410,7 +410,7 @@ async function analyseOne(i){
     const known=findSup(stellerRoh);
 
     if(known){
-      results[i]={typ:p.typ||'RE',nr:p.nr||'',steller:known.short,datum:p.datum||'',betrag:p.betrag||'',confirmed:false};
+      results[i]={typ:p.typ||'RE',nr:p.nr||'',steller:known.short,datum:p.datum||'',betrag:p.betrag||'',confirmed:true,autoDownloaded:false};
     } else {
       const shortSug=stellerRoh.split(' ').slice(0,2).join(' ');
       results[i]={typ:p.typ||'RE',nr:p.nr||'',steller:shortSug,datum:p.datum||'',betrag:p.betrag||'',pendingSupplier:true,stellerRoh,confirmed:false};
@@ -419,7 +419,11 @@ async function analyseOne(i){
     results[i]={error:e.message};
   }
   reRender(i);
-}
+  // bekannter Lieferant → sofort automatisch herunterladen
+  if(results[i]&&results[i].confirmed&&!results[i].error&&results[i].nr&&!results[i].autoDownloaded){
+    results[i].autoDownloaded=true;
+    await downloadOne(i);
+  }
 
 // ── SUPPLIER FLOW ─────────────────────────────────────────
 function updSupPrev(i){
@@ -442,6 +446,7 @@ function saveSup(i){
   results[i]={...results[i],steller:short,typ,supSaved:true};
   reRender(i);
   toast(`Lieferant „${short}" gespeichert.`,'ts');
+  // zeige Bestätigungs-Schritt (kein auto-download, Benutzer muss einmalig bestätigen)
 }
 
 function skipSup(i){
@@ -466,15 +471,15 @@ function editName(i){
 
 function confirmFile(i){
   const r=results[i];if(!r) return;
-  // check if name was manually edited
   const el=document.getElementById('rname-'+i);
   if(el&&el.isContentEditable){
     const edited=el.textContent.trim().replace(/\.pdf$/i,'');
     if(edited) results[i]._customName=edited;
   }
   results[i].confirmed=true;
+  results[i].autoDownloaded=true;
   reRender(i);
-  toast('Datei bestätigt — bereit zum Herunterladen.','ts');
+  downloadOne(i);
 }
 
 // ── DOWNLOAD ──────────────────────────────────────────────
