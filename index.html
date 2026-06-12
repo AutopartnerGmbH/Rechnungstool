@@ -162,8 +162,8 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
   <!-- LIEFERANTEN -->
   <div class="pg" id="pg-lieferanten">
     <div class="card">
-      <div class="ctitle">🏪 Gespeicherte Lieferanten</div>
-      <p style="font-size:.83rem;color:var(--mut);margin-bottom:8px">IBAN und BIC werden automatisch aus der Rechnung gelesen und hier gespeichert.</p><div style="display:flex;gap:7px;font-size:.7rem;color:var(--mut);padding:0 0 6px 0;border-bottom:1px solid var(--brd);margin-bottom:4px"><span style="flex:1;min-width:130px">Name auf Rechnung</span><span style="width:4px"></span><span style="max-width:110px;flex:1">Kurzname</span><span style="max-width:44px">Typ</span><span style="max-width:120px">Zahlungsart</span><span style="flex:1">IBAN</span><span style="max-width:90px">BIC</span><span style="width:36px"></span></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px"><div class="ctitle" style="margin-bottom:0">🏪 Gespeicherte Lieferanten</div><div id="sup-uew-counter" style="font-size:.78rem;color:var(--mut)"></div></div>
+      <p style="font-size:.83rem;color:var(--mut);margin-bottom:8px">IBAN und BIC werden automatisch aus der Rechnung gelesen und hier gespeichert.</p><div style="display:flex;gap:7px;font-size:.7rem;color:var(--mut);padding:0 0 6px 0;border-bottom:1px solid var(--brd);margin-bottom:4px"><span style="flex:1;min-width:130px">Name auf Rechnung</span><span style="width:4px"></span><span style="max-width:110px;flex:1">Kurzname</span><span style="max-width:44px">Typ</span><span style="max-width:120px">Zahlungsart</span><span style="flex:1">IBAN</span><span style="max-width:90px">BIC</span><span style="max-width:100px">Kd-Nr.</span><span style="width:36px"></span></div>
       <div id="slist"></div>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-sm" onclick="addSupManual()">➕ Hinzufügen</button>
@@ -447,7 +447,7 @@ function addStoredTransfer(r, fileName) {
   // avoid duplicate by nr+steller
   var exists = transfers.some(function(t){ return t.nr === r.nr && t.steller === r.steller; });
   if (!exists) {
-    transfers.push({ steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: r.iban || '', bic: r.bic || '', fileName: fileName });
+    transfers.push({ steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: r.iban || '', bic: r.bic || '', kundennr: r.kundennr || '', fileName: fileName });
     saveStoredTransfers(transfers);
   }
 }
@@ -463,14 +463,16 @@ function renderSepaTable() {
       var r = results[i];
       var supIban = getSupIban(r.steller) || r.iban || '';
       var supBic  = getSupBic(r.steller)  || r.bic  || '';
-      rows.push({ source: 'live', idx: i, steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: supIban, bic: supBic });
+      var supKdNr = getSupKdNr(r.steller) || r.kundennr || '';
+      rows.push({ source: 'live', idx: i, steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: supIban, bic: supBic, kundennr: supKdNr });
     }
   });
   // Add stored transfers (already downloaded, not yet exported)
   getStoredTransfers().forEach(function(t, si) {
     var supIban = getSupIban(t.steller) || t.iban || '';
     var supBic  = getSupBic(t.steller)  || t.bic  || '';
-    rows.push({ source: 'stored', si: si, steller: t.steller, nr: t.nr, betrag: t.betrag, datum: t.datum, iban: supIban, bic: supBic });
+    var storedKdNr = getSupKdNr(t.steller) || t.kundennr || '';
+    rows.push({ source: 'stored', si: si, steller: t.steller, nr: t.nr, betrag: t.betrag, datum: t.datum, iban: supIban, bic: supBic, kundennr: storedKdNr });
   });
 
   if (!rows.length) {
@@ -488,7 +490,7 @@ function renderSepaTable() {
       + '<td>' + esc(row.nr) + '</td>'
       + '<td><input class="xml-iban" data-k="' + k + '" value="' + esc(row.iban) + '" placeholder="DE…" style="font-family:Consolas;min-width:190px"></td>'
       + '<td><input class="xml-bic"  data-k="' + k + '" value="' + esc(row.bic)  + '" placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:100px"></td>'
-      + '<td><input class="xml-date" data-k="' + k + '" value="' + esc(row.datum) + '" placeholder="TT.MM.JJJJ" style="min-width:90px"></td>'
+      + '<td><input class="xml-date" data-k="' + k + '" value="' + todayDE() + '" placeholder="TT.MM.JJJJ" style="min-width:90px"></td>'
       + '<td><button class="btn btn-sm btn-er" onclick="removeTransferRow(' + k + ')">🗑️</button></td>'
       + '</tr>';
   });
@@ -538,7 +540,7 @@ function exportXML() {
     var amt = parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.'));
     if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + steller, 'ter'); return; }
     var execDate = toISODate(rawDate);
-    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate });
+    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate, datum: row.datum || '', kundennr: row.kundennr || '' });
     updateSupBank(steller, iban, bic);
   }
 
@@ -578,7 +580,7 @@ function exportXML() {
           + (t.bic ? '        <CdtrAgt><FinInstnId><BIC>' + xmlEsc(t.bic) + '</BIC></FinInstnId></CdtrAgt>\n' : '')
           + '        <Cdtr><Nm>' + xmlEsc(t.steller) + '</Nm></Cdtr>\n'
           + '        <CdtrAcct><Id><IBAN>' + xmlEsc(t.iban) + '</IBAN></Id></CdtrAcct>\n'
-          + '        <RmtInf><Ustrd>Rechnung ' + xmlEsc(t.nr) + '</Ustrd></RmtInf>\n'
+          + '        <RmtInf><Ustrd>' + xmlEsc('RE ' + t.nr + ' vom ' + t.datum + (t.kundennr ? '\nKD-NR: ' + t.kundennr : '')) + '</Ustrd></RmtInf>\n'
           + '      </CdtTrfTxInf>';
       }).join('\n')
     + '\n    </PmtInf>\n'
@@ -607,10 +609,18 @@ function exportXML() {
 }
 
 function toISODate(ddmmyyyy) {
-  if (!ddmmyyyy) { var d = new Date(); d.setDate(d.getDate()+2); return d.toISOString().slice(0,10); }
+  if (!ddmmyyyy) { return new Date().toISOString().slice(0,10); }
   var p = ddmmyyyy.split('.');
-  if (p.length === 3) return p[2] + '-' + p[1] + '-' + p[0];
+  if (p.length === 3 && p[2].length === 4) return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
   return new Date().toISOString().slice(0,10);
+}
+
+function todayDE() {
+  var d = new Date();
+  var dd = String(d.getDate()).padStart(2,'0');
+  var mm = String(d.getMonth()+1).padStart(2,'0');
+  var yyyy = d.getFullYear();
+  return dd + '.' + mm + '.' + yyyy;
 }
 
 function xmlEsc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
@@ -654,10 +664,16 @@ function findSup(stellerRoh){
 function isDupSup(raw){return!!findSup(raw);}
 function getSupIban(short){var s=getSups().find(function(x){return x.short===short;});return s?s.iban||'':'';}
 function getSupBic(short){var s=getSups().find(function(x){return x.short===short;});return s?s.bic||'':'';}
-function updateSupBank(short,iban,bic){
+function getSupKdNr(short){var s=getSups().find(function(x){return x.short===short;});return s?s.kundennr||'':'';}  
+function updateSupBank(short,iban,bic,kundennr){
   var sups=getSups();
   var s=sups.find(function(x){return x.short===short;});
-  if(s){if(iban)s.iban=iban;if(bic)s.bic=bic;saveSupList(sups);}
+  if(s){
+    if(iban)s.iban=iban;
+    if(bic)s.bic=bic;
+    if(kundennr)s.kundennr=kundennr;
+    saveSupList(sups);
+  }
 }
 
 // ── ANALYSE ───────────────────────────────────────────────
@@ -665,7 +681,7 @@ async function analyseOne(i){
   try{
     var b64=await toB64(files[i]);
     var prompt='Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurueck, ohne Erklaerungen:\n'
-      +'{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung)","nr":"Rechnungsnummer","steller_roh":"Firmenname Rechnungssteller exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Brutto-Gesamtbetrag z.B. 238,00EUR","sepa":true oder false,"sepa_info":"Kurzer Hinweis falls SEPA z.B. Abbuchung am 13.06.2026 oder leer","iban":"IBAN des Lieferanten falls auf Rechnung angegeben sonst leer","bic":"BIC des Lieferanten falls auf Rechnung angegeben sonst leer"}';
+      +'{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung)","nr":"Rechnungsnummer","steller_roh":"Firmenname Rechnungssteller exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Brutto-Gesamtbetrag z.B. 238,00EUR","sepa":true oder false,"sepa_info":"Kurzer Hinweis falls SEPA z.B. Abbuchung am 13.06.2026 oder leer","iban":"IBAN des Lieferanten falls auf Rechnung angegeben sonst leer","bic":"BIC des Lieferanten falls auf Rechnung angegeben sonst leer","kundennr":"Kundennummer von Autopartner beim Lieferanten falls erkennbar sonst leer"}';
 
     var resp=await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -686,15 +702,15 @@ async function analyseOne(i){
     var bic=(parsed.bic||'').replace(/\s/g,'').toUpperCase();
 
     // update stored IBAN/BIC if found on invoice
-    if(known&&iban) updateSupBank(known.short,iban,bic);
+    if(known) updateSupBank(known.short,iban,bic,parsed.kundennr||'');
 
     if(known){
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,confirmed:true};
+      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
       reRender(i);
       await dlOne(i);
     } else {
       var shortSug=stellerRoh.split(/[\s,]+/).slice(0,2).join(' ');
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
+      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
       reRender(i);
     }
   }catch(e){
@@ -720,7 +736,7 @@ function confirmSup(i){
     reRender(i);toast('Lieferant bereits vorhanden — wurde zugeordnet.','tok');return;
   }
   var sups=getSups();
-  sups.push({raw:raw,short:short,typ:typ,zahlart:'auto',iban:results[i].iban||'',bic:results[i].bic||''});
+  sups.push({raw:raw,short:short,typ:typ,zahlart:'auto',iban:results[i].iban||'',bic:results[i].bic||'',kundennr:results[i].kundennr||''});
   saveSupList(sups);
   results[i]=Object.assign({},results[i],{steller:short,typ:typ,supSaved:true,pendingSup:false});
   reRender(i);toast('Lieferant "'+short+'" gespeichert.','tok');
@@ -796,6 +812,14 @@ function saveSupList(s){localStorage.setItem('re_sups',JSON.stringify(s));}
 function renderSups(){
   var sups=getSups(),list=document.getElementById('slist');
   if(!sups.length){list.innerHTML='<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>';return;}
+  // update counter
+  var uewSups = sups.filter(function(s){ return s.zahlart === 'uew'; }).length;
+  var sepaSups = sups.filter(function(s){ return s.zahlart === 'sepa'; }).length;
+  var autoSups = sups.filter(function(s){ return !s.zahlart || s.zahlart === 'auto'; }).length;
+  var ctr = document.getElementById('sup-uew-counter');
+  if(ctr) ctr.innerHTML = '<span style="color:var(--pu)">💸 ' + uewSups + ' Überweisung</span>'
+    + ' &nbsp;·&nbsp; <span style="color:var(--acc)">🔄 ' + sepaSups + ' SEPA</span>'
+    + ' &nbsp;·&nbsp; <span>🤖 ' + autoSups + ' Auto</span>';
   list.innerHTML=sups.map(function(s,i){
     return '<div class="srow">'
       +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung" style="min-width:130px">'
@@ -809,6 +833,7 @@ function renderSups(){
       +'</select>'
       +'<input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="IBAN">'
       +'<input class="sin sb sin-mono sin-sm" value="'+esc(s.bic||'')+'" placeholder="BIC">'
+      +'<input class="sin sk sin-sm" value="'+esc(s.kundennr||'')+'" placeholder="Kd-Nr." style="max-width:100px">'
       +'<button class="btn btn-sm btn-er" onclick="delSup('+i+')">🗑️</button>'
       +'</div>';
   }).join('');
@@ -820,7 +845,8 @@ function saveSupsFromUI(){
       typ:row.querySelector('.st').value||'RE',
       zahlart:row.querySelector('.sz')?row.querySelector('.sz').value||'auto':'auto',
       iban:(row.querySelector('.si').value||'').replace(/\s/g,'').toUpperCase(),
-      bic:(row.querySelector('.sb').value||'').replace(/\s/g,'').toUpperCase()};
+      bic:(row.querySelector('.sb').value||'').replace(/\s/g,'').toUpperCase(),
+      kundennr:(row.querySelector('.sk')?(row.querySelector('.sk').value||'').trim():'')};
   }).filter(function(s){return s.raw;});
   var seen=[];
   sups=sups.filter(function(s){var n=normalize(s.raw);if(seen.indexOf(n)!==-1)return false;seen.push(n);return true;});
