@@ -491,19 +491,7 @@ function toast(msg, cls) {
 async function analyseOne(i) {
   try {
     var b64 = await toB64(files[i]);
-    var sups = getSups();
-    var supHint = sups.length
-      ? '\n\nBekannte Lieferanten (Kurzname exakt verwenden bei Treffer): '
-        + sups.map(function(s){ return '"' + s.raw + '" → "' + s.short + '"'; }).join(', ')
-      : '';
-    var prompt = 'Analysiere diese Rechnung. Antworte NUR mit JSON, kein Text davor oder danach:\n'
-      + '{\n'
-      + '  "typ": "RE" oder "GS" (GS fuer Gutschrift/Stornorechnung/Rechnungskorrektur),\n'
-      + '  "nr": "Rechnungsnummer oder Belegnummer als String",\n'
-      + '  "steller_roh": "Firmenname des Rechnungsstellers exakt wie auf der Rechnung (nicht Autopartner GmbH)",\n'
-      + '  "datum": "Rechnungsdatum im Format TT.MM.JJJJ",\n'
-      + '  "betrag": "Brutto-Gesamtbetrag mit Komma und Euro-Zeichen, z.B. 238,00EUR oder 2150,60EUR"\n'
-      + '}' + supHint;
+    var prompt = 'Analysiere diese Rechnung und gib NUR ein JSON-Objekt zurueck, ohne Text davor oder danach: {"typ":"RE oder GS (GS=Gutschrift/Storno)","nr":"Rechnungsnummer","steller_roh":"Firmenname Absender exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Bruttobetrag mit Komma und Euro-Zeichen z.B. 2150,60EUR"}';
 
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -673,11 +661,19 @@ function getSups() {
   try { return JSON.parse(localStorage.getItem('re_sups') || '[]'); } catch(e) { return []; }
 }
 function saveSupList(s) { localStorage.setItem('re_sups', JSON.stringify(s)); }
+function normStr(s) {
+  return (s || "").toLowerCase().replace(/[^a-z0-9äöüß]/g, " ").replace(/\s+/g, " ").trim();
+}
 function findSup(text) {
   if (!text) return null;
   var sups = getSups();
   for (var i = 0; i < sups.length; i++) {
-    if (sups[i].raw && text.toLowerCase().includes(sups[i].raw.toLowerCase())) return sups[i];
+    var rawNorm = normStr(sups[i].raw);
+    var textNorm = normStr(text);
+    if (!rawNorm) continue;
+    if (textNorm.includes(rawNorm) || rawNorm.includes(textNorm)) return sups[i];
+    var rawWords = rawNorm.split(" ").filter(function(w){ return w.length > 2; });
+    if (rawWords.length && rawWords.every(function(w){ return textNorm.includes(w); })) return sups[i];
   }
   return null;
 }
