@@ -119,7 +119,7 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
   <div class="logo"><div class="logo-icon">📄</div>Rechnungs-Umbenenner</div>
   <nav>
     <button class="nb on" id="nav-analyse" onclick="showPg('analyse')">📥 Analyse</button>
-    <button class="nb" id="nav-sepa" onclick="showPg('sepa')">🏦 Überweisungen</button>
+    <button class="nb" id="nav-sepa" onclick="showPg('sepa')">🏦 Überweisungen <span id="sepa-badge" style="display:none;background:var(--pu);color:#fff;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:3px;vertical-align:middle">0</span></button>
     <button class="nb" id="nav-lieferanten" onclick="showPg('lieferanten')">🏪 Lieferanten</button>
     <button class="nb" id="nav-einstellungen" onclick="showPg('einstellungen')">⚙️ Einstellungen</button>
   </nav>
@@ -163,7 +163,7 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
   <div class="pg" id="pg-lieferanten">
     <div class="card">
       <div class="ctitle">🏪 Gespeicherte Lieferanten</div>
-      <p style="font-size:.83rem;color:var(--mut);margin-bottom:12px">IBAN und BIC werden automatisch aus der Rechnung gelesen und hier gespeichert.</p>
+      <p style="font-size:.83rem;color:var(--mut);margin-bottom:8px">IBAN und BIC werden automatisch aus der Rechnung gelesen und hier gespeichert.</p><div style="display:flex;gap:7px;font-size:.7rem;color:var(--mut);padding:0 0 6px 0;border-bottom:1px solid var(--brd);margin-bottom:4px"><span style="flex:1;min-width:130px">Name auf Rechnung</span><span style="width:4px"></span><span style="max-width:110px;flex:1">Kurzname</span><span style="max-width:44px">Typ</span><span style="max-width:120px">Zahlungsart</span><span style="flex:1">IBAN</span><span style="max-width:90px">BIC</span><span style="width:36px"></span></div>
       <div id="slist"></div>
       <div style="margin-top:12px;display:flex;gap:8px">
         <button class="btn btn-sm" onclick="addSupManual()">➕ Hinzufügen</button>
@@ -406,47 +406,110 @@ function updDlAll() {
 
 function updToolbar() {
   var uewCount = 0;
+  // count all pending transfers: confirmed, not sepa (or sepa overridden by supplier setting), not yet xml-exported
   files.forEach(function(_, i) {
-    if (results[i] && results[i].confirmed && !results[i].sepa && results[i].nr) uewCount++;
+    if (isTransfer(i)) uewCount++;
   });
+  // also count stored transfers not in current file list
+  var stored = getStoredTransfers();
+  var totalUew = uewCount + stored.length;
   document.getElementById('uew-cnt').textContent = uewCount;
-  document.getElementById('btn-sepa-pg').disabled = uewCount === 0;
+  document.getElementById('btn-sepa-pg').disabled = totalUew === 0;
+  var badge = document.getElementById('sepa-badge');
+  if (badge) {
+    badge.textContent = totalUew;
+    badge.style.display = totalUew > 0 ? 'inline' : 'none';
+  }
 }
+
+function isTransfer(i) {
+  var r = results[i];
+  if (!r || !r.confirmed || r.error || !r.nr) return false;
+  // check supplier payment preference
+  var sup = findSup(r.steller) || findSupByShort(r.steller);
+  if (sup && sup.zahlart === 'uew') return true;
+  if (sup && sup.zahlart === 'sepa') return false;
+  // fallback to AI detection
+  return !r.sepa;
+}
+
+function findSupByShort(short) {
+  return getSups().find(function(s){ return s.short === short; }) || null;
+}
+
+// Persistent transfer store - survives file removal
+function getStoredTransfers() {
+  try { return JSON.parse(localStorage.getItem('re_transfers') || '[]'); } catch(e) { return []; }
+}
+function saveStoredTransfers(t) { localStorage.setItem('re_transfers', JSON.stringify(t)); }
+function addStoredTransfer(r, fileName) {
+  var transfers = getStoredTransfers();
+  // avoid duplicate by nr+steller
+  var exists = transfers.some(function(t){ return t.nr === r.nr && t.steller === r.steller; });
+  if (!exists) {
+    transfers.push({ steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: r.iban || '', bic: r.bic || '', fileName: fileName });
+    saveStoredTransfers(transfers);
+  }
+}
+function clearStoredTransfers() { localStorage.removeItem('re_transfers'); }
 
 // ── SEPA XML TABLE ────────────────────────────────────────
 function renderSepaTable() {
   var wrap = document.getElementById('xml-table-wrap');
+  // Collect from current file results
   var rows = [];
   files.forEach(function(f, i) {
-    var r = results[i];
-    if (r && r.confirmed && !r.sepa && r.nr) {
+    if (isTransfer(i)) {
+      var r = results[i];
       var supIban = getSupIban(r.steller) || r.iban || '';
       var supBic  = getSupBic(r.steller)  || r.bic  || '';
-      rows.push({ idx: i, steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: supIban, bic: supBic });
+      rows.push({ source: 'live', idx: i, steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: supIban, bic: supBic });
     }
+  });
+  // Add stored transfers (already downloaded, not yet exported)
+  getStoredTransfers().forEach(function(t, si) {
+    var supIban = getSupIban(t.steller) || t.iban || '';
+    var supBic  = getSupBic(t.steller)  || t.bic  || '';
+    rows.push({ source: 'stored', si: si, steller: t.steller, nr: t.nr, betrag: t.betrag, datum: t.datum, iban: supIban, bic: supBic });
   });
 
   if (!rows.length) {
-    wrap.innerHTML = '<div class="xml-empty">Noch keine offenen Überweisungen. Lade Rechnungen hoch und analysiere sie.</div>';
+    wrap.innerHTML = '<div class="xml-empty">Noch keine offenen Überweisungen.</div>';
     document.getElementById('btn-xml-export').disabled = true;
     return;
   }
 
   var html = '<table class="xml-table">'
-    + '<thead><tr><th>Empfänger</th><th>Betrag</th><th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th></tr></thead><tbody>';
-  rows.forEach(function(row) {
+    + '<thead><tr><th>Empfänger</th><th>Betrag</th><th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th><th></th></tr></thead><tbody>';
+  rows.forEach(function(row, k) {
     html += '<tr>'
       + '<td>' + esc(row.steller) + '</td>'
       + '<td><b>' + esc(formatBetrag(row.betrag)) + '</b></td>'
       + '<td>' + esc(row.nr) + '</td>'
-      + '<td><input class="xml-iban" data-idx="' + row.idx + '" value="' + esc(row.iban) + '" placeholder="DE…" style="font-family:Consolas;min-width:200px"></td>'
-      + '<td><input class="xml-bic"  data-idx="' + row.idx + '" value="' + esc(row.bic)  + '" placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:110px"></td>'
-      + '<td><input class="xml-date" data-idx="' + row.idx + '" value="' + esc(row.datum) + '" placeholder="TT.MM.JJJJ" style="min-width:100px"></td>'
+      + '<td><input class="xml-iban" data-k="' + k + '" value="' + esc(row.iban) + '" placeholder="DE…" style="font-family:Consolas;min-width:190px"></td>'
+      + '<td><input class="xml-bic"  data-k="' + k + '" value="' + esc(row.bic)  + '" placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:100px"></td>'
+      + '<td><input class="xml-date" data-k="' + k + '" value="' + esc(row.datum) + '" placeholder="TT.MM.JJJJ" style="min-width:90px"></td>'
+      + '<td><button class="btn btn-sm btn-er" onclick="removeTransferRow(' + k + ')">🗑️</button></td>'
       + '</tr>';
   });
   html += '</tbody></table>';
+  // store rows reference for export
+  window._sepaRows = rows;
   wrap.innerHTML = html;
   document.getElementById('btn-xml-export').disabled = false;
+}
+
+function removeTransferRow(k) {
+  var rows = window._sepaRows || [];
+  var row = rows[k];
+  if (!row) return;
+  if (row.source === 'stored') {
+    var stored = getStoredTransfers();
+    stored.splice(row.si, 1);
+    saveStoredTransfers(stored);
+  }
+  renderSepaTable();
+  updToolbar();
 }
 
 function exportXML() {
@@ -459,26 +522,24 @@ function exportXML() {
   var ibanInputs = document.querySelectorAll('.xml-iban');
   var bicInputs  = document.querySelectorAll('.xml-bic');
   var dateInputs = document.querySelectorAll('.xml-date');
+  var rows = window._sepaRows || [];
 
   // collect transactions
   var txs = [];
   for (var k = 0; k < ibanInputs.length; k++) {
-    var idx = parseInt(ibanInputs[k].dataset.idx);
-    var r = results[idx];
-    if (!r) continue;
+    var row = rows[k] || {};
+    var steller = row.steller || '';
+    var nr = row.nr || '';
+    var betrag = row.betrag || '0';
     var iban = ibanInputs[k].value.replace(/\s/g,'').toUpperCase();
     var bic  = bicInputs[k].value.replace(/\s/g,'').toUpperCase();
     var rawDate = dateInputs[k].value.trim();
     if (!iban) { toast('Bitte alle IBAN-Felder ausfüllen.', 'ter'); return; }
-    // parse amount
-    var amt = parseFloat((r.betrag || '0').replace(/[^\d,]/g,'').replace(',','.'));
-    if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + r.steller, 'ter'); return; }
-    // parse date → YYYY-MM-DD
+    var amt = parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.'));
+    if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + steller, 'ter'); return; }
     var execDate = toISODate(rawDate);
-    txs.push({ steller: r.steller, iban: iban, bic: bic, amt: amt, nr: r.nr, execDate: execDate });
-
-    // update stored supplier IBAN/BIC
-    updateSupBank(r.steller, iban, bic);
+    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate });
+    updateSupBank(steller, iban, bic);
   }
 
   if (!txs.length) { toast('Keine Überweisungen vorhanden.', 'ter'); return; }
@@ -530,12 +591,15 @@ function exportXML() {
   a.download = 'Ueberweisungen_' + new Date().toISOString().slice(0,10) + '.xml';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
   URL.revokeObjectURL(a.href);
-  // Bestätigungsmeldung und Tabelle leeren
+  // Stored transfers leeren + Bestätigungsmeldung
+  clearStoredTransfers();
+  window._sepaRows = [];
+  updToolbar();
   var wrap = document.getElementById('xml-table-wrap');
   if(wrap){
-    wrap.innerHTML = '<div style="background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:16px 20px;text-align:center">'
-      + '<div style="font-size:1.1rem;color:var(--ok);font-weight:600;margin-bottom:6px">✅ XML erfolgreich erstellt und heruntergeladen</div>'
-      + '<div style="font-size:.83rem;color:var(--mut)">' + txs.length + ' Überweisung(en) · ' + a.download + '</div>'
+    wrap.innerHTML = '<div style="background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:18px 20px;text-align:center">'
+      + '<div style="font-size:1.05rem;color:var(--ok);font-weight:600;margin-bottom:6px">✅ XML erfolgreich erstellt und heruntergeladen</div>'
+      + '<div style="font-size:.82rem;color:var(--mut)">' + txs.length + ' Überweisung(en) exportiert &nbsp;·&nbsp; ' + esc(a.download) + '</div>'
       + '</div>';
   }
   document.getElementById('btn-xml-export').disabled = true;
@@ -656,7 +720,7 @@ function confirmSup(i){
     reRender(i);toast('Lieferant bereits vorhanden — wurde zugeordnet.','tok');return;
   }
   var sups=getSups();
-  sups.push({raw:raw,short:short,typ:typ,iban:results[i].iban||'',bic:results[i].bic||''});
+  sups.push({raw:raw,short:short,typ:typ,zahlart:'auto',iban:results[i].iban||'',bic:results[i].bic||''});
   saveSupList(sups);
   results[i]=Object.assign({},results[i],{steller:short,typ:typ,supSaved:true,pendingSup:false});
   reRender(i);toast('Lieferant "'+short+'" gespeichert.','tok');
@@ -700,10 +764,16 @@ async function dlOne(i){
         +'</div>';
       el.className='fitem s-ok';
       el.style.transition='opacity 0.4s';
+      // if transfer: save to persistent store before removal
+      if(!r.sepa){
+        var sup = findSupByShort(r.steller);
+        var isUew = !sup || sup.zahlart !== 'sepa';
+        if(isUew) addStoredTransfer(r, name);
+      }
       (function(el,idx){
         setTimeout(function(){
           el.style.opacity='0';
-          setTimeout(function(){ removeFile(idx); },420);
+          setTimeout(function(){ removeFile(idx); updToolbar(); },420);
         },2000);
       })(el,i);
     }
@@ -728,10 +798,15 @@ function renderSups(){
   if(!sups.length){list.innerHTML='<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>';return;}
   list.innerHTML=sups.map(function(s,i){
     return '<div class="srow">'
-      +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung">'
+      +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung" style="min-width:130px">'
       +'<span style="color:var(--mut);flex-shrink:0;font-size:.8rem">→</span>'
-      +'<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname">'
-      +'<select class="sin st sin-sm"><option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option><option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option></select>'
+      +'<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" style="max-width:110px">'
+      +'<select class="sin st sin-sm" title="Dokumenttyp"><option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option><option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option></select>'
+      +'<select class="sin sz sin-sm" title="Zahlungsart" style="max-width:120px">'
+      +'<option value="auto"'+((!s.zahlart||s.zahlart==='auto')?' selected':'')+'>🤖 Auto</option>'
+      +'<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
+      +'<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA-Abbuchung</option>'
+      +'</select>'
       +'<input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="IBAN">'
       +'<input class="sin sb sin-mono sin-sm" value="'+esc(s.bic||'')+'" placeholder="BIC">'
       +'<button class="btn btn-sm btn-er" onclick="delSup('+i+')">🗑️</button>'
@@ -742,7 +817,9 @@ function saveSupsFromUI(){
   var rows=document.querySelectorAll('.srow');
   var sups=Array.from(rows).map(function(row){
     return{raw:(row.querySelector('.sr').value||'').trim(),short:(row.querySelector('.ss').value||'').trim(),
-      typ:row.querySelector('.st').value||'RE',iban:(row.querySelector('.si').value||'').replace(/\s/g,'').toUpperCase(),
+      typ:row.querySelector('.st').value||'RE',
+      zahlart:row.querySelector('.sz')?row.querySelector('.sz').value||'auto':'auto',
+      iban:(row.querySelector('.si').value||'').replace(/\s/g,'').toUpperCase(),
       bic:(row.querySelector('.sb').value||'').replace(/\s/g,'').toUpperCase()};
   }).filter(function(s){return s.raw;});
   var seen=[];
