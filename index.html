@@ -6,169 +6,124 @@
 <title>Rechnungs-Umbenenner</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --surface: #1a1d27;
-    --surface2: #22263a;
-    --surface3: #2a2f47;
-    --accent: #4f8ef7;
-    --accent2: #7c5cbf;
-    --text: #e8eaf0;
-    --muted: #6b7194;
-    --border: #2e3250;
-    --success: #3ecf8e;
-    --success-bg: rgba(62,207,142,0.1);
-    --success-border: rgba(62,207,142,0.3);
-    --danger: #f76f6f;
-    --danger-bg: rgba(247,111,111,0.1);
-    --danger-border: rgba(247,111,111,0.3);
-    --warn: #f0a500;
-    --warn-bg: rgba(240,165,0,0.1);
-    --warn-border: rgba(240,165,0,0.3);
-    --info-bg: rgba(79,142,247,0.1);
-    --info-border: rgba(79,142,247,0.3);
-    --radius: 10px;
-    --radius-sm: 6px;
+    --bg:#0f1117; --surface:#1a1d27; --surface2:#22263a; --surface3:#2a2f47;
+    --accent:#4f8ef7; --accent2:#7c5cbf; --text:#e8eaf0; --muted:#6b7194; --border:#2e3250;
+    --success:#3ecf8e; --success-bg:rgba(62,207,142,0.1); --success-bd:rgba(62,207,142,0.3);
+    --danger:#f76f6f; --danger-bg:rgba(247,111,111,0.1); --danger-bd:rgba(247,111,111,0.3);
+    --warn:#f0a500; --warn-bg:rgba(240,165,0,0.1); --warn-bd:rgba(240,165,0,0.3);
+    --purple:#a78bfa; --purple-bg:rgba(124,92,191,0.12); --purple-bd:rgba(124,92,191,0.35);
+    --info-bg:rgba(79,142,247,0.1); --info-bd:rgba(79,142,247,0.3);
+    --r:10px; --rs:6px;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
 
-  header {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  .logo { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600; }
-  .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
-  nav { display: flex; gap: 2px; background: var(--surface2); border-radius: 8px; padding: 3px; }
-  .nav-btn { background: none; border: none; color: var(--muted); padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-family: inherit; transition: all .15s; }
-  .nav-btn:hover { color: var(--text); }
-  .nav-btn.active { background: var(--surface3); color: var(--text); }
-  .key-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); cursor: pointer; transition: background .2s; }
-  .key-dot.ok { background: var(--success); }
+  header{background:var(--surface);border-bottom:1px solid var(--border);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+  .logo{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:600}
+  .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+  nav{display:flex;gap:2px;background:var(--surface2);border-radius:8px;padding:3px}
+  .nb{background:none;border:none;color:var(--muted);padding:6px 16px;border-radius:6px;cursor:pointer;font-size:.85rem;font-family:inherit;transition:all .15s}
+  .nb:hover{color:var(--text)} .nb.active{background:var(--surface3);color:var(--text)}
+  .key-dot{width:9px;height:9px;border-radius:50%;background:var(--danger);cursor:pointer;transition:background .2s;flex-shrink:0}
+  .key-dot.ok{background:var(--success)}
 
-  main { max-width: 880px; margin: 0 auto; padding: 28px 20px; }
-  .page { display: none; }
-  .page.active { display: block; }
+  main{max-width:880px;margin:0 auto;padding:28px 20px}
+  .page{display:none} .page.active{display:block}
+  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:20px 24px;margin-bottom:16px}
+  .card-title{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin-bottom:16px}
 
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
-  .card-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
+  .dropzone{border:2px dashed var(--border);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s}
+  .dropzone:hover,.dropzone.over{border-color:var(--accent);background:rgba(79,142,247,0.04)}
+  .dropzone p{color:var(--muted);font-size:.88rem;margin-top:6px}
 
-  .dropzone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 36px 20px; text-align: center; cursor: pointer; transition: all .2s; }
-  .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(79,142,247,0.04); }
-  .dropzone p { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
+  .btn{padding:8px 16px;border-radius:var(--rs);font-size:.83rem;cursor:pointer;border:1px solid var(--border);background:var(--surface2);color:var(--text);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
+  .btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#fff;font-weight:600}
+  .btn-primary:hover{opacity:.88;color:#fff;border:none}
+  .btn-success{background:var(--success-bg);border-color:var(--success-bd);color:var(--success)}
+  .btn-success:hover{background:rgba(62,207,142,.2);color:var(--success);border-color:var(--success)}
+  .btn-danger{color:var(--danger);border-color:var(--danger-bd)}
+  .btn-danger:hover{background:var(--danger-bg);border-color:var(--danger);color:var(--danger)}
+  .btn-sm{padding:5px 11px;font-size:.78rem}
 
-  .btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 0.83rem; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
-  .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #fff; font-weight: 600; }
-  .btn-primary:hover { opacity: 0.88; color: #fff; border: none; }
-  .btn-success { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
-  .btn-success:hover { background: rgba(62,207,142,0.2); color: var(--success); border-color: var(--success); }
-  .btn-danger { color: var(--danger); border-color: var(--danger-border); }
-  .btn-danger:hover { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
-  .btn-sm { padding: 5px 11px; font-size: 0.78rem; }
+  .toolbar{display:flex;align-items:center;gap:10px;margin-top:4px}
+  .toolbar-left{flex:1;font-size:.85rem;color:var(--muted)}
 
-  .toolbar { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
-  .toolbar-left { flex: 1; font-size: 0.85rem; color: var(--muted); }
+  .file-list{display:flex;flex-direction:column;gap:12px;margin-top:16px}
 
-  .file-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
-  .file-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .2s; }
-  .file-item.ready { border-color: var(--success-border); }
-  .file-item.error-state { border-color: var(--danger-border); }
+  .file-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
+  .file-item.ready{border-color:var(--success-bd)}
+  .file-item.analyzing{border-color:var(--info-bd)}
+  .file-item.new-sup{border-color:var(--purple-bd)}
 
-  .file-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-  .file-orig { font-size: 0.8rem; color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.71rem; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
-  .badge-pending { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
-  .badge-analyzing { background: var(--info-bg); color: var(--accent); border: 1px solid var(--info-border); }
-  .badge-done { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
-  .badge-new-supplier { background: rgba(124,92,191,0.15); color: #a78bfa; border: 1px solid rgba(124,92,191,0.35); }
-  .badge-error { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+  .file-header{display:flex;align-items:center;gap:10px;padding:14px 16px 0}
+  .file-orig{font-size:.8rem;color:var(--muted);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-  .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .field-group { display: flex; flex-direction: column; gap: 5px; }
-  .field-group.full { grid-column: 1 / -1; }
-  .field-label { font-size: 0.71rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
-  .field-input { background: var(--surface3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text); font-size: 0.85rem; font-family: inherit; outline: none; transition: border-color .15s; }
-  .field-input:focus { border-color: var(--accent); }
-  select.field-input { cursor: pointer; }
+  .badge{display:inline-flex;align-items:center;gap:5px;font-size:.71rem;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+  .b-pending{background:var(--warn-bg);color:var(--warn);border:1px solid var(--warn-bd)}
+  .b-analyzing{background:var(--info-bg);color:var(--accent);border:1px solid var(--info-bd)}
+  .b-done{background:var(--success-bg);color:var(--success);border:1px solid var(--success-bd)}
+  .b-newsup{background:var(--purple-bg);color:var(--purple);border:1px solid var(--purple-bd)}
+  .b-error{background:var(--danger-bg);color:var(--danger);border:1px solid var(--danger-bd)}
 
-  .name-preview { background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.8rem; color: var(--success); font-family: 'Consolas', monospace; margin-top: 10px; word-break: break-all; }
+  .file-result{padding:12px 16px 0}
+  .result-name{background:var(--success-bg);border:1px solid var(--success-bd);border-radius:var(--rs);padding:10px 14px;font-size:.85rem;color:var(--success);font-family:'Consolas',monospace;word-break:break-all}
+  .result-name.editable{cursor:text}
+  .result-meta{display:flex;gap:16px;margin-top:8px;flex-wrap:wrap}
+  .meta-item{font-size:.75rem;color:var(--muted)}
+  .meta-item b{color:var(--text)}
 
-  .file-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 10px; }
-  .download-hint { font-size: 0.75rem; color: var(--muted); }
-  .download-hint span { color: var(--warn); }
+  .file-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;gap:10px}
+  .folder-hint{font-size:.75rem;color:var(--warn);display:flex;align-items:center;gap:5px}
 
-  /* NEW SUPPLIER BANNER */
-  .new-supplier-banner { background: rgba(124,92,191,0.1); border: 1px solid rgba(124,92,191,0.3); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 12px; }
-  .new-supplier-banner p { font-size: 0.83rem; color: #c4b5fd; margin-bottom: 10px; }
-  .new-supplier-banner strong { color: #a78bfa; }
-  .banner-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
-  .banner-actions { display: flex; gap: 8px; }
+  /* NEW SUPPLIER PANEL — inline inside file-item */
+  .new-sup-panel{background:var(--purple-bg);border-top:1px solid var(--purple-bd);padding:14px 16px}
+  .new-sup-panel h3{font-size:.85rem;font-weight:600;color:var(--purple);margin-bottom:6px}
+  .new-sup-panel p{font-size:.8rem;color:var(--muted);margin-bottom:12px;line-height:1.6}
+  .sup-fields{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px}
+  .sup-field label{font-size:.71rem;color:var(--muted);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+  .sup-field input,.sup-field select{width:100%;background:var(--surface3);border:1px solid var(--border);border-radius:var(--rs);padding:7px 10px;color:var(--text);font-size:.85rem;font-family:inherit;outline:none;transition:border-color .15s}
+  .sup-field input:focus,.sup-field select:focus{border-color:var(--accent)}
+  .sup-preview{font-size:.75rem;color:var(--purple);font-family:'Consolas',monospace;margin-bottom:10px;padding:6px 10px;background:rgba(124,92,191,.08);border-radius:var(--rs);word-break:break-all}
+  .sup-actions{display:flex;gap:8px}
 
   /* SUPPLIER PAGE */
-  .supplier-row { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .supplier-row:last-child { border-bottom: none; }
-  .sup-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text); font-size: 0.85rem; font-family: inherit; outline: none; transition: border-color .15s; }
-  .sup-input:focus { border-color: var(--accent); }
-  .arrow-sep { color: var(--muted); }
-  .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 0.88rem; }
+  .supplier-row{display:flex;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--border)}
+  .supplier-row:last-child{border-bottom:none}
+  .sup-in{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:7px 10px;color:var(--text);font-size:.84rem;font-family:inherit;outline:none;transition:border-color .15s}
+  .sup-in:focus{border-color:var(--accent)}
+  .arrow{color:var(--muted);font-size:.9rem;flex-shrink:0}
+  .empty-state{text-align:center;padding:32px;color:var(--muted);font-size:.88rem}
 
   /* SETTINGS */
-  .setting-row { margin-bottom: 20px; }
-  .setting-label { font-size: 0.82rem; color: var(--muted); margin-bottom: 7px; display: block; }
-  .setting-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 14px; color: var(--text); font-size: 0.88rem; font-family: inherit; outline: none; transition: border-color .15s; }
-  .setting-input:focus { border-color: var(--accent); }
-  .inline-row { display: flex; gap: 8px; }
-  .inline-row .setting-input { flex: 1; font-family: 'Consolas', monospace; font-size: 0.83rem; }
-  .hint-box { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.8rem; color: var(--warn); margin-top: 8px; }
+  .s-label{font-size:.82rem;color:var(--muted);margin-bottom:7px;display:block}
+  .s-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:9px 14px;color:var(--text);font-size:.88rem;font-family:inherit;outline:none;transition:border-color .15s}
+  .s-input:focus{border-color:var(--accent)}
+  .irow{display:flex;gap:8px} .irow .s-input{flex:1}
+  .folder-set-box{background:var(--success-bg);border:1px solid var(--success-bd);border-radius:var(--rs);padding:10px 14px;display:flex;align-items:center;gap:10px}
+  .folder-set-box span{font-size:.83rem;color:var(--success);font-family:'Consolas',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .hint-box{background:var(--warn-bg);border:1px solid var(--warn-bd);border-radius:var(--rs);padding:10px 14px;font-size:.8rem;color:var(--warn);margin-top:10px}
 
-  /* FOLDER STATUS */
-  .folder-set { background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
-  .folder-set span { font-size: 0.83rem; color: var(--success); font-family: 'Consolas', monospace; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  #toast{position:fixed;bottom:24px;right:24px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:11px 18px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:340px}
+  #toast.show{opacity:1}
+  #toast.t-success{border-color:var(--success-bd);color:var(--success)}
+  #toast.t-error{border-color:var(--danger-bd);color:var(--danger)}
 
-  /* MODAL */
-  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
-  .modal-overlay.open { display: flex; }
-  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; max-width: 480px; width: 90%; }
-  .modal h2 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
-  .modal p { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
-  .modal-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
-  .modal-field label { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 5px; }
-  .modal-field input, .modal-field select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text); font-size: 0.88rem; font-family: inherit; outline: none; }
-  .modal-field input:focus, .modal-field select:focus { border-color: var(--accent); }
-  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
-  .preview-line { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.78rem; color: var(--success); font-family: 'Consolas', monospace; margin-bottom: 20px; word-break: break-all; }
-
-  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 18px; font-size: 0.85rem; z-index: 9999; opacity: 0; transition: opacity .3s; pointer-events: none; }
-  #toast.show { opacity: 1; }
-  #toast.t-success { border-color: var(--success-border); color: var(--success); }
-  #toast.t-error { border-color: var(--danger-border); color: var(--danger); }
-
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner { display: inline-block; width: 11px; height: 11px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <div class="logo-icon">📄</div>
-    Rechnungs-Umbenenner
-  </div>
+  <div class="logo"><div class="logo-icon">📄</div>Rechnungs-Umbenenner</div>
   <nav>
-    <button class="nav-btn active" onclick="showPage('analyse')">📥 Analyse</button>
-    <button class="nav-btn" onclick="showPage('lieferanten')">🏪 Lieferanten</button>
-    <button class="nav-btn" onclick="showPage('einstellungen')">⚙️ Einstellungen</button>
+    <button class="nb active" onclick="showPage('analyse')">📥 Analyse</button>
+    <button class="nb" onclick="showPage('lieferanten')">🏪 Lieferanten</button>
+    <button class="nb" onclick="showPage('einstellungen')">⚙️ Einstellungen</button>
   </nav>
-  <div title="API Key Status" class="key-dot" id="key-dot" onclick="showPage('einstellungen')"></div>
+  <div class="key-dot" id="key-dot" title="API Key Status" onclick="showPage('einstellungen')"></div>
 </header>
 
 <main>
@@ -177,12 +132,12 @@
   <div class="page active" id="page-analyse">
     <div class="card">
       <div class="card-title">📥 Rechnungen einlesen</div>
-      <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
+      <div class="dropzone" id="dropzone" onclick="document.getElementById('fi').click()">
         <div style="font-size:2rem;margin-bottom:10px">📂</div>
         <strong>PDFs hier ablegen oder klicken</strong>
         <p>Rechnungen, Gutschriften, Stornorechnungen — einzeln oder mehrere auf einmal</p>
       </div>
-      <input type="file" id="file-input" accept=".pdf,.PDF" multiple style="display:none">
+      <input type="file" id="fi" accept=".pdf,.PDF" multiple style="display:none">
       <div class="file-list" id="file-list"></div>
     </div>
     <div class="toolbar">
@@ -196,13 +151,11 @@
   <div class="page" id="page-lieferanten">
     <div class="card">
       <div class="card-title">🏪 Gespeicherte Lieferanten</div>
-      <p style="font-size:0.83rem;color:var(--muted);margin-bottom:16px">
-        Diese Lieferanten kennt das Tool bereits. Neue werden automatisch beim ersten Hochladen einer Rechnung angelegt.
-      </p>
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:14px">Werden automatisch beim ersten Hochladen einer neuen Rechnung angelegt. Hier kannst du sie bearbeiten oder manuell ergänzen.</p>
       <div id="supplier-list"></div>
       <div style="margin-top:14px;display:flex;gap:8px">
         <button class="btn btn-sm" onclick="addSupplierManual()">➕ Manuell hinzufügen</button>
-        <button class="btn btn-sm btn-success" onclick="saveSuppliers()">💾 Änderungen speichern</button>
+        <button class="btn btn-sm btn-success" onclick="persistSuppliers()">💾 Änderungen speichern</button>
       </div>
     </div>
   </div>
@@ -210,473 +163,363 @@
   <!-- EINSTELLUNGEN -->
   <div class="page" id="page-einstellungen">
     <div class="card">
-      <div class="card-title">🔑 Anthropic API Key</div>
-      <div class="setting-row">
-        <label class="setting-label">Key wird lokal im Browser gespeichert — verlässt deinen PC nicht</label>
-        <div class="inline-row">
-          <input type="password" class="setting-input" id="api-key-field" placeholder="sk-ant-api03-..." autocomplete="off">
+      <div class="card-title">🔑 API Key</div>
+      <div style="margin-bottom:16px">
+        <label class="s-label">Anthropic API Key — wird nur lokal gespeichert</label>
+        <div class="irow">
+          <input type="password" class="s-input" id="api-key-field" placeholder="sk-ant-api03-..." autocomplete="off" style="font-family:'Consolas',monospace;font-size:.83rem">
           <button class="btn" onclick="saveApiKey()">💾 Speichern</button>
           <button class="btn btn-danger btn-sm" onclick="clearApiKey()">🗑️</button>
         </div>
-        <div id="key-status-text" style="font-size:0.8rem;margin-top:8px"></div>
+        <div id="key-status" style="font-size:.8rem;margin-top:8px"></div>
       </div>
     </div>
     <div class="card">
       <div class="card-title">📁 Speicherort</div>
-      <p style="font-size:0.83rem;color:var(--muted);margin-bottom:14px">
-        Gib den Ordnerpfad ein, in dem du deine Rechnungen speicherst. Das Tool zeigt dir diesen Pfad beim Download als Erinnerung an.
-      </p>
-      <div id="folder-empty">
-        <div class="inline-row" style="margin-bottom:8px">
-          <input type="text" class="setting-input" id="folder-input" placeholder="z.B. C:\Dokumente\Rechnungen 2026" style="font-family:inherit">
+      <p style="font-size:.83rem;color:var(--muted);margin-bottom:14px">Trage den Pfad ein, in dem du Rechnungen ablegen willst. Er wird beim Download als Erinnerung angezeigt.</p>
+      <div id="folder-empty-ui">
+        <div class="irow" style="margin-bottom:8px">
+          <input type="text" class="s-input" id="folder-field" placeholder="z.B. C:\Buchhaltung\Rechnungen 2026" style="font-family:inherit">
           <button class="btn" onclick="saveFolder()">💾 Speichern</button>
         </div>
       </div>
-      <div id="folder-set" class="folder-set" style="display:none">
-        <span>📁</span>
-        <span id="folder-display"></span>
-        <button class="btn btn-sm" onclick="changeFolder()">✏️ Ändern</button>
+      <div id="folder-set-ui" style="display:none">
+        <div class="folder-set-box">
+          <span>📁</span><span id="folder-display"></span>
+          <button class="btn btn-sm" onclick="changeFolder()">✏️ Ändern</button>
+        </div>
       </div>
-      <div class="hint-box" style="margin-top:12px">
-        ℹ️ Der Browser speichert Dateien automatisch in deinen Download-Ordner. Dieser Pfad ist nur eine Erinnerung für dich.
-      </div>
+      <div class="hint-box">ℹ️ Browser-Sicherheitsregel: Dateien landen immer im Download-Ordner. Der Pfad hier ist nur eine Erinnerung für dich.</div>
     </div>
   </div>
 
 </main>
-
-<!-- NEW SUPPLIER MODAL -->
-<div class="modal-overlay" id="modal-overlay">
-  <div class="modal">
-    <h2>🏪 Neuer Lieferant erkannt</h2>
-    <p id="modal-desc">Dieser Lieferant ist noch nicht gespeichert. Lege ihn einmalig an — beim nächsten Mal wird er automatisch erkannt.</p>
-    <div class="modal-fields">
-      <div class="modal-field">
-        <label>Erkennungsname (wie auf der Rechnung)</label>
-        <input type="text" id="modal-raw" oninput="updateModalPreview()">
-      </div>
-      <div class="modal-field">
-        <label>Kurzname für den Dateinamen</label>
-        <input type="text" id="modal-short" oninput="updateModalPreview()">
-      </div>
-      <div class="modal-field">
-        <label>Standard-Typ für diesen Lieferanten</label>
-        <select id="modal-typ" onchange="updateModalPreview()">
-          <option value="RE">RE – Rechnung</option>
-          <option value="GS">GS – Gutschrift / Storno</option>
-        </select>
-      </div>
-    </div>
-    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px">Vorschau Dateiname:</div>
-    <div class="preview-line" id="modal-preview">—</div>
-    <div class="modal-actions">
-      <button class="btn" onclick="skipSupplier()">Überspringen</button>
-      <button class="btn btn-primary" onclick="confirmSupplier()">✅ Lieferant speichern</button>
-    </div>
-  </div>
-</div>
 
 <div id="toast"></div>
 
 <script>
 let files = [];
 let results = {};
-let modalContext = null;
 
-// ─── NAV ──────────────────────────────────────────────────
+// ── NAV ──────────────────────────────────────────────────
 function showPage(id) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('page-' + id).classList.add('active');
-  const idx = ['analyse','lieferanten','einstellungen'].indexOf(id);
-  document.querySelectorAll('.nav-btn')[idx].classList.add('active');
-  if (id === 'lieferanten') renderSuppliers();
-  if (id === 'einstellungen') loadSettingsDisplay();
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  ['analyse','lieferanten','einstellungen'].forEach((n,i)=>{if(n===id)document.querySelectorAll('.nb')[i].classList.add('active')});
+  if(id==='lieferanten') renderSuppliers();
+  if(id==='einstellungen') loadSettings();
 }
 
-// ─── DRAG & DROP ──────────────────────────────────────────
-const dz = document.getElementById('dropzone');
-dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
-dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addFiles([...e.dataTransfer.files].filter(f => f.name.toLowerCase().endsWith('.pdf'))); });
-document.getElementById('file-input').addEventListener('change', e => { addFiles([...e.target.files]); e.target.value = ''; });
+// ── DROP ─────────────────────────────────────────────────
+const dz=document.getElementById('dropzone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('over')});
+dz.addEventListener('dragleave',()=>dz.classList.remove('over'));
+dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('over');addFiles([...e.dataTransfer.files].filter(f=>f.name.toLowerCase().endsWith('.pdf')))});
+document.getElementById('fi').addEventListener('change',e=>{addFiles([...e.target.files]);e.target.value=''});
 
-function addFiles(nf) {
-  nf.forEach(f => { if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f); });
-  renderFileList();
+function addFiles(nf){
+  nf.forEach(f=>{if(!files.find(x=>x.name===f.name&&x.size===f.size))files.push(f)});
+  renderList();
+}
+function removeFile(i){
+  files.splice(i,1);
+  const nr={};
+  Object.keys(results).forEach(k=>{const ki=parseInt(k);if(ki<i)nr[ki]=results[ki];else if(ki>i)nr[ki-1]=results[ki]});
+  results=nr; renderList();
 }
 
-function removeFile(i) {
-  files.splice(i, 1);
-  const nr = {};
-  Object.keys(results).forEach(k => { const ki = parseInt(k); if (ki < i) nr[ki] = results[ki]; else if (ki > i) nr[ki-1] = results[ki]; });
-  results = nr;
-  renderFileList();
-}
-
-// ─── RENDER ───────────────────────────────────────────────
-function renderFileList() {
-  const list = document.getElementById('file-list');
-  document.getElementById('file-count').textContent = files.length;
-  document.getElementById('btn-analyse').disabled = files.length === 0;
-  if (files.length === 0) { list.innerHTML = ''; updateDlAll(); return; }
-
-  list.innerHTML = files.map((f, i) => {
-    const r = results[i] || {};
-    const typ = r.typ || 'RE';
-    const nr = r.nr || '';
-    const steller = r.steller || '';
-    const datum = r.datum || '';
-    const betrag = r.betrag || '';
-    const preview = buildName(typ, nr, steller, datum, betrag);
-    const isReady = results[i] && !results[i].error && nr;
-    const folder = getSavedFolder();
-
-    let badge = `<span class="badge badge-pending">⏳ Ausstehend</span>`;
-    if (results[i]) {
-      if (results[i].error) badge = `<span class="badge badge-error">❌ Fehler</span>`;
-      else if (results[i].isNewSupplier) badge = `<span class="badge badge-new-supplier">🆕 Neuer Lieferant</span>`;
-      else badge = `<span class="badge badge-done">✅ Bereit</span>`;
-    }
-
-    return `<div class="file-item${isReady?' ready':''}" id="item-${i}">
-      <div class="file-header">
-        <span class="file-orig" title="${esc(f.name)}">📄 ${esc(f.name)}</span>
-        <span id="badge-${i}">${badge}</span>
-      </div>
-      <div class="fields-grid">
-        <div class="field-group">
-          <span class="field-label">Typ</span>
-          <select class="field-input" id="typ-${i}" onchange="onFieldChange(${i})">
-            <option value="RE"${typ==='RE'?' selected':''}>RE – Rechnung</option>
-            <option value="GS"${typ==='GS'?' selected':''}>GS – Gutschrift / Storno</option>
-          </select>
-        </div>
-        <div class="field-group">
-          <span class="field-label">Rechnungsnummer</span>
-          <input class="field-input" id="nr-${i}" value="${esc(nr)}" oninput="onFieldChange(${i})" placeholder="z.B. 2024-001">
-        </div>
-        <div class="field-group">
-          <span class="field-label">Rechnungssteller</span>
-          <input class="field-input" id="steller-${i}" value="${esc(steller)}" oninput="onFieldChange(${i})" placeholder="z.B. RSU GmbH">
-        </div>
-        <div class="field-group">
-          <span class="field-label">Datum (TT.MM.JJJJ)</span>
-          <input class="field-input" id="datum-${i}" value="${esc(datum)}" oninput="onFieldChange(${i})" placeholder="12.06.2026">
-        </div>
-        <div class="field-group full">
-          <span class="field-label">Bruttobetrag</span>
-          <input class="field-input" id="betrag-${i}" value="${esc(betrag)}" oninput="onFieldChange(${i})" placeholder="238,00€">
-        </div>
-      </div>
-      ${preview ? `<div class="name-preview" id="preview-${i}">📄 ${esc(preview)}.pdf</div>` : `<div class="name-preview" id="preview-${i}" style="display:none"></div>`}
-      <div class="file-footer">
-        <span class="download-hint" id="hint-${i}">${folder && isReady ? `💾 Speichern in: <span>${esc(folder)}</span>` : ''}</span>
-        <div style="display:flex;gap:8px">
-          <button class="btn btn-sm btn-danger" onclick="removeFile(${i})">🗑️</button>
-          <button class="btn btn-sm btn-success" id="dl-btn-${i}" onclick="downloadOne(${i})" ${isReady?'':'disabled'}>⬇️ Herunterladen</button>
-        </div>
-      </div>
-    </div>`;
-  }).join('');
+// ── RENDER ───────────────────────────────────────────────
+function renderList(){
+  const list=document.getElementById('file-list');
+  document.getElementById('file-count').textContent=files.length;
+  document.getElementById('btn-analyse').disabled=files.length===0;
+  if(!files.length){list.innerHTML='';updateDlAll();return}
+  list.innerHTML=files.map((f,i)=>renderItem(f,i)).join('');
   updateDlAll();
 }
 
-function updateDlAll() {
-  const anyReady = files.some((_, i) => results[i] && !results[i].error && results[i].nr);
-  document.getElementById('btn-dl-all').disabled = !anyReady;
+function renderItem(f,i){
+  const r=results[i];
+  const isReady=r&&!r.error&&!r.pendingSupplier&&r.nr;
+  const folder=getFolder();
+
+  let badgeHtml='<span class="badge b-pending">⏳ Ausstehend</span>';
+  let itemClass='file-item';
+  if(r){
+    if(r.analyzing){badgeHtml='<span class="badge b-analyzing"><span class="spin"></span> Analysiere…</span>';itemClass='file-item analyzing'}
+    else if(r.error){badgeHtml=`<span class="badge b-error">❌ Fehler</span>`;itemClass='file-item'}
+    else if(r.pendingSupplier){badgeHtml='<span class="badge b-newsup">🆕 Neuer Lieferant</span>';itemClass='file-item new-sup'}
+    else if(isReady){badgeHtml='<span class="badge b-done">✅ Bereit</span>';itemClass='file-item ready'}
+  }
+
+  let resultHtml='';
+  if(r&&!r.analyzing&&!r.error&&r.nr){
+    const name=buildName(r.typ,r.nr,r.steller,r.datum,r.betrag);
+    resultHtml=`
+      <div class="file-result">
+        <div class="result-name">📄 ${esc(name)}.pdf</div>
+        <div class="result-meta">
+          <span class="meta-item">Typ: <b>${esc(r.typ)}</b></span>
+          <span class="meta-item">Nr: <b>${esc(r.nr)}</b></span>
+          <span class="meta-item">Steller: <b>${esc(r.steller)}</b></span>
+          <span class="meta-item">Datum: <b>${esc(r.datum)}</b></span>
+          <span class="meta-item">Betrag: <b>${esc(r.betrag)}</b></span>
+        </div>
+      </div>`;
+  }
+  if(r&&r.error){
+    resultHtml=`<div class="file-result"><div style="font-size:.8rem;color:var(--danger);padding:8px 0">${esc(r.error)}</div></div>`;
+  }
+
+  let newSupHtml='';
+  if(r&&r.pendingSupplier){
+    newSupHtml=`
+      <div class="new-sup-panel">
+        <h3>🆕 Neuer Lieferant erkannt</h3>
+        <p>Claude hat <strong style="color:var(--purple)">${esc(r.stellerRoh)}</strong> erkannt. Lege diesen Lieferanten einmalig an — beim nächsten Mal wird er automatisch verwendet.</p>
+        <div class="sup-fields">
+          <div class="sup-field">
+            <label>Erkennungsname (auf Rechnung)</label>
+            <input id="sup-raw-${i}" value="${esc(r.stellerRoh)}" oninput="updateSupPreview(${i})">
+          </div>
+          <div class="sup-field">
+            <label>Kurzname für Dateiname</label>
+            <input id="sup-short-${i}" value="${esc(r.steller)}" oninput="updateSupPreview(${i})">
+          </div>
+          <div class="sup-field">
+            <label>Typ</label>
+            <select id="sup-typ-${i}" onchange="updateSupPreview(${i})">
+              <option value="RE"${r.typ==='RE'?' selected':''}>RE</option>
+              <option value="GS"${r.typ==='GS'?' selected':''}>GS</option>
+            </select>
+          </div>
+        </div>
+        <div class="sup-preview" id="sup-prev-${i}">📄 ${esc(buildName(r.typ,r.nr,r.steller,r.datum,r.betrag))}.pdf</div>
+        <div class="sup-actions">
+          <button class="btn btn-sm" onclick="skipNewSupplier(${i})">Nicht speichern</button>
+          <button class="btn btn-sm btn-primary" onclick="confirmNewSupplier(${i})">✅ Lieferant speichern & herunterladen</button>
+        </div>
+      </div>`;
+  }
+
+  const folderHint=folder&&isReady?`<span class="folder-hint">📁 ${esc(folder)}</span>`:'<span></span>';
+
+  return `<div class="${itemClass}" id="item-${i}">
+    <div class="file-header">
+      <span class="file-orig" title="${esc(f.name)}">📄 ${esc(f.name)}</span>
+      <span id="badge-${i}">${badgeHtml}</span>
+    </div>
+    ${resultHtml}
+    ${newSupHtml}
+    <div class="file-footer">
+      ${folderHint}
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm btn-danger" onclick="removeFile(${i})">🗑️</button>
+        <button class="btn btn-sm btn-success" id="dl-${i}" onclick="downloadOne(${i})" ${isReady?'':'disabled'}>⬇️ Herunterladen</button>
+      </div>
+    </div>
+  </div>`;
 }
 
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
-
-function onFieldChange(i) {
-  if (!results[i]) results[i] = { typ:'RE', nr:'', steller:'', datum:'', betrag:'' };
-  results[i].typ     = document.getElementById('typ-'+i)?.value || 'RE';
-  results[i].nr      = document.getElementById('nr-'+i)?.value || '';
-  results[i].steller = document.getElementById('steller-'+i)?.value || '';
-  results[i].datum   = document.getElementById('datum-'+i)?.value || '';
-  results[i].betrag  = document.getElementById('betrag-'+i)?.value || '';
-  const r = results[i];
-  const p = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
-  const prev = document.getElementById('preview-'+i);
-  if (prev) { prev.textContent = p ? '📄 ' + p + '.pdf' : ''; prev.style.display = p ? '' : 'none'; }
-  const dlBtn = document.getElementById('dl-btn-'+i);
-  if (dlBtn) dlBtn.disabled = !r.nr;
-  const item = document.getElementById('item-'+i);
-  if (item) { item.classList.toggle('ready', !!r.nr); }
-  const hint = document.getElementById('hint-'+i);
-  const folder = getSavedFolder();
-  if (hint) hint.innerHTML = folder && r.nr ? `💾 Speichern in: <span>${esc(folder)}</span>` : '';
-  updateDlAll();
+function updateDlAll(){
+  document.getElementById('btn-dl-all').disabled=!files.some((_,i)=>results[i]&&!results[i].error&&!results[i].pendingSupplier&&results[i].nr);
 }
 
-function buildName(typ, nr, steller, datum, betrag) {
-  if (!nr && !steller) return '';
-  const s = sanitize(steller || 'Unbekannt');
-  const n = sanitize(nr || '');
-  const d = (datum || '').trim();
-  const b = (betrag || '').replace(/[\/\\:*?"<>|]/g,'').trim();
+function esc(s){return(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;')}
+
+function buildName(typ,nr,steller,datum,betrag){
+  if(!nr&&!steller) return '';
+  const s=san(steller||'Unbekannt'),n=san(nr||''),d=(datum||'').trim(),b=(betrag||'').replace(/[\/\\:*?"<>|]/g,'').trim();
   return `${typ} ${n} ${s} ${d}${b?' '+b:''}`.replace(/\s+/g,' ').trim();
 }
+function san(s){return(s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim()}
 
-function sanitize(s) { return (s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim(); }
-
-// ─── ANALYSE ──────────────────────────────────────────────
-async function analyseAll() {
-  if (!getApiKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.','error'); showPage('einstellungen'); return; }
-  for (let i = 0; i < files.length; i++) {
-    if (results[i] && !results[i].error) continue;
+// ── ANALYSE ──────────────────────────────────────────────
+async function analyseAll(){
+  if(!getKey()){toast('Bitte zuerst den API Key unter Einstellungen eintragen.','error');showPage('einstellungen');return}
+  for(let i=0;i<files.length;i++){
+    if(results[i]&&!results[i].error&&!results[i].pendingSupplier) continue;
     await analyseOne(i);
   }
   toast('Analyse abgeschlossen.','success');
 }
 
-async function analyseOne(i) {
-  setBadge(i,'analyzing','<span class="spinner"></span> Analysiere…');
-  try {
-    const b64 = await toBase64(files[i]);
-    const sups = getSuppliers();
-    const supHint = sups.length ? '\n\nBekannte Lieferanten: ' + sups.map(s=>`"${s.raw}" → Kurzname "${s.short}"`).join(', ') + '. Wenn der Rechnungssteller einem davon entspricht, verwende den Kurznamen exakt.' : '';
-    const prompt = `Analysiere diese Rechnung. Antworte NUR mit JSON, kein Text davor oder danach:\n{\n  "typ": "RE" oder "GS" (GS für Gutschrift/Stornorechnung/Rechnungskorrektur),\n  "nr": "Rechnungsnummer oder Belegnummer",\n  "steller": "Firmenname des Rechnungsstellers (nicht Autopartner GmbH)",\n  "steller_roh": "Firmenname exakt wie auf Rechnung",\n  "datum": "Rechnungsdatum TT.MM.JJJJ",\n  "betrag": "Brutto-Gesamtbetrag mit €, z.B. 238,00€"\n}${supHint}`;
+async function analyseOne(i){
+  results[i]={analyzing:true};
+  reRenderItem(i);
+  try{
+    const b64=await toB64(files[i]);
+    const sups=getSuppliers();
+    const supHint=sups.length
+      ? '\n\nBekannte Lieferanten (Kurzname exakt verwenden wenn Treffer): '+sups.map(s=>`"${s.raw}" → "${s.short}"`).join(', ')
+      : '';
+    const prompt=`Analysiere diese Rechnung. Antworte NUR mit JSON, kein Text drumherum:\n{\n  "typ": "RE" oder "GS" (GS für Gutschrift/Stornorechnung/Rechnungskorrektur),\n  "nr": "Rechnungsnummer oder Belegnummer als String",\n  "steller_roh": "Firmenname des Rechnungsstellers exakt wie auf der Rechnung (nicht Autopartner GmbH)",\n  "datum": "Rechnungsdatum im Format TT.MM.JJJJ",\n  "betrag": "Brutto-Gesamtbetrag mit €-Zeichen, z.B. 238,00€"\n}${supHint}`;
 
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type':'application/json', 'x-api-key': getApiKey(), 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, messages:[{ role:'user', content:[
-        { type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } },
-        { type:'text', text:prompt }
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,messages:[{role:'user',content:[
+        {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
+        {type:'text',text:prompt}
       ]}]})
     });
+    const data=await resp.json();
+    if(data.error) throw new Error(data.error.message);
+    const text=(data.content||[]).map(c=>c.text||'').join('');
+    const p=JSON.parse(text.replace(/```json|```/g,'').trim());
+    const stellerRoh=p.steller_roh||'';
+    const known=findSupplier(stellerRoh);
 
-    const data = await resp.json();
-    if (data.error) throw new Error(data.error.message);
-    const text = (data.content||[]).map(c=>c.text||'').join('');
-    const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
-
-    const stellerRoh = parsed.steller_roh || parsed.steller || '';
-    const knownSup = findSupplier(stellerRoh);
-
-    if (knownSup) {
-      results[i] = { typ: parsed.typ||'RE', nr: parsed.nr||'', steller: knownSup.short, datum: parsed.datum||'', betrag: parsed.betrag||'' };
-      setBadge(i,'done','✅ Bereit');
-      fillFields(i);
+    if(known){
+      results[i]={typ:p.typ||'RE',nr:p.nr||'',steller:known.short,datum:p.datum||'',betrag:p.betrag||''};
     } else {
-      results[i] = { typ: parsed.typ||'RE', nr: parsed.nr||'', steller: stellerRoh, datum: parsed.datum||'', betrag: parsed.betrag||'', isNewSupplier: true, stellerRoh };
-      setBadge(i,'new-supplier','🆕 Neuer Lieferant');
-      fillFields(i);
-      await showNewSupplierModal(i, stellerRoh, parsed.typ||'RE');
+      // Neuer Lieferant: kurznamen vorschlagen = erster Teil des Namens
+      const shortSuggestion=stellerRoh.split(' ').slice(0,2).join(' ');
+      results[i]={typ:p.typ||'RE',nr:p.nr||'',steller:shortSuggestion,datum:p.datum||'',betrag:p.betrag||'',pendingSupplier:true,stellerRoh};
     }
-  } catch(e) {
-    results[i] = { typ:'RE', nr:'', steller:'', datum:'', betrag:'', error: e.message };
-    setBadge(i,'error','❌ ' + e.message.slice(0,50));
+  } catch(e){
+    results[i]={error:e.message};
   }
+  reRenderItem(i);
   updateDlAll();
 }
 
-// ─── NEW SUPPLIER MODAL ───────────────────────────────────
-function showNewSupplierModal(fileIdx, stellerRoh, typ) {
-  return new Promise(resolve => {
-    modalContext = { fileIdx, resolve };
-    document.getElementById('modal-desc').textContent = `„${stellerRoh}" ist noch nicht gespeichert. Lege diesen Lieferanten einmalig an — beim nächsten Mal wird er automatisch erkannt.`;
-    document.getElementById('modal-raw').value = stellerRoh;
-    document.getElementById('modal-short').value = stellerRoh.split(' ')[0];
-    document.getElementById('modal-typ').value = typ;
-    updateModalPreview();
-    document.getElementById('modal-overlay').classList.add('open');
-  });
+function reRenderItem(i){
+  const el=document.getElementById('item-'+i);
+  if(!el) return;
+  const tmp=document.createElement('div');
+  tmp.innerHTML=renderItem(files[i],i);
+  el.replaceWith(tmp.firstElementChild);
 }
 
-function updateModalPreview() {
-  const short = document.getElementById('modal-short').value.trim();
-  const typ = document.getElementById('modal-typ').value;
-  const r = results[modalContext?.fileIdx] || {};
-  const p = buildName(typ, r.nr||'NR', short||'Lieferant', r.datum||'TT.MM.JJJJ', r.betrag||'0,00€');
-  document.getElementById('modal-preview').textContent = p + '.pdf';
+// ── NEW SUPPLIER ─────────────────────────────────────────
+function updateSupPreview(i){
+  const short=(document.getElementById('sup-short-'+i)?.value||'').trim();
+  const typ=document.getElementById('sup-typ-'+i)?.value||'RE';
+  const r=results[i]||{};
+  const p=buildName(typ,r.nr||'NR',short||'Lieferant',r.datum||'TT.MM.JJJJ',r.betrag||'0,00€');
+  const el=document.getElementById('sup-prev-'+i);
+  if(el) el.textContent='📄 '+p+'.pdf';
 }
 
-function confirmSupplier() {
-  const raw = document.getElementById('modal-raw').value.trim();
-  const short = document.getElementById('modal-short').value.trim();
-  const typ = document.getElementById('modal-typ').value;
-  if (!raw || !short) { toast('Bitte beide Felder ausfüllen.','error'); return; }
-  const sups = getSuppliers();
-  sups.push({ raw, short, typ });
+function confirmNewSupplier(i){
+  const raw=(document.getElementById('sup-raw-'+i)?.value||'').trim();
+  const short=(document.getElementById('sup-short-'+i)?.value||'').trim();
+  const typ=document.getElementById('sup-typ-'+i)?.value||'RE';
+  if(!raw||!short){toast('Bitte beide Felder ausfüllen.','error');return}
+  const sups=getSuppliers();
+  sups.push({raw,short,typ});
   saveSuppliersList(sups);
-  const i = modalContext?.fileIdx;
-  if (i !== undefined && results[i]) {
-    results[i].steller = short;
-    results[i].typ = typ;
-    results[i].isNewSupplier = false;
-    fillFields(i);
-    setBadge(i,'done','✅ Bereit');
-  }
-  closeModal();
+  results[i]={...results[i],steller:short,typ,pendingSupplier:false,stellerRoh:undefined};
+  reRenderItem(i);
+  updateDlAll();
   toast(`Lieferant „${short}" gespeichert.`,'success');
-  if (modalContext?.resolve) modalContext.resolve();
+  downloadOne(i);
 }
 
-function skipSupplier() {
-  const i = modalContext?.fileIdx;
-  if (i !== undefined && results[i]) {
-    results[i].isNewSupplier = false;
-    setBadge(i,'done','✅ Bereit');
-    fillFields(i);
-  }
-  closeModal();
-  if (modalContext?.resolve) modalContext.resolve();
+function skipNewSupplier(i){
+  results[i]={...results[i],pendingSupplier:false,stellerRoh:undefined};
+  reRenderItem(i);
+  updateDlAll();
 }
 
-function closeModal() {
-  document.getElementById('modal-overlay').classList.remove('open');
-  modalContext = null;
-}
-
-// ─── DOWNLOAD ─────────────────────────────────────────────
-async function downloadOne(i) {
-  const r = results[i];
-  if (!r || !r.nr) return;
-  const name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag) + '.pdf';
-  const data = await files[i].arrayBuffer();
-  const blob = new Blob([data], { type:'application/pdf' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = name;
+// ── DOWNLOAD ─────────────────────────────────────────────
+async function downloadOne(i){
+  const r=results[i];
+  if(!r||!r.nr) return;
+  const name=buildName(r.typ,r.nr,r.steller,r.datum,r.betrag)+'.pdf';
+  const data=await files[i].arrayBuffer();
+  const blob=new Blob([data],{type:'application/pdf'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=name;
   a.click();
   URL.revokeObjectURL(a.href);
-  toast(`⬇️ ${name}`, 'success');
+  toast('⬇️ '+name,'success');
 }
 
-async function downloadAll() {
-  let count = 0;
-  for (let i = 0; i < files.length; i++) {
-    if (results[i] && !results[i].error && results[i].nr) {
-      await downloadOne(i);
-      count++;
-      await new Promise(r => setTimeout(r, 400));
+async function downloadAll(){
+  let count=0;
+  for(let i=0;i<files.length;i++){
+    if(results[i]&&!results[i].error&&!results[i].pendingSupplier&&results[i].nr){
+      await downloadOne(i);count++;
+      await new Promise(r=>setTimeout(r,400));
     }
   }
-  toast(`${count} Datei(en) heruntergeladen.`, 'success');
+  toast(count+' Datei(en) heruntergeladen.','success');
 }
 
-// ─── HELPERS ──────────────────────────────────────────────
-function setBadge(i, type, html) {
-  const el = document.getElementById('badge-'+i);
-  if (el) el.innerHTML = `<span class="badge badge-${type}">${html}</span>`;
-}
-
-function fillFields(i) {
-  const r = results[i]; if (!r) return;
-  const set = (id, val) => { const el = document.getElementById(id+'-'+i); if (el) el.value = val||''; };
-  set('typ', r.typ); set('nr', r.nr); set('steller', r.steller); set('datum', r.datum); set('betrag', r.betrag);
-  const p = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
-  const prev = document.getElementById('preview-'+i);
-  if (prev) { prev.textContent = p ? '📄 '+p+'.pdf' : ''; prev.style.display = p?'':'none'; }
-  const dlBtn = document.getElementById('dl-btn-'+i);
-  if (dlBtn) dlBtn.disabled = !r.nr;
-  const item = document.getElementById('item-'+i);
-  if (item) item.classList.toggle('ready', !!r.nr);
-  const folder = getSavedFolder();
-  const hint = document.getElementById('hint-'+i);
-  if (hint) hint.innerHTML = folder && r.nr ? `💾 Speichern in: <span>${esc(folder)}</span>` : '';
-}
-
-async function toBase64(file) {
-  return new Promise((res,rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = () => rej(new Error('Lesefehler'));
-    r.readAsDataURL(file);
-  });
-}
-
-// ─── SUPPLIERS ────────────────────────────────────────────
-function getSuppliers() { try { return JSON.parse(localStorage.getItem('re_suppliers')||'[]'); } catch { return []; } }
-function saveSuppliersList(s) { localStorage.setItem('re_suppliers', JSON.stringify(s)); }
-function findSupplier(text) {
-  if (!text) return null;
-  const sups = getSuppliers();
-  for (const s of sups) { if (s.raw && text.toLowerCase().includes(s.raw.toLowerCase())) return s; }
+// ── SUPPLIERS ────────────────────────────────────────────
+function getSuppliers(){try{return JSON.parse(localStorage.getItem('re_suppliers')||'[]')}catch{return[]}}
+function saveSuppliersList(s){localStorage.setItem('re_suppliers',JSON.stringify(s))}
+function findSupplier(text){
+  if(!text) return null;
+  for(const s of getSuppliers()){if(s.raw&&text.toLowerCase().includes(s.raw.toLowerCase()))return s}
   return null;
 }
-function saveSuppliers() {
-  const rows = document.querySelectorAll('#supplier-list .supplier-row');
-  const sups = [...rows].map(row => ({
-    raw: row.querySelector('.sup-raw')?.value?.trim()||'',
-    short: row.querySelector('.sup-short')?.value?.trim()||'',
-    typ: row.querySelector('.sup-typ')?.value||'RE'
-  })).filter(s => s.raw);
-  saveSuppliersList(sups);
-  toast('Lieferanten gespeichert.','success');
-}
-function renderSuppliers() {
-  const sups = getSuppliers();
-  const list = document.getElementById('supplier-list');
-  if (!sups.length) { list.innerHTML = '<div class="empty-state">Noch keine Lieferanten — werden automatisch beim Hochladen angelegt.</div>'; return; }
-  list.innerHTML = sups.map((s,i) => `
+function renderSuppliers(){
+  const sups=getSuppliers();
+  const list=document.getElementById('supplier-list');
+  if(!sups.length){list.innerHTML='<div class="empty-state">Noch keine Lieferanten gespeichert.<br>Werden automatisch angelegt wenn du eine neue Rechnung hochlädst.</div>';return}
+  list.innerHTML=sups.map((s,i)=>`
     <div class="supplier-row">
-      <input class="sup-input sup-raw" value="${esc(s.raw)}" placeholder="Name auf Rechnung">
-      <span class="arrow-sep">→</span>
-      <input class="sup-input sup-short" value="${esc(s.short)}" placeholder="Kurzname">
-      <select class="sup-input sup-typ" style="max-width:130px">
+      <input class="sup-in sup-r" value="${esc(s.raw)}" placeholder="Name auf Rechnung">
+      <span class="arrow">→</span>
+      <input class="sup-in sup-s" value="${esc(s.short)}" placeholder="Kurzname">
+      <select class="sup-in sup-t" style="max-width:90px">
         <option value="RE"${s.typ==='RE'?' selected':''}>RE</option>
         <option value="GS"${s.typ==='GS'?' selected':''}>GS</option>
       </select>
-      <button class="btn btn-sm btn-danger" onclick="deleteSupplier(${i})">🗑️</button>
+      <button class="btn btn-sm btn-danger" onclick="delSupplier(${i})">🗑️</button>
     </div>`).join('');
 }
-function addSupplierManual() {
-  const sups = getSuppliers();
-  sups.push({ raw:'', short:'', typ:'RE' });
+function persistSuppliers(){
+  const rows=document.querySelectorAll('.supplier-row');
+  const sups=[...rows].map(r=>({raw:r.querySelector('.sup-r')?.value?.trim()||'',short:r.querySelector('.sup-s')?.value?.trim()||'',typ:r.querySelector('.sup-t')?.value||'RE'})).filter(s=>s.raw);
   saveSuppliersList(sups);
-  renderSuppliers();
+  toast('Lieferanten gespeichert.','success');
 }
-function deleteSupplier(i) {
-  const sups = getSuppliers(); sups.splice(i,1); saveSuppliersList(sups); renderSuppliers();
+function addSupplierManual(){
+  const sups=getSuppliers();sups.push({raw:'',short:'',typ:'RE'});saveSuppliersList(sups);renderSuppliers();
+}
+function delSupplier(i){const sups=getSuppliers();sups.splice(i,1);saveSuppliersList(sups);renderSuppliers()}
+
+// ── SETTINGS ─────────────────────────────────────────────
+function getKey(){return localStorage.getItem('re_api_key')||''}
+function getFolder(){return localStorage.getItem('re_folder')||''}
+function saveApiKey(){
+  const v=document.getElementById('api-key-field').value.trim();
+  if(!v){toast('Bitte einen Key eingeben.','error');return}
+  localStorage.setItem('re_api_key',v);loadSettings();toast('API Key gespeichert.','success');
+}
+function clearApiKey(){localStorage.removeItem('re_api_key');document.getElementById('api-key-field').value='';loadSettings();toast('Key gelöscht.','success')}
+function saveFolder(){
+  const v=document.getElementById('folder-field')?.value?.trim()||'';
+  localStorage.setItem('re_folder',v);loadSettings();toast('Speicherort gespeichert.','success');
+}
+function changeFolder(){
+  document.getElementById('folder-set-ui').style.display='none';
+  document.getElementById('folder-empty-ui').style.display='block';
+  document.getElementById('folder-field').value=getFolder();
+}
+function loadSettings(){
+  const k=getKey();
+  document.getElementById('key-dot').className='key-dot'+(k?' ok':'');
+  const ks=document.getElementById('key-status');
+  if(ks) ks.innerHTML=k?`<span style="color:var(--success)">✅ Key gespeichert: ${k.slice(0,14)}…</span>`:`<span style="color:var(--danger)">❌ Kein Key hinterlegt</span>`;
+  const kf=document.getElementById('api-key-field');if(kf)kf.value='';
+  const folder=getFolder();
+  const fe=document.getElementById('folder-empty-ui'),fs=document.getElementById('folder-set-ui'),fd=document.getElementById('folder-display');
+  if(folder&&fe&&fs&&fd){fe.style.display='none';fs.style.display='flex';fd.textContent=folder}
+  else if(fe&&fs){fe.style.display='block';fs.style.display='none'}
 }
 
-// ─── SETTINGS ─────────────────────────────────────────────
-function getApiKey() { return localStorage.getItem('re_api_key')||''; }
-function saveApiKey() {
-  const v = document.getElementById('api-key-field').value.trim();
-  if (!v) { toast('Bitte einen Key eingeben.','error'); return; }
-  localStorage.setItem('re_api_key', v);
-  loadSettingsDisplay();
-  toast('API Key gespeichert.','success');
-}
-function clearApiKey() { localStorage.removeItem('re_api_key'); document.getElementById('api-key-field').value=''; loadSettingsDisplay(); toast('Key gelöscht.','success'); }
-function getSavedFolder() { return localStorage.getItem('re_folder')||''; }
-function saveFolder() {
-  const v = document.getElementById('folder-input')?.value?.trim()||'';
-  localStorage.setItem('re_folder', v);
-  loadSettingsDisplay();
-  toast('Speicherort gespeichert.','success');
-}
-function changeFolder() {
-  document.getElementById('folder-set').style.display = 'none';
-  document.getElementById('folder-empty').style.display = 'block';
-  document.getElementById('folder-input').value = getSavedFolder();
-}
-function loadSettingsDisplay() {
-  const k = getApiKey();
-  document.getElementById('key-dot').className = 'key-dot' + (k?' ok':'');
-  const st = document.getElementById('key-status-text');
-  if (st) st.innerHTML = k ? `<span style="color:var(--success)">✅ Key gespeichert: ${k.slice(0,14)}…</span>` : `<span style="color:var(--danger)">❌ Kein Key hinterlegt</span>`;
-  if (document.getElementById('api-key-field')) document.getElementById('api-key-field').value = '';
-  const folder = getSavedFolder();
-  const fe = document.getElementById('folder-empty');
-  const fs = document.getElementById('folder-set');
-  const fd = document.getElementById('folder-display');
-  if (folder && fe && fs && fd) { fe.style.display='none'; fs.style.display='flex'; fd.textContent=folder; }
-  else if (fe && fs) { fe.style.display='block'; fs.style.display='none'; }
-}
+// ── HELPERS ──────────────────────────────────────────────
+async function toB64(file){return new Promise((res,rej)=>{const r=new FileReader();r.onload=()=>res(r.result.split(',')[1]);r.onerror=()=>rej(new Error('Lesefehler'));r.readAsDataURL(file)})}
+function toast(msg,type=''){const t=document.getElementById('toast');t.textContent=msg;t.className='show'+(type?' t-'+type:'');clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3200)}
 
-function toast(msg, type='') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'show' + (type?' t-'+type:'');
-  clearTimeout(t._t); t._t = setTimeout(()=>t.className='', 3200);
-}
-
-loadSettingsDisplay();
+loadSettings();
 </script>
 </body>
 </html>
