@@ -5,20 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Rechnungs-Umbenenner</title>
 <style>
-:root {
-  --bg:#0f1117; --sur:#1a1d27; --sur2:#22263a; --sur3:#2a2f47;
-  --acc:#4f8ef7; --acc2:#7c5cbf; --txt:#e8eaf0; --mut:#6b7194; --brd:#2e3250;
-  --ok:#3ecf8e;  --ok-bg:rgba(62,207,142,.1);  --ok-bd:rgba(62,207,142,.3);
-  --er:#f76f6f;  --er-bg:rgba(247,111,111,.1); --er-bd:rgba(247,111,111,.3);
-  --wa:#f0a500;  --wa-bg:rgba(240,165,0,.1);   --wa-bd:rgba(240,165,0,.3);
-  --pu:#a78bfa;  --pu-bg:rgba(124,92,191,.12); --pu-bd:rgba(124,92,191,.35);
-  --in-bg:rgba(79,142,247,.1); --in-bd:rgba(79,142,247,.3);
-  --r:10px; --rs:6px;
+:root{
+  --bg:#0f1117;--sur:#1a1d27;--sur2:#22263a;--sur3:#2a2f47;
+  --acc:#4f8ef7;--acc2:#7c5cbf;--txt:#e8eaf0;--mut:#6b7194;--brd:#2e3250;
+  --ok:#3ecf8e;--ok-bg:rgba(62,207,142,.1);--ok-bd:rgba(62,207,142,.3);
+  --er:#f76f6f;--er-bg:rgba(247,111,111,.1);--er-bd:rgba(247,111,111,.3);
+  --wa:#f0a500;--wa-bg:rgba(240,165,0,.1);--wa-bd:rgba(240,165,0,.3);
+  --pu:#a78bfa;--pu-bg:rgba(124,92,191,.12);--pu-bd:rgba(124,92,191,.35);
+  --in-bg:rgba(79,142,247,.1);--in-bd:rgba(79,142,247,.3);
+  --r:10px;--rs:6px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh}
-
-/* HEADER */
 header{background:var(--sur);border-bottom:1px solid var(--brd);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
 .logo{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:600}
 .logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
@@ -27,19 +25,13 @@ nav{display:flex;gap:2px;background:var(--sur2);border-radius:8px;padding:3px}
 .nb:hover{color:var(--txt)}.nb.on{background:var(--sur3);color:var(--txt)}
 .kdot{width:9px;height:9px;border-radius:50%;background:var(--er);cursor:pointer;transition:background .2s;flex-shrink:0}
 .kdot.ok{background:var(--ok)}
-
-/* LAYOUT */
 main{max-width:900px;margin:0 auto;padding:28px 20px}
 .pg{display:none}.pg.on{display:block}
 .card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:20px 24px;margin-bottom:16px}
 .ctitle{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:16px}
-
-/* DROPZONE */
 .dz{border:2px dashed var(--brd);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
 .dz:hover,.dz.over{border-color:var(--acc);background:rgba(79,142,247,.04)}
 .dz p{color:var(--mut);font-size:.88rem;margin-top:6px}
-
-/* BUTTONS */
 .btn{padding:8px 16px;border-radius:var(--rs);font-size:.83rem;cursor:pointer;border:1px solid var(--brd);background:var(--sur2);color:var(--txt);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn:hover{border-color:var(--acc);color:var(--acc)}
 .btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
@@ -52,26 +44,15 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
 .btn-wa{background:var(--wa-bg);border-color:var(--wa-bd);color:var(--wa)}
 .btn-wa:hover{background:rgba(240,165,0,.2);border-color:var(--wa);color:var(--wa)}
 .btn-sm{padding:5px 11px;font-size:.78rem}
-
-/* TOOLBAR */
 .toolbar{display:flex;align-items:center;gap:10px;margin-top:4px}
 .tl{flex:1;font-size:.85rem;color:var(--mut)}
-
-/* FILE LIST */
 .flist{display:flex;flex-direction:column;gap:12px;margin-top:16px}
-
-/* FILE ITEM */
 .fitem{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
-.fitem.s-ok{border-color:var(--ok-bd)}
-.fitem.s-anlz{border-color:var(--in-bd)}
-.fitem.s-new{border-color:var(--pu-bd)}
-.fitem.s-conf{border-color:var(--wa-bd)}
+.fitem.s-ok{border-color:var(--ok-bd)}.fitem.s-anlz{border-color:var(--in-bd)}
+.fitem.s-new{border-color:var(--pu-bd)}.fitem.s-conf{border-color:var(--wa-bd)}
 .fitem.s-err{border-color:var(--er-bd)}
-
 .fhead{display:flex;align-items:center;gap:10px;padding:14px 16px 0}
 .forig{font-size:.8rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-
-/* BADGES */
 .bdg{display:inline-flex;align-items:center;gap:5px;font-size:.71rem;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;flex-shrink:0}
 .bdg-pend{background:var(--wa-bg);color:var(--wa);border:1px solid var(--wa-bd)}
 .bdg-anlz{background:var(--in-bg);color:var(--acc);border:1px solid var(--in-bd)}
@@ -79,19 +60,12 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
 .bdg-new{background:var(--pu-bg);color:var(--pu);border:1px solid var(--pu-bd)}
 .bdg-ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
 .bdg-err{background:var(--er-bg);color:var(--er);border:1px solid var(--er-bd)}
-
-/* RESULT */
 .rblock{padding:12px 16px 0}
 .rname{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:10px 14px;font-size:.88rem;color:var(--ok);font-family:'Consolas',monospace;word-break:break-all}
 .rmeta{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
 .rmeta span{font-size:.75rem;color:var(--mut)}.rmeta b{color:var(--txt)}
-.rerr{font-size:.82rem;color:var(--er);padding:10px 0}
-
-/* CONFIRM PANEL */
 .cpanel{background:var(--wa-bg);border-top:1px solid var(--wa-bd);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 .cpanel p{font-size:.82rem;color:var(--wa);flex:1;min-width:160px}
-
-/* NEW SUPPLIER PANEL */
 .spanel{background:var(--pu-bg);border-top:1px solid var(--pu-bd);padding:14px 16px}
 .spanel h3{font-size:.85rem;font-weight:600;color:var(--pu);margin-bottom:6px}
 .spanel p{font-size:.8rem;color:var(--mut);margin-bottom:12px;line-height:1.6}
@@ -100,20 +74,13 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
 .sfield input,.sfield select{width:100%;background:var(--sur3);border:1px solid var(--brd);border-radius:var(--rs);padding:7px 10px;color:var(--txt);font-size:.85rem;font-family:inherit;outline:none;transition:border-color .15s}
 .sfield input:focus,.sfield select:focus{border-color:var(--acc)}
 .sprev{font-size:.75rem;color:var(--pu);font-family:'Consolas',monospace;padding:6px 10px;background:rgba(124,92,191,.08);border-radius:var(--rs);margin-bottom:10px;word-break:break-all}
-.ssaved{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:8px 12px;font-size:.82rem;color:var(--ok);margin-bottom:10px}
-
-/* FOOTER */
 .ffoot{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;gap:10px;flex-wrap:wrap}
 .fhint{font-size:.75rem;color:var(--wa)}
-
-/* SUPPLIER PAGE */
 .srow{display:flex;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--brd)}
 .srow:last-child{border-bottom:none}
 .sin{flex:1;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:7px 10px;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;transition:border-color .15s}
 .sin:focus{border-color:var(--acc)}
 .empty{text-align:center;padding:32px;color:var(--mut);font-size:.88rem}
-
-/* SETTINGS */
 .slbl{font-size:.82rem;color:var(--mut);margin-bottom:7px;display:block}
 .sinp{width:100%;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:9px 14px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none;transition:border-color .15s}
 .sinp:focus{border-color:var(--acc)}
@@ -121,35 +88,23 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
 .fbox{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:10px 14px;display:flex;align-items:center;gap:10px}
 .fbox span{font-size:.83rem;color:var(--ok);font-family:'Consolas',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .hintbox{background:var(--wa-bg);border:1px solid var(--wa-bd);border-radius:var(--rs);padding:10px 14px;font-size:.8rem;color:var(--wa);margin-top:10px}
-
-/* TOAST */
 #toast{position:fixed;bottom:24px;right:24px;background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:11px 18px;font-size:.85rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:360px}
-#toast.show{opacity:1}
-#toast.tok{border-color:var(--ok-bd);color:var(--ok)}
-#toast.ter{border-color:var(--er-bd);color:var(--er)}
-
+#toast.show{opacity:1}#toast.tok{border-color:var(--ok-bd);color:var(--ok)}#toast.ter{border-color:var(--er-bd);color:var(--er)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo">
-    <div class="logo-icon">📄</div>
-    Rechnungs-Umbenenner
-  </div>
+  <div class="logo"><div class="logo-icon">📄</div>Rechnungs-Umbenenner</div>
   <nav>
     <button class="nb on" id="nav-analyse" onclick="showPg('analyse')">📥 Analyse</button>
     <button class="nb" id="nav-lieferanten" onclick="showPg('lieferanten')">🏪 Lieferanten</button>
     <button class="nb" id="nav-einstellungen" onclick="showPg('einstellungen')">⚙️ Einstellungen</button>
   </nav>
-  <div class="kdot" id="kdot" title="API Key Status" onclick="showPg('einstellungen')"></div>
+  <div class="kdot" id="kdot" title="API Key" onclick="showPg('einstellungen')"></div>
 </header>
-
 <main>
-
-  <!-- ANALYSE -->
   <div class="pg on" id="pg-analyse">
     <div class="card">
       <div class="ctitle">📥 Rechnungen einlesen</div>
@@ -166,8 +121,6 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
       <button class="btn btn-p" id="btn-dla" onclick="dlAll()" disabled>⬇️ Alle herunterladen</button>
     </div>
   </div>
-
-  <!-- LIEFERANTEN -->
   <div class="pg" id="pg-lieferanten">
     <div class="card">
       <div class="ctitle">🏪 Gespeicherte Lieferanten</div>
@@ -175,12 +128,10 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
       <div id="slist"></div>
       <div style="margin-top:14px;display:flex;gap:8px">
         <button class="btn btn-sm" onclick="addSupManual()">➕ Hinzufügen</button>
-        <button class="btn btn-sm btn-ok" onclick="saveSups()">💾 Speichern</button>
+        <button class="btn btn-sm btn-ok" onclick="saveSupsFromUI()">💾 Speichern</button>
       </div>
     </div>
   </div>
-
-  <!-- EINSTELLUNGEN -->
   <div class="pg" id="pg-einstellungen">
     <div class="card">
       <div class="ctitle">🔑 API Key</div>
@@ -207,98 +158,67 @@ main{max-width:900px;margin:0 auto;padding:28px 20px}
       <div class="hintbox">ℹ️ Browser-Sicherheitsregel: Dateien landen immer im Download-Ordner. Tipp: In Chrome → Einstellungen → Downloads deinen Rechnungsordner als Standard setzen.</div>
     </div>
   </div>
-
 </main>
-
 <div id="toast"></div>
 
 <script>
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // STATE
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 var files = [];
 var results = {};
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // NAVIGATION
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 function showPg(id) {
-  document.querySelectorAll('.pg').forEach(function(p){ p.classList.remove('on'); });
-  document.querySelectorAll('.nb').forEach(function(b){ b.classList.remove('on'); });
+  ['analyse','lieferanten','einstellungen'].forEach(function(n) {
+    document.getElementById('pg-' + n).classList.remove('on');
+    document.getElementById('nav-' + n).classList.remove('on');
+  });
   document.getElementById('pg-' + id).classList.add('on');
   document.getElementById('nav-' + id).classList.add('on');
   if (id === 'lieferanten') renderSups();
   if (id === 'einstellungen') loadSettings();
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // DRAG & DROP
-// ═══════════════════════════════════════════════
-var dzEl = document.getElementById('dz');
-
-dzEl.addEventListener('click', function() {
-  document.getElementById('fi').click();
-});
-
-dzEl.addEventListener('dragenter', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  dzEl.classList.add('over');
-});
-
-dzEl.addEventListener('dragover', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  dzEl.classList.add('over');
-});
-
-dzEl.addEventListener('dragleave', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  dzEl.classList.remove('over');
-});
-
-dzEl.addEventListener('drop', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  dzEl.classList.remove('over');
-  var dropped = Array.from(e.dataTransfer.files).filter(function(f) {
-    return f.name.toLowerCase().endsWith('.pdf');
+// ═══════════════════════════════════════════════════════════════
+(function() {
+  var dz = document.getElementById('dz');
+  dz.addEventListener('click', function() { document.getElementById('fi').click(); });
+  dz.addEventListener('dragenter', function(e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragover',  function(e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave', function(e) { e.preventDefault(); e.stopPropagation(); dz.classList.remove('over'); });
+  dz.addEventListener('drop', function(e) {
+    e.preventDefault(); e.stopPropagation(); dz.classList.remove('over');
+    var dropped = Array.from(e.dataTransfer.files).filter(function(f) { return f.name.toLowerCase().endsWith('.pdf'); });
+    if (dropped.length) addFiles(dropped);
   });
-  if (dropped.length) addFiles(dropped);
-});
+  document.getElementById('fi').addEventListener('change', function(e) {
+    var sel = Array.from(e.target.files);
+    if (sel.length) addFiles(sel);
+    e.target.value = '';
+  });
+})();
 
-document.getElementById('fi').addEventListener('change', function(e) {
-  var selected = Array.from(e.target.files);
-  if (selected.length) addFiles(selected);
-  e.target.value = '';
-});
-
-// ═══════════════════════════════════════════════
-// ADD FILES & AUTO-ANALYSE
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// ADD FILES → AUTO ANALYSE
+// ═══════════════════════════════════════════════════════════════
 function addFiles(newFiles) {
   var added = [];
   newFiles.forEach(function(f) {
-    var dup = files.some(function(x){ return x.name === f.name && x.size === f.size; });
-    if (!dup) {
-      files.push(f);
-      added.push(files.length - 1);
-    }
+    var dup = files.some(function(x) { return x.name === f.name && x.size === f.size; });
+    if (!dup) { files.push(f); added.push(files.length - 1); }
   });
-  renderList();
   if (!added.length) return;
-  if (!getKey()) {
-    toast('Bitte zuerst den API Key unter Einstellungen eintragen.', 'ter');
-    showPg('einstellungen');
-    return;
-  }
-  added.forEach(function(i) {
-    results[i] = { analyzing: true };
-  });
   renderList();
-  Promise.all(added.map(function(i){ return analyseOne(i); }))
-    .then(function(){ toast('Analyse abgeschlossen.', 'tok'); });
+  if (!getKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.', 'ter'); showPg('einstellungen'); return; }
+  added.forEach(function(i) { results[i] = { analyzing: true }; });
+  renderList();
+  Promise.all(added.map(function(i) { return analyseOne(i); }))
+    .then(function() { toast('Analyse abgeschlossen.', 'tok'); });
 }
 
 function removeFile(i) {
@@ -313,14 +233,13 @@ function removeFile(i) {
   renderList();
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // RENDER
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 function renderList() {
   var list = document.getElementById('flist');
   document.getElementById('fcnt').textContent = files.length;
-  if (!files.length) { list.innerHTML = ''; updDlAll(); return; }
-  list.innerHTML = files.map(function(f, i){ return renderItem(f, i); }).join('');
+  list.innerHTML = files.map(function(f, i) { return renderItem(f, i); }).join('');
   updDlAll();
 }
 
@@ -329,34 +248,21 @@ function renderItem(f, i) {
   var folder = getFolder();
   var isDone = r && !r.error && !r.analyzing && r.confirmed && r.nr;
 
-  // Badge
   var badge = '<span class="bdg bdg-pend">⏳ Ausstehend</span>';
   var sc = 'fitem';
   if (r) {
-    if (r.analyzing) {
-      badge = '<span class="bdg bdg-anlz"><span class="spin"></span> Analysiere…</span>';
-      sc = 'fitem s-anlz';
-    } else if (r.error) {
-      badge = '<span class="bdg bdg-err">❌ Fehler</span>';
-      sc = 'fitem s-err';
-    } else if (r.pendingSup && !r.supSaved) {
-      badge = '<span class="bdg bdg-new">🆕 Neuer Lieferant</span>';
-      sc = 'fitem s-new';
-    } else if (!r.confirmed) {
-      badge = '<span class="bdg bdg-conf">👀 Bitte bestätigen</span>';
-      sc = 'fitem s-conf';
-    } else {
-      badge = '<span class="bdg bdg-ok">✅ Fertig</span>';
-      sc = 'fitem s-ok';
-    }
+    if (r.analyzing) { badge = '<span class="bdg bdg-anlz"><span class="spin"></span> Analysiere…</span>'; sc = 'fitem s-anlz'; }
+    else if (r.error) { badge = '<span class="bdg bdg-err">❌ Fehler</span>'; sc = 'fitem s-err'; }
+    else if (r.pendingSup && !r.supSaved) { badge = '<span class="bdg bdg-new">🆕 Neuer Lieferant</span>'; sc = 'fitem s-new'; }
+    else if (!r.confirmed) { badge = '<span class="bdg bdg-conf">👀 Bitte bestätigen</span>'; sc = 'fitem s-conf'; }
+    else { badge = '<span class="bdg bdg-ok">✅ Fertig</span>'; sc = 'fitem s-ok'; }
   }
 
-  // Result block
   var resultHtml = '';
   if (r && !r.analyzing && r.nr) {
     var name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
     resultHtml = '<div class="rblock">'
-      + '<div class="rname">📄 ' + esc(name) + '.pdf</div>'
+      + '<div class="rname" id="rname-' + i + '">📄 ' + esc(name) + '.pdf</div>'
       + '<div class="rmeta">'
       + '<span>Typ: <b>' + esc(r.typ) + '</b></span>'
       + '<span>Nr: <b>' + esc(r.nr) + '</b></span>'
@@ -366,53 +272,44 @@ function renderItem(f, i) {
       + '</div></div>';
   }
   if (r && r.error) {
-    resultHtml = '<div class="rblock"><div class="rerr">' + esc(r.error) + '</div></div>';
+    resultHtml = '<div class="rblock"><div style="font-size:.82rem;color:var(--er);padding:8px 0">' + esc(r.error) + '</div></div>';
   }
 
-  // New supplier panel
   var supHtml = '';
   if (r && r.pendingSup && !r.supSaved) {
-    var shortSug = r.steller || '';
     supHtml = '<div class="spanel">'
       + '<h3>🆕 Neuer Lieferant erkannt</h3>'
       + '<p>Claude hat <strong style="color:var(--pu)">' + esc(r.stellerRoh) + '</strong> erkannt. Lege diesen Lieferanten einmalig an.</p>'
       + '<div class="sgrid">'
-      + '<div class="sfield"><label>Erkennungsname</label><input id="sraw-' + i + '" value="' + esc(r.stellerRoh) + '" oninput="updSprev(' + i + ')"></div>'
-      + '<div class="sfield"><label>Kurzname für Dateiname</label><input id="sshort-' + i + '" value="' + esc(shortSug) + '" oninput="updSprev(' + i + ')"></div>'
+      + '<div class="sfield"><label>Erkennungsname (auf Rechnung)</label><input id="sraw-' + i + '" value="' + esc(r.stellerRoh) + '" oninput="updSprev(' + i + ')"></div>'
+      + '<div class="sfield"><label>Kurzname für Dateiname</label><input id="sshort-' + i + '" value="' + esc(r.steller) + '" oninput="updSprev(' + i + ')"></div>'
       + '<div class="sfield"><label>Typ</label><select id="styp-' + i + '" onchange="updSprev(' + i + ')">'
       + '<option value="RE"' + (r.typ === 'RE' ? ' selected' : '') + '>RE</option>'
       + '<option value="GS"' + (r.typ === 'GS' ? ' selected' : '') + '>GS</option>'
       + '</select></div>'
       + '</div>'
-      + '<div class="sprev" id="sprev-' + i + '">📄 ' + esc(buildName(r.typ, r.nr, shortSug, r.datum, r.betrag)) + '.pdf</div>'
+      + '<div class="sprev" id="sprev-' + i + '">📄 ' + esc(buildName(r.typ, r.nr, r.steller, r.datum, r.betrag)) + '.pdf</div>'
       + '<div style="display:flex;gap:8px">'
       + '<button class="btn btn-sm" onclick="skipSup(' + i + ')">Überspringen</button>'
-      + '<button class="btn btn-sm btn-p" onclick="saveSup(' + i + ')">💾 Lieferant speichern</button>'
+      + '<button class="btn btn-sm btn-p" onclick="confirmSup(' + i + ')">💾 Lieferant speichern</button>'
       + '</div></div>';
   }
-  if (r && r.pendingSup && r.supSaved) {
-    supHtml = '<div class="spanel" style="padding:10px 16px"><div class="ssaved">✅ Lieferant gespeichert.</div></div>';
-  }
 
-  // Confirm panel — shown after supplier step done, before confirmed
   var confirmHtml = '';
-  var showConfirm = r && !r.analyzing && !r.error && r.nr && (!r.pendingSup || r.supSaved) && !r.confirmed;
-  if (showConfirm) {
-    confirmHtml = '<div class="cpanel">'
-      + '<p>Dateiname prüfen und bestätigen:</p>'
+  if (r && !r.analyzing && !r.error && r.nr && (!r.pendingSup || r.supSaved) && !r.confirmed) {
+    confirmHtml = '<div class="cpanel"><p>Dateiname prüfen und bestätigen:</p>'
       + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
       + '<button class="btn btn-sm btn-wa" onclick="editName(' + i + ')">✏️ Bearbeiten</button>'
       + '<button class="btn btn-sm btn-ok" onclick="confirmFile(' + i + ')">✅ Bestätigen & herunterladen</button>'
       + '</div></div>';
   }
 
-  // Footer
   var hintHtml = (folder && isDone) ? '<span class="fhint">📁 ' + esc(folder) + '</span>' : '<span></span>';
   var dlDis = isDone ? '' : ' disabled';
 
   return '<div class="' + sc + '" id="item-' + i + '">'
     + '<div class="fhead"><span class="forig" title="' + esc(f.name) + '">📄 ' + esc(f.name) + '</span>'
-    + '<span id="bdg-' + i + '">' + badge + '</span></div>'
+    + badge + '</div>'
     + resultHtml + supHtml + confirmHtml
     + '<div class="ffoot">' + hintHtml
     + '<div style="display:flex;gap:8px">'
@@ -431,24 +328,18 @@ function reRender(i) {
 }
 
 function updDlAll() {
-  var any = files.some(function(_, i){
-    return results[i] && results[i].confirmed && !results[i].error && results[i].nr;
-  });
+  var any = files.some(function(_, i) { return results[i] && results[i].confirmed && !results[i].error && results[i].nr; });
   document.getElementById('btn-dla').disabled = !any;
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // HELPERS
-// ═══════════════════════════════════════════════
-function esc(s) {
-  return (s || '').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
+// ═══════════════════════════════════════════════════════════════
+function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function formatBetrag(raw) {
   if (!raw) return '';
-  // strip currency symbols and spaces
   var s = raw.replace(/[^\d,.]/g, '').trim();
-  // assume German format: dots = thousands sep, comma = decimal
   s = s.replace(/\./g, '').replace(',', '.');
   var num = parseFloat(s);
   if (isNaN(num)) return raw;
@@ -464,9 +355,7 @@ function buildName(typ, nr, steller, datum, betrag) {
   return (typ + ' ' + n + ' ' + s + ' ' + d + (b ? ' ' + b : '')).replace(/\s+/g, ' ').trim();
 }
 
-function san(s) {
-  return (s || '').replace(/[\/\\:*?"<>|]/g, '_').replace(/\s+/g, ' ').trim();
-}
+function san(s) { return (s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim(); }
 
 function toB64(file) {
   return new Promise(function(res, rej) {
@@ -479,19 +368,68 @@ function toB64(file) {
 
 function toast(msg, cls) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show' + (cls ? ' ' + cls : '');
-  clearTimeout(t._timer);
-  t._timer = setTimeout(function(){ t.className = ''; }, 3200);
+  t.textContent = msg; t.className = 'show' + (cls ? ' ' + cls : '');
+  clearTimeout(t._timer); t._timer = setTimeout(function() { t.className = ''; }, 3200);
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// SUPPLIER MATCHING  — robust, multi-pass
+// ═══════════════════════════════════════════════════════════════
+function normalize(s) {
+  // lowercase, remove all non-alphanumeric except spaces, collapse spaces
+  return (s || '').toLowerCase()
+    .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+function findSup(stellerRoh) {
+  if (!stellerRoh) return null;
+  var sups = getSups();
+  var needle = normalize(stellerRoh);
+
+  // Pass 1: exact normalized match
+  for (var i = 0; i < sups.length; i++) {
+    if (!sups[i].raw) continue;
+    if (normalize(sups[i].raw) === needle) return sups[i];
+  }
+  // Pass 2: one contains the other
+  for (var i = 0; i < sups.length; i++) {
+    if (!sups[i].raw) continue;
+    var hay = normalize(sups[i].raw);
+    if (!hay) continue;
+    if (needle.includes(hay) || hay.includes(needle)) return sups[i];
+  }
+  // Pass 3: all significant words of stored raw appear in detected name
+  for (var i = 0; i < sups.length; i++) {
+    if (!sups[i].raw) continue;
+    var words = normalize(sups[i].raw).split(' ').filter(function(w) { return w.length > 2; });
+    if (!words.length) continue;
+    if (words.every(function(w) { return needle.includes(w); })) return sups[i];
+  }
+  // Pass 4: all significant words of detected name appear in stored raw
+  for (var i = 0; i < sups.length; i++) {
+    if (!sups[i].raw) continue;
+    var hay = normalize(sups[i].raw);
+    var words = needle.split(' ').filter(function(w) { return w.length > 2; });
+    if (!words.length) continue;
+    if (words.every(function(w) { return hay.includes(w); })) return sups[i];
+  }
+  return null;
+}
+
+// Check duplicate before adding a new supplier
+function isDupSup(raw) {
+  return !!findSup(raw);
+}
+
+// ═══════════════════════════════════════════════════════════════
 // ANALYSE
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 async function analyseOne(i) {
   try {
     var b64 = await toB64(files[i]);
-    var prompt = 'Analysiere diese Rechnung und gib NUR ein JSON-Objekt zurueck, ohne Text davor oder danach: {"typ":"RE oder GS (GS=Gutschrift/Storno)","nr":"Rechnungsnummer","steller_roh":"Firmenname Absender exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Bruttobetrag mit Komma und Euro-Zeichen z.B. 2150,60EUR"}';
+    var prompt = 'Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurueck, ohne Erklaerungen, ohne Markdown:\n{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung/Rechnungskorrektur)","nr":"Rechnungsnummer oder Belegnummer","steller_roh":"Firmenname des Rechnungsstellers exakt wie auf der Rechnung, NICHT Autopartner GmbH","datum":"Rechnungsdatum TT.MM.JJJJ","betrag":"Brutto-Gesamtbetrag mit Komma und Euro-Zeichen z.B. 238,00EUR oder 2150,60EUR"}';
 
     var resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -503,124 +441,113 @@ async function analyseOne(i) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 500,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } },
-            { type: 'text', text: prompt }
-          ]
-        }]
+        max_tokens: 400,
+        messages: [{ role: 'user', content: [
+          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } },
+          { type: 'text', text: prompt }
+        ]}]
       })
     });
 
     var data = await resp.json();
     if (data.error) throw new Error(data.error.message);
-    var text = (data.content || []).map(function(c){ return c.text || ''; }).join('');
-    var parsed = JSON.parse(text.replace(/```json|```/g, '').trim());
+    var rawText = (data.content || []).map(function(c) { return c.text || ''; }).join('');
+    var jsonText = rawText.replace(/```json|```/g, '').trim();
+    var parsed = JSON.parse(jsonText);
 
-    var stellerRoh = parsed.steller_roh || '';
+    var stellerRoh = (parsed.steller_roh || '').trim();
     var known = findSup(stellerRoh);
 
     if (known) {
-      // Bekannter Lieferant → direkt bestätigen und herunterladen
-      results[i] = {
-        typ: parsed.typ || 'RE',
-        nr: parsed.nr || '',
-        steller: known.short,
-        datum: parsed.datum || '',
-        betrag: parsed.betrag || '',
-        confirmed: true
-      };
+      // Bekannter Lieferant → sofort bestätigen und herunterladen
+      results[i] = { typ: parsed.typ || 'RE', nr: parsed.nr || '', steller: known.short, datum: parsed.datum || '', betrag: parsed.betrag || '', confirmed: true };
       reRender(i);
       await dlOne(i);
     } else {
-      // Neuer Lieferant → Benutzer muss anlegen
-      var shortSug = stellerRoh.split(' ').slice(0, 2).join(' ');
-      results[i] = {
-        typ: parsed.typ || 'RE',
-        nr: parsed.nr || '',
-        steller: shortSug,
-        datum: parsed.datum || '',
-        betrag: parsed.betrag || '',
-        pendingSup: true,
-        stellerRoh: stellerRoh,
-        confirmed: false
-      };
+      // Neuer Lieferant → Kurzname vorschlagen, Benutzer muss bestätigen
+      var shortSug = stellerRoh.split(/[\s,]+/).slice(0, 2).join(' ');
+      results[i] = { typ: parsed.typ || 'RE', nr: parsed.nr || '', steller: shortSug, datum: parsed.datum || '', betrag: parsed.betrag || '', pendingSup: true, stellerRoh: stellerRoh, confirmed: false };
       reRender(i);
     }
   } catch(e) {
-    results[i] = { error: e.message };
+    results[i] = { error: 'Analysefehler: ' + e.message };
     reRender(i);
   }
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // SUPPLIER FLOW
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 function updSprev(i) {
-  var short = (document.getElementById('sshort-' + i) || {}).value || '';
-  var typ = (document.getElementById('styp-' + i) || {}).value || 'RE';
+  var shortEl = document.getElementById('sshort-' + i);
+  var typEl = document.getElementById('styp-' + i);
   var r = results[i] || {};
-  var p = buildName(typ, r.nr || 'NR', short || 'Lieferant', r.datum || 'TT.MM.JJJJ', r.betrag || '0,00€');
+  var short = shortEl ? shortEl.value : r.steller;
+  var typ = typEl ? typEl.value : 'RE';
+  var p = buildName(typ, r.nr || 'NR', short || 'Lieferant', r.datum || 'TT.MM.JJJJ', r.betrag || '0,00EUR');
   var el = document.getElementById('sprev-' + i);
   if (el) el.textContent = '📄 ' + p + '.pdf';
 }
 
-function saveSup(i) {
-  var raw = ((document.getElementById('sraw-' + i) || {}).value || '').trim();
-  var short = ((document.getElementById('sshort-' + i) || {}).value || '').trim();
-  var typ = (document.getElementById('styp-' + i) || {}).value || 'RE';
+function confirmSup(i) {
+  var rawEl = document.getElementById('sraw-' + i);
+  var shortEl = document.getElementById('sshort-' + i);
+  var typEl = document.getElementById('styp-' + i);
+  var raw = rawEl ? rawEl.value.trim() : '';
+  var short = shortEl ? shortEl.value.trim() : '';
+  var typ = typEl ? typEl.value : 'RE';
   if (!raw || !short) { toast('Bitte beide Felder ausfüllen.', 'ter'); return; }
+
+  // Duplikatsprüfung
+  if (isDupSup(raw)) {
+    toast('Dieser Lieferant ist bereits gespeichert.', 'ter');
+    // trotzdem weiter mit dem bestehenden
+    var existing = findSup(raw);
+    results[i] = Object.assign({}, results[i], { steller: existing ? existing.short : short, supSaved: true, pendingSup: false });
+    reRender(i);
+    return;
+  }
+
   var sups = getSups();
   sups.push({ raw: raw, short: short, typ: typ });
   saveSupList(sups);
-  results[i] = Object.assign({}, results[i], { steller: short, typ: typ, supSaved: true });
+  results[i] = Object.assign({}, results[i], { steller: short, typ: typ, supSaved: true, pendingSup: false });
   reRender(i);
   toast('Lieferant "' + short + '" gespeichert.', 'tok');
 }
 
 function skipSup(i) {
-  results[i] = Object.assign({}, results[i], { supSaved: true });
+  results[i] = Object.assign({}, results[i], { supSaved: true, pendingSup: false });
   reRender(i);
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // CONFIRM FLOW
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 function editName(i) {
-  var r = results[i]; if (!r) return;
-  var name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
-  var el = document.getElementById('item-' + i);
+  var el = document.getElementById('rname-' + i);
   if (!el) return;
-  var rname = el.querySelector('.rname');
-  if (!rname) return;
-  rname.contentEditable = 'true';
-  rname.style.background = 'var(--sur3)';
-  rname.style.color = 'var(--txt)';
-  rname.style.borderColor = 'var(--acc)';
-  rname.textContent = name + '.pdf';
-  rname.focus();
+  var r = results[i];
+  el.contentEditable = 'true';
+  el.style.background = 'var(--sur3)'; el.style.color = 'var(--txt)'; el.style.borderColor = 'var(--acc)';
+  el.textContent = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag) + '.pdf';
+  el.focus();
 }
 
 function confirmFile(i) {
-  var r = results[i]; if (!r) return;
-  var el = document.getElementById('item-' + i);
-  if (el) {
-    var rname = el.querySelector('.rname');
-    if (rname && rname.contentEditable === 'true') {
-      var edited = rname.textContent.trim().replace(/\.pdf$/i, '');
-      if (edited) results[i]._customName = edited;
-    }
+  var el = document.getElementById('rname-' + i);
+  if (el && el.contentEditable === 'true') {
+    var edited = el.textContent.trim().replace(/\.pdf$/i, '');
+    if (edited) results[i]._customName = edited;
   }
   results[i].confirmed = true;
   reRender(i);
   dlOne(i);
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // DOWNLOAD
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 async function dlOne(i) {
   var r = results[i];
   if (!r || !r.confirmed || !r.nr) return;
@@ -629,62 +556,37 @@ async function dlOne(i) {
     var data = await files[i].arrayBuffer();
     var blob = new Blob([data], { type: 'application/pdf' });
     var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     toast('⬇️ ' + name, 'tok');
-  } catch(e) {
-    toast('Download fehlgeschlagen: ' + e.message, 'ter');
-  }
+  } catch(e) { toast('Download fehlgeschlagen.', 'ter'); }
 }
 
 async function dlAll() {
   var count = 0;
   for (var i = 0; i < files.length; i++) {
-    var r = results[i];
-    if (r && r.confirmed && !r.error && r.nr) {
-      await dlOne(i);
-      count++;
-      await new Promise(function(res){ setTimeout(res, 400); });
+    if (results[i] && results[i].confirmed && !results[i].error && results[i].nr) {
+      await dlOne(i); count++;
+      await new Promise(function(r) { setTimeout(r, 400); });
     }
   }
   if (count) toast(count + ' Datei(en) heruntergeladen.', 'tok');
 }
 
-// ═══════════════════════════════════════════════
-// SUPPLIERS
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
+// SUPPLIERS (Storage)
+// ═══════════════════════════════════════════════════════════════
 function getSups() {
   try { return JSON.parse(localStorage.getItem('re_sups') || '[]'); } catch(e) { return []; }
 }
 function saveSupList(s) { localStorage.setItem('re_sups', JSON.stringify(s)); }
-function normStr(s) {
-  return (s || "").toLowerCase().replace(/[^a-z0-9äöüß]/g, " ").replace(/\s+/g, " ").trim();
-}
-function findSup(text) {
-  if (!text) return null;
-  var sups = getSups();
-  for (var i = 0; i < sups.length; i++) {
-    var rawNorm = normStr(sups[i].raw);
-    var textNorm = normStr(text);
-    if (!rawNorm) continue;
-    if (textNorm.includes(rawNorm) || rawNorm.includes(textNorm)) return sups[i];
-    var rawWords = rawNorm.split(" ").filter(function(w){ return w.length > 2; });
-    if (rawWords.length && rawWords.every(function(w){ return textNorm.includes(w); })) return sups[i];
-  }
-  return null;
-}
+
 function renderSups() {
   var sups = getSups();
   var list = document.getElementById('slist');
-  if (!sups.length) {
-    list.innerHTML = '<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>';
-    return;
-  }
-  list.innerHTML = sups.map(function(s, i){
+  if (!sups.length) { list.innerHTML = '<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>'; return; }
+  list.innerHTML = sups.map(function(s, i) {
     return '<div class="srow">'
       + '<input class="sin sr" value="' + esc(s.raw) + '" placeholder="Name auf Rechnung">'
       + '<span style="color:var(--mut);flex-shrink:0">→</span>'
@@ -697,82 +599,68 @@ function renderSups() {
       + '</div>';
   }).join('');
 }
-function saveSups() {
+
+function saveSupsFromUI() {
   var rows = document.querySelectorAll('.srow');
-  var sups = Array.from(rows).map(function(row){
-    return {
-      raw: (row.querySelector('.sr') || {}).value || '',
-      short: (row.querySelector('.ss') || {}).value || '',
-      typ: (row.querySelector('.st') || {}).value || 'RE'
-    };
-  }).filter(function(s){ return s.raw.trim(); });
+  var sups = Array.from(rows).map(function(row) {
+    return { raw: (row.querySelector('.sr').value || '').trim(), short: (row.querySelector('.ss').value || '').trim(), typ: row.querySelector('.st').value || 'RE' };
+  }).filter(function(s) { return s.raw; });
+  // deduplicate by normalized raw
+  var seen = [];
+  sups = sups.filter(function(s) {
+    var n = normalize(s.raw);
+    if (seen.indexOf(n) !== -1) return false;
+    seen.push(n); return true;
+  });
   saveSupList(sups);
+  renderSups();
   toast('Lieferanten gespeichert.', 'tok');
 }
+
 function addSupManual() {
   var sups = getSups(); sups.push({ raw: '', short: '', typ: 'RE' }); saveSupList(sups); renderSups();
 }
+
 function delSup(i) {
   var sups = getSups(); sups.splice(i, 1); saveSupList(sups); renderSups();
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // SETTINGS
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 function getKey() { return localStorage.getItem('re_key') || ''; }
 function getFolder() { return localStorage.getItem('re_folder') || ''; }
 
 function saveKey() {
   var v = document.getElementById('kfield').value.trim();
   if (!v) { toast('Bitte einen Key eingeben.', 'ter'); return; }
-  localStorage.setItem('re_key', v);
-  loadSettings();
-  toast('API Key gespeichert.', 'tok');
+  localStorage.setItem('re_key', v); loadSettings(); toast('API Key gespeichert.', 'tok');
 }
-function delKey() {
-  localStorage.removeItem('re_key');
-  document.getElementById('kfield').value = '';
-  loadSettings();
-  toast('Key gelöscht.', 'tok');
-}
+function delKey() { localStorage.removeItem('re_key'); document.getElementById('kfield').value = ''; loadSettings(); toast('Key gelöscht.', 'tok'); }
 function saveFolder() {
-  var v = (document.getElementById('ffield') || {}).value || '';
-  localStorage.setItem('re_folder', v.trim());
-  loadSettings();
-  toast('Speicherort gespeichert.', 'tok');
+  var v = (document.getElementById('ffield').value || '').trim();
+  localStorage.setItem('re_folder', v); loadSettings(); toast('Speicherort gespeichert.', 'tok');
 }
 function changeFolder() {
   document.getElementById('fui-set').style.display = 'none';
   document.getElementById('fui-empty').style.display = 'block';
-  var ff = document.getElementById('ffield');
-  if (ff) ff.value = getFolder();
+  document.getElementById('ffield').value = getFolder();
 }
 function loadSettings() {
   var k = getKey();
   document.getElementById('kdot').className = 'kdot' + (k ? ' ok' : '');
   var ks = document.getElementById('kstatus');
-  if (ks) ks.innerHTML = k
-    ? '<span style="color:var(--ok)">✅ Key gespeichert: ' + k.slice(0, 14) + '…</span>'
-    : '<span style="color:var(--er)">❌ Kein Key hinterlegt</span>';
-  var kf = document.getElementById('kfield');
-  if (kf) kf.value = '';
+  if (ks) ks.innerHTML = k ? '<span style="color:var(--ok)">✅ Key gespeichert: ' + k.slice(0,14) + '…</span>' : '<span style="color:var(--er)">❌ Kein Key hinterlegt</span>';
+  var kf = document.getElementById('kfield'); if (kf) kf.value = '';
   var folder = getFolder();
-  var fe = document.getElementById('fui-empty');
-  var fs = document.getElementById('fui-set');
-  var fd = document.getElementById('fdisplay');
-  if (folder && fe && fs && fd) {
-    fe.style.display = 'none';
-    fs.style.display = 'flex';
-    fd.textContent = folder;
-  } else if (fe && fs) {
-    fe.style.display = 'block';
-    fs.style.display = 'none';
-  }
+  var fe = document.getElementById('fui-empty'), fs = document.getElementById('fui-set'), fd = document.getElementById('fdisplay');
+  if (folder && fe && fs && fd) { fe.style.display = 'none'; fs.style.display = 'flex'; fd.textContent = folder; }
+  else if (fe && fs) { fe.style.display = 'block'; fs.style.display = 'none'; }
 }
 
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 // INIT
-// ═══════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════
 loadSettings();
 </script>
 </body>
