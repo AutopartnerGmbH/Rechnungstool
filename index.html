@@ -16,20 +16,22 @@
     --muted: #6b7194;
     --border: #2e3250;
     --success: #3ecf8e;
-    --success-bg: rgba(62,207,142,0.12);
+    --success-bg: rgba(62,207,142,0.1);
+    --success-border: rgba(62,207,142,0.3);
     --danger: #f76f6f;
-    --danger-bg: rgba(247,111,111,0.12);
+    --danger-bg: rgba(247,111,111,0.1);
+    --danger-border: rgba(247,111,111,0.3);
     --warn: #f0a500;
-    --warn-bg: rgba(240,165,0,0.12);
-    --info: #4f8ef7;
-    --info-bg: rgba(79,142,247,0.12);
+    --warn-bg: rgba(240,165,0,0.1);
+    --warn-border: rgba(240,165,0,0.3);
+    --info-bg: rgba(79,142,247,0.1);
+    --info-border: rgba(79,142,247,0.3);
     --radius: 10px;
     --radius-sm: 6px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; min-height: 100vh; }
 
-  /* HEADER */
   header {
     background: var(--surface);
     border-bottom: 1px solid var(--border);
@@ -42,101 +44,116 @@
     top: 0;
     z-index: 100;
   }
-  .logo { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+  .logo { display: flex; align-items: center; gap: 10px; font-size: 1rem; font-weight: 600; }
   .logo-icon { width: 32px; height: 32px; background: linear-gradient(135deg, var(--accent), var(--accent2)); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
   nav { display: flex; gap: 2px; background: var(--surface2); border-radius: 8px; padding: 3px; }
-  .nav-btn { background: none; border: none; color: var(--muted); padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-family: inherit; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+  .nav-btn { background: none; border: none; color: var(--muted); padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-family: inherit; transition: all .15s; }
   .nav-btn:hover { color: var(--text); }
   .nav-btn.active { background: var(--surface3); color: var(--text); }
-  .header-right { display: flex; align-items: center; gap: 8px; }
-  .key-indicator { font-size: 0.75rem; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); color: var(--muted); cursor: pointer; transition: all .15s; }
-  .key-indicator.ok { border-color: var(--success); color: var(--success); }
-  .key-indicator:hover { border-color: var(--accent); color: var(--accent); }
+  .key-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--danger); cursor: pointer; transition: background .2s; }
+  .key-dot.ok { background: var(--success); }
 
-  /* LAYOUT */
-  main { max-width: 860px; margin: 0 auto; padding: 28px 20px; }
+  main { max-width: 880px; margin: 0 auto; padding: 28px 20px; }
   .page { display: none; }
   .page.active { display: block; }
 
-  /* CARDS */
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px 24px; margin-bottom: 16px; }
-  .card-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .card-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 16px; }
 
-  /* DROPZONE */
   .dropzone { border: 2px dashed var(--border); border-radius: var(--radius); padding: 36px 20px; text-align: center; cursor: pointer; transition: all .2s; }
   .dropzone:hover, .dropzone.over { border-color: var(--accent); background: rgba(79,142,247,0.04); }
-  .dropzone .dz-icon { font-size: 2rem; margin-bottom: 10px; }
-  .dropzone p { color: var(--muted); font-size: 0.9rem; margin-top: 4px; }
-  .dropzone strong { color: var(--text); }
+  .dropzone p { color: var(--muted); font-size: 0.88rem; margin-top: 6px; }
 
-  /* TOOLBAR */
-  .toolbar { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-  .toolbar-left { flex: 1; font-size: 0.85rem; color: var(--muted); }
-  .toolbar-left b { color: var(--text); }
-
-  /* BUTTONS */
-  .btn { padding: 9px 18px; border-radius: var(--radius-sm); font-size: 0.85rem; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  .btn { padding: 8px 16px; border-radius: var(--radius-sm); font-size: 0.83rem; cursor: pointer; border: 1px solid var(--border); background: var(--surface2); color: var(--text); font-family: inherit; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
   .btn:hover { border-color: var(--accent); color: var(--accent); }
-  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
-  .btn:disabled:hover { border-color: var(--border); color: var(--text); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; pointer-events: none; }
   .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent2)); border: none; color: #fff; font-weight: 600; }
-  .btn-primary:hover { opacity: 0.9; color: #fff; }
-  .btn-sm { padding: 5px 12px; font-size: 0.78rem; }
-  .btn-danger { color: var(--danger); border-color: var(--danger-bg); }
+  .btn-primary:hover { opacity: 0.88; color: #fff; border: none; }
+  .btn-success { background: var(--success-bg); border-color: var(--success-border); color: var(--success); }
+  .btn-success:hover { background: rgba(62,207,142,0.2); color: var(--success); border-color: var(--success); }
+  .btn-danger { color: var(--danger); border-color: var(--danger-border); }
   .btn-danger:hover { background: var(--danger-bg); border-color: var(--danger); color: var(--danger); }
+  .btn-sm { padding: 5px 11px; font-size: 0.78rem; }
 
-  /* FILE ITEMS */
-  .file-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
-  .file-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 14px 16px; }
-  .file-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .toolbar { display: flex; align-items: center; gap: 10px; margin-top: 4px; }
+  .toolbar-left { flex: 1; font-size: 0.85rem; color: var(--muted); }
+
+  .file-list { display: flex; flex-direction: column; gap: 12px; margin-top: 16px; }
+  .file-item { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px 18px; transition: border-color .2s; }
+  .file-item.ready { border-color: var(--success-border); }
+  .file-item.error-state { border-color: var(--danger-border); }
+
+  .file-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   .file-orig { font-size: 0.8rem; color: var(--muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
-  .badge-pending { background: var(--warn-bg); color: var(--warn); }
-  .badge-analyzing { background: var(--info-bg); color: var(--info); }
-  .badge-done { background: var(--success-bg); color: var(--success); }
-  .badge-error { background: var(--danger-bg); color: var(--danger); }
+  .badge { display: inline-flex; align-items: center; gap: 5px; font-size: 0.71rem; font-weight: 600; padding: 3px 9px; border-radius: 20px; white-space: nowrap; flex-shrink: 0; }
+  .badge-pending { background: var(--warn-bg); color: var(--warn); border: 1px solid var(--warn-border); }
+  .badge-analyzing { background: var(--info-bg); color: var(--accent); border: 1px solid var(--info-border); }
+  .badge-done { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
+  .badge-new-supplier { background: rgba(124,92,191,0.15); color: #a78bfa; border: 1px solid rgba(124,92,191,0.35); }
+  .badge-error { background: var(--danger-bg); color: var(--danger); border: 1px solid var(--danger-border); }
+
   .fields-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
   .field-group { display: flex; flex-direction: column; gap: 5px; }
   .field-group.full { grid-column: 1 / -1; }
-  .field-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; }
+  .field-label { font-size: 0.71rem; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; }
   .field-input { background: var(--surface3); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text); font-size: 0.85rem; font-family: inherit; outline: none; transition: border-color .15s; }
   .field-input:focus { border-color: var(--accent); }
   select.field-input { cursor: pointer; }
-  .name-preview { background: rgba(62,207,142,0.08); border: 1px solid rgba(62,207,142,0.25); border-radius: var(--radius-sm); padding: 7px 10px; font-size: 0.8rem; color: var(--success); font-family: 'Consolas', 'Courier New', monospace; margin-top: 8px; word-break: break-all; }
-  .name-preview::before { content: '📄 '; }
-  .file-actions { display: flex; justify-content: flex-end; margin-top: 10px; }
 
-  /* SUPPLIERS */
-  .supplier-list { display: flex; flex-direction: column; gap: 0; }
+  .name-preview { background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.8rem; color: var(--success); font-family: 'Consolas', monospace; margin-top: 10px; word-break: break-all; }
+
+  .file-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 12px; gap: 10px; }
+  .download-hint { font-size: 0.75rem; color: var(--muted); }
+  .download-hint span { color: var(--warn); }
+
+  /* NEW SUPPLIER BANNER */
+  .new-supplier-banner { background: rgba(124,92,191,0.1); border: 1px solid rgba(124,92,191,0.3); border-radius: var(--radius-sm); padding: 12px 14px; margin-top: 12px; }
+  .new-supplier-banner p { font-size: 0.83rem; color: #c4b5fd; margin-bottom: 10px; }
+  .new-supplier-banner strong { color: #a78bfa; }
+  .banner-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 10px; }
+  .banner-actions { display: flex; gap: 8px; }
+
+  /* SUPPLIER PAGE */
   .supplier-row { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
   .supplier-row:last-child { border-bottom: none; }
-  .supplier-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text); font-size: 0.85rem; font-family: inherit; outline: none; transition: border-color .15s; }
-  .supplier-input:focus { border-color: var(--accent); }
-  .arrow-sep { color: var(--muted); font-size: 1rem; }
+  .sup-input { flex: 1; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 7px 10px; color: var(--text); font-size: 0.85rem; font-family: inherit; outline: none; transition: border-color .15s; }
+  .sup-input:focus { border-color: var(--accent); }
+  .arrow-sep { color: var(--muted); }
   .empty-state { text-align: center; padding: 32px; color: var(--muted); font-size: 0.88rem; }
-  .empty-state .empty-icon { font-size: 2rem; margin-bottom: 10px; display: block; }
 
   /* SETTINGS */
   .setting-row { margin-bottom: 20px; }
-  .setting-label { font-size: 0.82rem; color: var(--muted); margin-bottom: 6px; display: block; }
-  .setting-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 14px; color: var(--text); font-size: 0.9rem; font-family: 'Consolas', monospace; outline: none; transition: border-color .15s; }
+  .setting-label { font-size: 0.82rem; color: var(--muted); margin-bottom: 7px; display: block; }
+  .setting-input { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 9px 14px; color: var(--text); font-size: 0.88rem; font-family: inherit; outline: none; transition: border-color .15s; }
   .setting-input:focus { border-color: var(--accent); }
-  .setting-hint { font-size: 0.78rem; color: var(--muted); margin-top: 6px; }
-  .key-status { display: inline-flex; align-items: center; gap: 6px; font-size: 0.82rem; margin-top: 8px; }
-  .key-status.ok { color: var(--success); }
-  .key-status.missing { color: var(--danger); }
-  .inline-row { display: flex; gap: 8px; align-items: flex-start; }
-  .inline-row .setting-input { flex: 1; }
+  .inline-row { display: flex; gap: 8px; }
+  .inline-row .setting-input { flex: 1; font-family: 'Consolas', monospace; font-size: 0.83rem; }
+  .hint-box { background: var(--warn-bg); border: 1px solid var(--warn-border); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.8rem; color: var(--warn); margin-top: 8px; }
 
-  /* TOAST */
-  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 12px 20px; font-size: 0.88rem; z-index: 9999; opacity: 0; transition: opacity .3s; pointer-events: none; max-width: 320px; }
+  /* FOLDER STATUS */
+  .folder-set { background: var(--success-bg); border: 1px solid var(--success-border); border-radius: var(--radius-sm); padding: 10px 14px; display: flex; align-items: center; gap: 10px; }
+  .folder-set span { font-size: 0.83rem; color: var(--success); font-family: 'Consolas', monospace; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px; max-width: 480px; width: 90%; }
+  .modal h2 { font-size: 1rem; font-weight: 600; margin-bottom: 8px; }
+  .modal p { font-size: 0.85rem; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
+  .modal-fields { display: flex; flex-direction: column; gap: 12px; margin-bottom: 20px; }
+  .modal-field label { font-size: 0.75rem; color: var(--muted); display: block; margin-bottom: 5px; }
+  .modal-field input, .modal-field select { width: 100%; background: var(--surface2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; color: var(--text); font-size: 0.88rem; font-family: inherit; outline: none; }
+  .modal-field input:focus, .modal-field select:focus { border-color: var(--accent); }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; }
+  .preview-line { background: var(--surface2); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.78rem; color: var(--success); font-family: 'Consolas', monospace; margin-bottom: 20px; word-break: break-all; }
+
+  #toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 11px 18px; font-size: 0.85rem; z-index: 9999; opacity: 0; transition: opacity .3s; pointer-events: none; }
   #toast.show { opacity: 1; }
-  #toast.success { border-color: var(--success); color: var(--success); }
-  #toast.error { border-color: var(--danger); color: var(--danger); }
+  #toast.t-success { border-color: var(--success-border); color: var(--success); }
+  #toast.t-error { border-color: var(--danger-border); color: var(--danger); }
 
-  /* SPINNER */
   @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner { display: inline-block; width: 12px; height: 12px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
+  .spinner { display: inline-block; width: 11px; height: 11px; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: spin .7s linear infinite; }
 </style>
 </head>
 <body>
@@ -151,9 +168,7 @@
     <button class="nav-btn" onclick="showPage('lieferanten')">🏪 Lieferanten</button>
     <button class="nav-btn" onclick="showPage('einstellungen')">⚙️ Einstellungen</button>
   </nav>
-  <div class="header-right">
-    <span class="key-indicator" id="key-indicator" onclick="showPage('einstellungen')">🔑 API Key</span>
-  </div>
+  <div title="API Key Status" class="key-dot" id="key-dot" onclick="showPage('einstellungen')"></div>
 </header>
 
 <main>
@@ -163,39 +178,31 @@
     <div class="card">
       <div class="card-title">📥 Rechnungen einlesen</div>
       <div class="dropzone" id="dropzone" onclick="document.getElementById('file-input').click()">
-        <div class="dz-icon">📂</div>
+        <div style="font-size:2rem;margin-bottom:10px">📂</div>
         <strong>PDFs hier ablegen oder klicken</strong>
-        <p>Rechnungen, Gutschriften, Stornorechnungen — beliebig viele auf einmal</p>
+        <p>Rechnungen, Gutschriften, Stornorechnungen — einzeln oder mehrere auf einmal</p>
       </div>
       <input type="file" id="file-input" accept=".pdf,.PDF" multiple style="display:none">
       <div class="file-list" id="file-list"></div>
     </div>
-
     <div class="toolbar">
-      <div class="toolbar-left">
-        <b id="file-count">0</b> Datei(en) geladen
-      </div>
-      <button class="btn" id="btn-analyse" onclick="analyseAll()" disabled>
-        🤖 Alle analysieren
-      </button>
-      <button class="btn btn-primary" id="btn-download" onclick="downloadZip()" disabled>
-        ⬇️ ZIP herunterladen
-      </button>
+      <div class="toolbar-left"><b id="file-count">0</b> Datei(en)</div>
+      <button class="btn" id="btn-analyse" onclick="analyseAll()" disabled>🤖 Alle analysieren</button>
+      <button class="btn btn-primary" id="btn-dl-all" onclick="downloadAll()" disabled>⬇️ Alle herunterladen</button>
     </div>
   </div>
 
   <!-- LIEFERANTEN -->
   <div class="page" id="page-lieferanten">
     <div class="card">
-      <div class="card-title">🏪 Bekannte Lieferanten</div>
-      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px">
-        Links: Name wie er auf der Rechnung steht (oder ein Teil davon).<br>
-        Rechts: Kurzname für den Dateinamen. Claude verwendet ihn automatisch.
+      <div class="card-title">🏪 Gespeicherte Lieferanten</div>
+      <p style="font-size:0.83rem;color:var(--muted);margin-bottom:16px">
+        Diese Lieferanten kennt das Tool bereits. Neue werden automatisch beim ersten Hochladen einer Rechnung angelegt.
       </p>
-      <div class="supplier-list" id="supplier-list"></div>
-      <div style="margin-top:16px">
-        <button class="btn btn-sm" onclick="addSupplier()">➕ Lieferant hinzufügen</button>
-        <button class="btn btn-sm" style="margin-left:8px" onclick="saveSuppliers()">💾 Speichern</button>
+      <div id="supplier-list"></div>
+      <div style="margin-top:14px;display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="addSupplierManual()">➕ Manuell hinzufügen</button>
+        <button class="btn btn-sm btn-success" onclick="saveSuppliers()">💾 Änderungen speichern</button>
       </div>
     </div>
   </div>
@@ -205,37 +212,78 @@
     <div class="card">
       <div class="card-title">🔑 Anthropic API Key</div>
       <div class="setting-row">
-        <label class="setting-label">API Key (wird lokal gespeichert, nie übertragen)</label>
+        <label class="setting-label">Key wird lokal im Browser gespeichert — verlässt deinen PC nicht</label>
         <div class="inline-row">
           <input type="password" class="setting-input" id="api-key-field" placeholder="sk-ant-api03-..." autocomplete="off">
           <button class="btn" onclick="saveApiKey()">💾 Speichern</button>
-          <button class="btn btn-danger" onclick="clearApiKey()">🗑️</button>
+          <button class="btn btn-danger btn-sm" onclick="clearApiKey()">🗑️</button>
         </div>
-        <div class="key-status" id="key-status-text"></div>
+        <div id="key-status-text" style="font-size:0.8rem;margin-top:8px"></div>
       </div>
     </div>
     <div class="card">
-      <div class="card-title">📁 Zielordner</div>
-      <div class="setting-row">
-        <label class="setting-label">Ordnername im ZIP (optional)</label>
-        <input type="text" class="setting-input" id="folder-name" placeholder="z.B. Eingangsrechnungen 2026" style="font-family:inherit">
-        <p class="setting-hint">Die umbenannten PDFs werden in diesem Unterordner im ZIP abgelegt.</p>
+      <div class="card-title">📁 Speicherort</div>
+      <p style="font-size:0.83rem;color:var(--muted);margin-bottom:14px">
+        Gib den Ordnerpfad ein, in dem du deine Rechnungen speicherst. Das Tool zeigt dir diesen Pfad beim Download als Erinnerung an.
+      </p>
+      <div id="folder-empty">
+        <div class="inline-row" style="margin-bottom:8px">
+          <input type="text" class="setting-input" id="folder-input" placeholder="z.B. C:\Dokumente\Rechnungen 2026" style="font-family:inherit">
+          <button class="btn" onclick="saveFolder()">💾 Speichern</button>
+        </div>
       </div>
-      <button class="btn" onclick="saveSettings()">💾 Speichern</button>
+      <div id="folder-set" class="folder-set" style="display:none">
+        <span>📁</span>
+        <span id="folder-display"></span>
+        <button class="btn btn-sm" onclick="changeFolder()">✏️ Ändern</button>
+      </div>
+      <div class="hint-box" style="margin-top:12px">
+        ℹ️ Der Browser speichert Dateien automatisch in deinen Download-Ordner. Dieser Pfad ist nur eine Erinnerung für dich.
+      </div>
     </div>
   </div>
 
 </main>
 
+<!-- NEW SUPPLIER MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <h2>🏪 Neuer Lieferant erkannt</h2>
+    <p id="modal-desc">Dieser Lieferant ist noch nicht gespeichert. Lege ihn einmalig an — beim nächsten Mal wird er automatisch erkannt.</p>
+    <div class="modal-fields">
+      <div class="modal-field">
+        <label>Erkennungsname (wie auf der Rechnung)</label>
+        <input type="text" id="modal-raw" oninput="updateModalPreview()">
+      </div>
+      <div class="modal-field">
+        <label>Kurzname für den Dateinamen</label>
+        <input type="text" id="modal-short" oninput="updateModalPreview()">
+      </div>
+      <div class="modal-field">
+        <label>Standard-Typ für diesen Lieferanten</label>
+        <select id="modal-typ" onchange="updateModalPreview()">
+          <option value="RE">RE – Rechnung</option>
+          <option value="GS">GS – Gutschrift / Storno</option>
+        </select>
+      </div>
+    </div>
+    <div style="font-size:0.72rem;color:var(--muted);margin-bottom:6px">Vorschau Dateiname:</div>
+    <div class="preview-line" id="modal-preview">—</div>
+    <div class="modal-actions">
+      <button class="btn" onclick="skipSupplier()">Überspringen</button>
+      <button class="btn btn-primary" onclick="confirmSupplier()">✅ Lieferant speichern</button>
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script>
-// ─── STATE ───────────────────────────────────────────────
 let files = [];
 let results = {};
+let modalContext = null;
 
-// ─── NAVIGATION ──────────────────────────────────────────
+// ─── NAV ──────────────────────────────────────────────────
 function showPage(id) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
@@ -246,45 +294,32 @@ function showPage(id) {
   if (id === 'einstellungen') loadSettingsDisplay();
 }
 
-// ─── DRAG & DROP ─────────────────────────────────────────
+// ─── DRAG & DROP ──────────────────────────────────────────
 const dz = document.getElementById('dropzone');
 dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('over'); });
 dz.addEventListener('dragleave', () => dz.classList.remove('over'));
-dz.addEventListener('drop', e => {
-  e.preventDefault(); dz.classList.remove('over');
-  addFiles([...e.dataTransfer.files].filter(f => f.name.toLowerCase().endsWith('.pdf')));
-});
-document.getElementById('file-input').addEventListener('change', e => {
-  addFiles([...e.target.files]);
-  e.target.value = '';
-});
+dz.addEventListener('drop', e => { e.preventDefault(); dz.classList.remove('over'); addFiles([...e.dataTransfer.files].filter(f => f.name.toLowerCase().endsWith('.pdf'))); });
+document.getElementById('file-input').addEventListener('change', e => { addFiles([...e.target.files]); e.target.value = ''; });
 
-function addFiles(newFiles) {
-  newFiles.forEach(f => {
-    if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f);
-  });
+function addFiles(nf) {
+  nf.forEach(f => { if (!files.find(x => x.name === f.name && x.size === f.size)) files.push(f); });
   renderFileList();
 }
 
 function removeFile(i) {
   files.splice(i, 1);
-  const newResults = {};
-  Object.keys(results).forEach(k => {
-    const ki = parseInt(k);
-    if (ki < i) newResults[ki] = results[ki];
-    else if (ki > i) newResults[ki - 1] = results[ki];
-  });
-  results = newResults;
+  const nr = {};
+  Object.keys(results).forEach(k => { const ki = parseInt(k); if (ki < i) nr[ki] = results[ki]; else if (ki > i) nr[ki-1] = results[ki]; });
+  results = nr;
   renderFileList();
 }
 
-// ─── RENDER FILES ─────────────────────────────────────────
+// ─── RENDER ───────────────────────────────────────────────
 function renderFileList() {
   const list = document.getElementById('file-list');
   document.getElementById('file-count').textContent = files.length;
   document.getElementById('btn-analyse').disabled = files.length === 0;
-
-  if (files.length === 0) { list.innerHTML = ''; updateDownloadBtn(); return; }
+  if (files.length === 0) { list.innerHTML = ''; updateDlAll(); return; }
 
   list.innerHTML = files.map((f, i) => {
     const r = results[i] || {};
@@ -294,23 +329,27 @@ function renderFileList() {
     const datum = r.datum || '';
     const betrag = r.betrag || '';
     const preview = buildName(typ, nr, steller, datum, betrag);
-    const badge = !results[i]
-      ? `<span class="badge badge-pending">⏳ Ausstehend</span>`
-      : r.error
-        ? `<span class="badge badge-error">❌ Fehler</span>`
-        : `<span class="badge badge-done">✅ Analysiert</span>`;
-    return `
-    <div class="file-item" id="item-${i}">
+    const isReady = results[i] && !results[i].error && nr;
+    const folder = getSavedFolder();
+
+    let badge = `<span class="badge badge-pending">⏳ Ausstehend</span>`;
+    if (results[i]) {
+      if (results[i].error) badge = `<span class="badge badge-error">❌ Fehler</span>`;
+      else if (results[i].isNewSupplier) badge = `<span class="badge badge-new-supplier">🆕 Neuer Lieferant</span>`;
+      else badge = `<span class="badge badge-done">✅ Bereit</span>`;
+    }
+
+    return `<div class="file-item${isReady?' ready':''}" id="item-${i}">
       <div class="file-header">
-        <span class="file-orig" title="${f.name}">📄 ${f.name}</span>
+        <span class="file-orig" title="${esc(f.name)}">📄 ${esc(f.name)}</span>
         <span id="badge-${i}">${badge}</span>
       </div>
       <div class="fields-grid">
         <div class="field-group">
           <span class="field-label">Typ</span>
           <select class="field-input" id="typ-${i}" onchange="onFieldChange(${i})">
-            <option value="RE" ${typ==='RE'?'selected':''}>RE – Rechnung</option>
-            <option value="GS" ${typ==='GS'?'selected':''}>GS – Gutschrift / Storno</option>
+            <option value="RE"${typ==='RE'?' selected':''}>RE – Rechnung</option>
+            <option value="GS"${typ==='GS'?' selected':''}>GS – Gutschrift / Storno</option>
           </select>
         </div>
         <div class="field-group">
@@ -330,30 +369,45 @@ function renderFileList() {
           <input class="field-input" id="betrag-${i}" value="${esc(betrag)}" oninput="onFieldChange(${i})" placeholder="238,00€">
         </div>
       </div>
-      ${preview ? `<div class="name-preview" id="preview-${i}">${esc(preview)}.pdf</div>` : `<div class="name-preview" id="preview-${i}" style="display:none"></div>`}
-      <div class="file-actions">
-        <button class="btn btn-sm btn-danger" onclick="removeFile(${i})">🗑️ Entfernen</button>
+      ${preview ? `<div class="name-preview" id="preview-${i}">📄 ${esc(preview)}.pdf</div>` : `<div class="name-preview" id="preview-${i}" style="display:none"></div>`}
+      <div class="file-footer">
+        <span class="download-hint" id="hint-${i}">${folder && isReady ? `💾 Speichern in: <span>${esc(folder)}</span>` : ''}</span>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-sm btn-danger" onclick="removeFile(${i})">🗑️</button>
+          <button class="btn btn-sm btn-success" id="dl-btn-${i}" onclick="downloadOne(${i})" ${isReady?'':'disabled'}>⬇️ Herunterladen</button>
+        </div>
       </div>
     </div>`;
   }).join('');
+  updateDlAll();
+}
 
-  updateDownloadBtn();
+function updateDlAll() {
+  const anyReady = files.some((_, i) => results[i] && !results[i].error && results[i].nr);
+  document.getElementById('btn-dl-all').disabled = !anyReady;
 }
 
 function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
 function onFieldChange(i) {
   if (!results[i]) results[i] = { typ:'RE', nr:'', steller:'', datum:'', betrag:'' };
-  results[i].typ    = document.getElementById('typ-'+i)?.value || 'RE';
-  results[i].nr     = document.getElementById('nr-'+i)?.value || '';
-  results[i].steller= document.getElementById('steller-'+i)?.value || '';
-  results[i].datum  = document.getElementById('datum-'+i)?.value || '';
-  results[i].betrag = document.getElementById('betrag-'+i)?.value || '';
+  results[i].typ     = document.getElementById('typ-'+i)?.value || 'RE';
+  results[i].nr      = document.getElementById('nr-'+i)?.value || '';
+  results[i].steller = document.getElementById('steller-'+i)?.value || '';
+  results[i].datum   = document.getElementById('datum-'+i)?.value || '';
+  results[i].betrag  = document.getElementById('betrag-'+i)?.value || '';
   const r = results[i];
   const p = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
   const prev = document.getElementById('preview-'+i);
-  if (prev) { prev.textContent = p + '.pdf'; prev.style.display = p ? '' : 'none'; }
-  updateDownloadBtn();
+  if (prev) { prev.textContent = p ? '📄 ' + p + '.pdf' : ''; prev.style.display = p ? '' : 'none'; }
+  const dlBtn = document.getElementById('dl-btn-'+i);
+  if (dlBtn) dlBtn.disabled = !r.nr;
+  const item = document.getElementById('item-'+i);
+  if (item) { item.classList.toggle('ready', !!r.nr); }
+  const hint = document.getElementById('hint-'+i);
+  const folder = getSavedFolder();
+  if (hint) hint.innerHTML = folder && r.nr ? `💾 Speichern in: <span>${esc(folder)}</span>` : '';
+  updateDlAll();
 }
 
 function buildName(typ, nr, steller, datum, betrag) {
@@ -361,214 +415,267 @@ function buildName(typ, nr, steller, datum, betrag) {
   const s = sanitize(steller || 'Unbekannt');
   const n = sanitize(nr || '');
   const d = (datum || '').trim();
-  const b = (betrag || '').replace(/[\/\\:*?"<>|]/g, '').trim();
-  return `${typ} ${n} ${s} ${d}${b ? ' ' + b : ''}`.replace(/\s+/g, ' ').trim();
+  const b = (betrag || '').replace(/[\/\\:*?"<>|]/g,'').trim();
+  return `${typ} ${n} ${s} ${d}${b?' '+b:''}`.replace(/\s+/g,' ').trim();
 }
 
-function sanitize(s) {
-  return (s || '').replace(/[\/\\:*?"<>|]/g, '_').replace(/\s+/g, ' ').trim();
-}
-
-function updateDownloadBtn() {
-  const allDone = files.length > 0 && files.every((_, i) => results[i] && !results[i].error && results[i].nr);
-  document.getElementById('btn-download').disabled = !allDone;
-}
+function sanitize(s) { return (s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim(); }
 
 // ─── ANALYSE ──────────────────────────────────────────────
 async function analyseAll() {
-  const key = getApiKey();
-  if (!key) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.', 'error'); showPage('einstellungen'); return; }
+  if (!getApiKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.','error'); showPage('einstellungen'); return; }
   for (let i = 0; i < files.length; i++) {
     if (results[i] && !results[i].error) continue;
     await analyseOne(i);
   }
-  toast('Analyse abgeschlossen.', 'success');
+  toast('Analyse abgeschlossen.','success');
 }
 
 async function analyseOne(i) {
-  setBadge(i, 'analyzing', '<span class="spinner"></span> Analysiere…');
+  setBadge(i,'analyzing','<span class="spinner"></span> Analysiere…');
   try {
     const b64 = await toBase64(files[i]);
-    const sups = getSuppliers().filter(s => s.raw && s.short).map(s => `"${s.raw}" → "${s.short}"`).join(', ');
-    const hint = sups ? `\n\nBekannte Lieferanten-Kurzbezeichnungen: ${sups}. Wenn der Rechnungssteller einem davon entspricht, verwende die Kurzbezeichnung exakt so.` : '';
-    const prompt = `Analysiere diese Rechnung und extrahiere folgende Felder. Antworte NUR mit einem JSON-Objekt, kein Text davor oder danach, keine Markdown-Blöcke:\n{\n  "typ": "RE" oder "GS" (GS für Gutschrift, Stornorechnung, Rechnungskorrektur),\n  "nr": "Rechnungsnummer oder Belegnummer als String",\n  "steller": "Firmenname des Rechnungsstellers (Absender, nicht Autopartner GmbH)",\n  "datum": "Rechnungsdatum im Format TT.MM.JJJJ",\n  "betrag": "Brutto-Gesamtbetrag mit Euro-Zeichen, z.B. 238,00€"\n}${hint}`;
+    const sups = getSuppliers();
+    const supHint = sups.length ? '\n\nBekannte Lieferanten: ' + sups.map(s=>`"${s.raw}" → Kurzname "${s.short}"`).join(', ') + '. Wenn der Rechnungssteller einem davon entspricht, verwende den Kurznamen exakt.' : '';
+    const prompt = `Analysiere diese Rechnung. Antworte NUR mit JSON, kein Text davor oder danach:\n{\n  "typ": "RE" oder "GS" (GS für Gutschrift/Stornorechnung/Rechnungskorrektur),\n  "nr": "Rechnungsnummer oder Belegnummer",\n  "steller": "Firmenname des Rechnungsstellers (nicht Autopartner GmbH)",\n  "steller_roh": "Firmenname exakt wie auf Rechnung",\n  "datum": "Rechnungsdatum TT.MM.JJJJ",\n  "betrag": "Brutto-Gesamtbetrag mit €, z.B. 238,00€"\n}${supHint}`;
 
     const resp = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': getApiKey(), 'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
-        max_tokens: 500,
-        messages: [{ role: 'user', content: [
-          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: b64 } },
-          { type: 'text', text: prompt }
-        ]}]
-      })
+      headers: { 'Content-Type':'application/json', 'x-api-key': getApiKey(), 'anthropic-version':'2023-06-01', 'anthropic-dangerous-direct-browser-access':'true' },
+      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, messages:[{ role:'user', content:[
+        { type:'document', source:{ type:'base64', media_type:'application/pdf', data:b64 } },
+        { type:'text', text:prompt }
+      ]}]})
     });
 
     const data = await resp.json();
     if (data.error) throw new Error(data.error.message);
-    const text = (data.content || []).map(c => c.text || '').join('');
-    const clean = text.replace(/```json|```/g, '').trim();
-    const parsed = JSON.parse(clean);
-    const matchedSteller = matchSupplier(parsed.steller) || parsed.steller || '';
-    results[i] = { typ: parsed.typ || 'RE', nr: parsed.nr || '', steller: matchedSteller, datum: parsed.datum || '', betrag: parsed.betrag || '' };
-    setBadge(i, 'done', '✅ Analysiert');
-    fillFields(i);
-  } catch (e) {
-    results[i] = { typ: 'RE', nr: '', steller: '', datum: '', betrag: '', error: e.message };
-    setBadge(i, 'error', '❌ Fehler: ' + e.message.slice(0, 40));
+    const text = (data.content||[]).map(c=>c.text||'').join('');
+    const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
+
+    const stellerRoh = parsed.steller_roh || parsed.steller || '';
+    const knownSup = findSupplier(stellerRoh);
+
+    if (knownSup) {
+      results[i] = { typ: parsed.typ||'RE', nr: parsed.nr||'', steller: knownSup.short, datum: parsed.datum||'', betrag: parsed.betrag||'' };
+      setBadge(i,'done','✅ Bereit');
+      fillFields(i);
+    } else {
+      results[i] = { typ: parsed.typ||'RE', nr: parsed.nr||'', steller: stellerRoh, datum: parsed.datum||'', betrag: parsed.betrag||'', isNewSupplier: true, stellerRoh };
+      setBadge(i,'new-supplier','🆕 Neuer Lieferant');
+      fillFields(i);
+      await showNewSupplierModal(i, stellerRoh, parsed.typ||'RE');
+    }
+  } catch(e) {
+    results[i] = { typ:'RE', nr:'', steller:'', datum:'', betrag:'', error: e.message };
+    setBadge(i,'error','❌ ' + e.message.slice(0,50));
   }
-  updateDownloadBtn();
+  updateDlAll();
 }
 
-function setBadge(i, type, html) {
-  const el = document.getElementById('badge-'+i);
-  if (el) { el.innerHTML = `<span class="badge badge-${type}">${html}</span>`; }
+// ─── NEW SUPPLIER MODAL ───────────────────────────────────
+function showNewSupplierModal(fileIdx, stellerRoh, typ) {
+  return new Promise(resolve => {
+    modalContext = { fileIdx, resolve };
+    document.getElementById('modal-desc').textContent = `„${stellerRoh}" ist noch nicht gespeichert. Lege diesen Lieferanten einmalig an — beim nächsten Mal wird er automatisch erkannt.`;
+    document.getElementById('modal-raw').value = stellerRoh;
+    document.getElementById('modal-short').value = stellerRoh.split(' ')[0];
+    document.getElementById('modal-typ').value = typ;
+    updateModalPreview();
+    document.getElementById('modal-overlay').classList.add('open');
+  });
 }
 
-function fillFields(i) {
-  const r = results[i];
-  if (!r) return;
-  const set = (id, val) => { const el = document.getElementById(id+'-'+i); if (el) el.value = val || ''; };
-  set('typ', r.typ); set('nr', r.nr); set('steller', r.steller); set('datum', r.datum); set('betrag', r.betrag);
-  const p = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
-  const prev = document.getElementById('preview-'+i);
-  if (prev) { prev.textContent = p + '.pdf'; prev.style.display = p ? '' : 'none'; }
+function updateModalPreview() {
+  const short = document.getElementById('modal-short').value.trim();
+  const typ = document.getElementById('modal-typ').value;
+  const r = results[modalContext?.fileIdx] || {};
+  const p = buildName(typ, r.nr||'NR', short||'Lieferant', r.datum||'TT.MM.JJJJ', r.betrag||'0,00€');
+  document.getElementById('modal-preview').textContent = p + '.pdf';
+}
+
+function confirmSupplier() {
+  const raw = document.getElementById('modal-raw').value.trim();
+  const short = document.getElementById('modal-short').value.trim();
+  const typ = document.getElementById('modal-typ').value;
+  if (!raw || !short) { toast('Bitte beide Felder ausfüllen.','error'); return; }
+  const sups = getSuppliers();
+  sups.push({ raw, short, typ });
+  saveSuppliersList(sups);
+  const i = modalContext?.fileIdx;
+  if (i !== undefined && results[i]) {
+    results[i].steller = short;
+    results[i].typ = typ;
+    results[i].isNewSupplier = false;
+    fillFields(i);
+    setBadge(i,'done','✅ Bereit');
+  }
+  closeModal();
+  toast(`Lieferant „${short}" gespeichert.`,'success');
+  if (modalContext?.resolve) modalContext.resolve();
+}
+
+function skipSupplier() {
+  const i = modalContext?.fileIdx;
+  if (i !== undefined && results[i]) {
+    results[i].isNewSupplier = false;
+    setBadge(i,'done','✅ Bereit');
+    fillFields(i);
+  }
+  closeModal();
+  if (modalContext?.resolve) modalContext.resolve();
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  modalContext = null;
 }
 
 // ─── DOWNLOAD ─────────────────────────────────────────────
-async function downloadZip() {
-  const zip = new JSZip();
-  const folder = (document.getElementById('folder-name')?.value || localStorage.getItem('rechnungs_folder') || '').trim();
-  const prefix = folder ? sanitize(folder) + '/' : '';
-  for (let i = 0; i < files.length; i++) {
-    const r = results[i];
-    if (!r || r.error) continue;
-    const name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag) + '.pdf';
-    const data = await files[i].arrayBuffer();
-    zip.file(prefix + name, data);
-  }
-  const blob = await zip.generateAsync({ type: 'blob' });
+async function downloadOne(i) {
+  const r = results[i];
+  if (!r || !r.nr) return;
+  const name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag) + '.pdf';
+  const data = await files[i].arrayBuffer();
+  const blob = new Blob([data], { type:'application/pdf' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = 'Rechnungen_umbenannt.zip';
+  a.download = name;
   a.click();
   URL.revokeObjectURL(a.href);
-  toast('ZIP wird heruntergeladen.', 'success');
+  toast(`⬇️ ${name}`, 'success');
+}
+
+async function downloadAll() {
+  let count = 0;
+  for (let i = 0; i < files.length; i++) {
+    if (results[i] && !results[i].error && results[i].nr) {
+      await downloadOne(i);
+      count++;
+      await new Promise(r => setTimeout(r, 400));
+    }
+  }
+  toast(`${count} Datei(en) heruntergeladen.`, 'success');
+}
+
+// ─── HELPERS ──────────────────────────────────────────────
+function setBadge(i, type, html) {
+  const el = document.getElementById('badge-'+i);
+  if (el) el.innerHTML = `<span class="badge badge-${type}">${html}</span>`;
+}
+
+function fillFields(i) {
+  const r = results[i]; if (!r) return;
+  const set = (id, val) => { const el = document.getElementById(id+'-'+i); if (el) el.value = val||''; };
+  set('typ', r.typ); set('nr', r.nr); set('steller', r.steller); set('datum', r.datum); set('betrag', r.betrag);
+  const p = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
+  const prev = document.getElementById('preview-'+i);
+  if (prev) { prev.textContent = p ? '📄 '+p+'.pdf' : ''; prev.style.display = p?'':'none'; }
+  const dlBtn = document.getElementById('dl-btn-'+i);
+  if (dlBtn) dlBtn.disabled = !r.nr;
+  const item = document.getElementById('item-'+i);
+  if (item) item.classList.toggle('ready', !!r.nr);
+  const folder = getSavedFolder();
+  const hint = document.getElementById('hint-'+i);
+  if (hint) hint.innerHTML = folder && r.nr ? `💾 Speichern in: <span>${esc(folder)}</span>` : '';
+}
+
+async function toBase64(file) {
+  return new Promise((res,rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result.split(',')[1]);
+    r.onerror = () => rej(new Error('Lesefehler'));
+    r.readAsDataURL(file);
+  });
 }
 
 // ─── SUPPLIERS ────────────────────────────────────────────
-function getSuppliers() {
-  try { return JSON.parse(localStorage.getItem('rechnungs_suppliers') || '[]'); } catch { return []; }
-}
-function saveSuppliers() {
-  const rows = document.querySelectorAll('.supplier-row');
-  const sups = [...rows].map(row => ({
-    raw: row.querySelector('.sup-raw')?.value?.trim() || '',
-    short: row.querySelector('.sup-short')?.value?.trim() || ''
-  })).filter(s => s.raw || s.short);
-  localStorage.setItem('rechnungs_suppliers', JSON.stringify(sups));
-  toast('Lieferanten gespeichert.', 'success');
-}
-function matchSupplier(text) {
+function getSuppliers() { try { return JSON.parse(localStorage.getItem('re_suppliers')||'[]'); } catch { return []; } }
+function saveSuppliersList(s) { localStorage.setItem('re_suppliers', JSON.stringify(s)); }
+function findSupplier(text) {
   if (!text) return null;
   const sups = getSuppliers();
-  for (const s of sups) {
-    if (s.raw && s.short && text.toLowerCase().includes(s.raw.toLowerCase())) return s.short;
-  }
+  for (const s of sups) { if (s.raw && text.toLowerCase().includes(s.raw.toLowerCase())) return s; }
   return null;
+}
+function saveSuppliers() {
+  const rows = document.querySelectorAll('#supplier-list .supplier-row');
+  const sups = [...rows].map(row => ({
+    raw: row.querySelector('.sup-raw')?.value?.trim()||'',
+    short: row.querySelector('.sup-short')?.value?.trim()||'',
+    typ: row.querySelector('.sup-typ')?.value||'RE'
+  })).filter(s => s.raw);
+  saveSuppliersList(sups);
+  toast('Lieferanten gespeichert.','success');
 }
 function renderSuppliers() {
   const sups = getSuppliers();
   const list = document.getElementById('supplier-list');
-  if (sups.length === 0) {
-    list.innerHTML = '<div class="empty-state"><span class="empty-icon">🏪</span>Noch keine Lieferanten gespeichert.<br>Klicke unten auf „Lieferant hinzufügen".</div>';
-    return;
-  }
-  list.innerHTML = sups.map((s, i) => `
+  if (!sups.length) { list.innerHTML = '<div class="empty-state">Noch keine Lieferanten — werden automatisch beim Hochladen angelegt.</div>'; return; }
+  list.innerHTML = sups.map((s,i) => `
     <div class="supplier-row">
-      <input class="supplier-input sup-raw" value="${esc(s.raw)}" placeholder="Name auf Rechnung (z.B. RSU GmbH)">
+      <input class="sup-input sup-raw" value="${esc(s.raw)}" placeholder="Name auf Rechnung">
       <span class="arrow-sep">→</span>
-      <input class="supplier-input sup-short" value="${esc(s.short)}" placeholder="Kurzname (z.B. RSU)">
-      <button class="btn btn-sm btn-danger" onclick="removeSupplierRow(${i})">🗑️</button>
+      <input class="sup-input sup-short" value="${esc(s.short)}" placeholder="Kurzname">
+      <select class="sup-input sup-typ" style="max-width:130px">
+        <option value="RE"${s.typ==='RE'?' selected':''}>RE</option>
+        <option value="GS"${s.typ==='GS'?' selected':''}>GS</option>
+      </select>
+      <button class="btn btn-sm btn-danger" onclick="deleteSupplier(${i})">🗑️</button>
     </div>`).join('');
 }
-function addSupplier() {
-  const list = document.getElementById('supplier-list');
-  const emptyState = list.querySelector('.empty-state');
-  if (emptyState) list.innerHTML = '';
-  const row = document.createElement('div');
-  row.className = 'supplier-row';
-  row.innerHTML = `<input class="supplier-input sup-raw" placeholder="Name auf Rechnung (z.B. KFZ-Komplett Dirk Jägermann)">
-    <span class="arrow-sep">→</span>
-    <input class="supplier-input sup-short" placeholder="Kurzname (z.B. KFZ-Komplett)">
-    <button class="btn btn-sm btn-danger" onclick="this.closest('.supplier-row').remove()">🗑️</button>`;
-  list.appendChild(row);
-}
-function removeSupplierRow(i) {
+function addSupplierManual() {
   const sups = getSuppliers();
-  sups.splice(i, 1);
-  localStorage.setItem('rechnungs_suppliers', JSON.stringify(sups));
+  sups.push({ raw:'', short:'', typ:'RE' });
+  saveSuppliersList(sups);
   renderSuppliers();
+}
+function deleteSupplier(i) {
+  const sups = getSuppliers(); sups.splice(i,1); saveSuppliersList(sups); renderSuppliers();
 }
 
 // ─── SETTINGS ─────────────────────────────────────────────
-function getApiKey() { return localStorage.getItem('rechnungs_api_key') || ''; }
+function getApiKey() { return localStorage.getItem('re_api_key')||''; }
 function saveApiKey() {
-  const val = document.getElementById('api-key-field').value.trim();
-  if (!val) { toast('Bitte einen Key eingeben.', 'error'); return; }
-  localStorage.setItem('rechnungs_api_key', val);
+  const v = document.getElementById('api-key-field').value.trim();
+  if (!v) { toast('Bitte einen Key eingeben.','error'); return; }
+  localStorage.setItem('re_api_key', v);
   loadSettingsDisplay();
-  toast('API Key gespeichert.', 'success');
+  toast('API Key gespeichert.','success');
 }
-function clearApiKey() {
-  localStorage.removeItem('rechnungs_api_key');
-  document.getElementById('api-key-field').value = '';
+function clearApiKey() { localStorage.removeItem('re_api_key'); document.getElementById('api-key-field').value=''; loadSettingsDisplay(); toast('Key gelöscht.','success'); }
+function getSavedFolder() { return localStorage.getItem('re_folder')||''; }
+function saveFolder() {
+  const v = document.getElementById('folder-input')?.value?.trim()||'';
+  localStorage.setItem('re_folder', v);
   loadSettingsDisplay();
-  toast('API Key gelöscht.', 'success');
+  toast('Speicherort gespeichert.','success');
 }
-function saveSettings() {
-  const folder = document.getElementById('folder-name').value.trim();
-  localStorage.setItem('rechnungs_folder', folder);
-  toast('Einstellungen gespeichert.', 'success');
+function changeFolder() {
+  document.getElementById('folder-set').style.display = 'none';
+  document.getElementById('folder-empty').style.display = 'block';
+  document.getElementById('folder-input').value = getSavedFolder();
 }
 function loadSettingsDisplay() {
   const k = getApiKey();
-  const ind = document.getElementById('key-indicator');
+  document.getElementById('key-dot').className = 'key-dot' + (k?' ok':'');
   const st = document.getElementById('key-status-text');
-  const field = document.getElementById('api-key-field');
-  if (k) {
-    ind.textContent = '🔑 Key aktiv'; ind.className = 'key-indicator ok';
-    if (st) { st.textContent = '✅ Key gespeichert: ' + k.slice(0, 12) + '…'; st.className = 'key-status ok'; }
-    if (field) field.value = '';
-  } else {
-    ind.textContent = '🔑 API Key'; ind.className = 'key-indicator';
-    if (st) { st.textContent = '❌ Kein Key gespeichert.'; st.className = 'key-status missing'; }
-  }
-  const folder = localStorage.getItem('rechnungs_folder') || '';
-  const fi = document.getElementById('folder-name');
-  if (fi) fi.value = folder;
+  if (st) st.innerHTML = k ? `<span style="color:var(--success)">✅ Key gespeichert: ${k.slice(0,14)}…</span>` : `<span style="color:var(--danger)">❌ Kein Key hinterlegt</span>`;
+  if (document.getElementById('api-key-field')) document.getElementById('api-key-field').value = '';
+  const folder = getSavedFolder();
+  const fe = document.getElementById('folder-empty');
+  const fs = document.getElementById('folder-set');
+  const fd = document.getElementById('folder-display');
+  if (folder && fe && fs && fd) { fe.style.display='none'; fs.style.display='flex'; fd.textContent=folder; }
+  else if (fe && fs) { fe.style.display='block'; fs.style.display='none'; }
 }
 
-// ─── HELPERS ──────────────────────────────────────────────
-async function toBase64(file) {
-  return new Promise((res, rej) => {
-    const r = new FileReader();
-    r.onload = () => res(r.result.split(',')[1]);
-    r.onerror = () => rej(new Error('Datei konnte nicht gelesen werden.'));
-    r.readAsDataURL(file);
-  });
-}
-function toast(msg, type = '') {
+function toast(msg, type='') {
   const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'show ' + type;
-  clearTimeout(t._timer);
-  t._timer = setTimeout(() => t.className = '', 3000);
+  t.textContent = msg; t.className = 'show' + (type?' t-'+type:'');
+  clearTimeout(t._t); t._t = setTimeout(()=>t.className='', 3200);
 }
 
-// ─── INIT ─────────────────────────────────────────────────
 loadSettingsDisplay();
 </script>
 </body>
