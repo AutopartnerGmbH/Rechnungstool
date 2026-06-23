@@ -136,10 +136,10 @@ main{max-width:920px;margin:0 auto;padding:28px 20px}
       <div class="ctitle">📥 Rechnungen einlesen</div>
       <div class="dz" id="dz">
         <div style="font-size:2rem;margin-bottom:8px">📂</div>
-        <strong>PDFs hier ablegen oder klicken</strong>
-        <p>Analyse startet automatisch — SEPA-Erkennung inklusive</p>
+        <strong>PDFs oder Outlook-Emails hier ablegen oder klicken</strong>
+        <p>PDF-Dateien oder .msg-Email-Dateien — Analyse startet automatisch</p>
       </div>
-      <input type="file" id="fi" accept=".pdf,.PDF" multiple style="display:none">
+      <input type="file" id="fi" accept=".pdf,.PDF,.msg,.MSG,.eml,.EML" multiple style="display:none">
       <div class="flist" id="flist"></div>
     </div>
     <div class="toolbar">
@@ -269,6 +269,8 @@ function showPg(id) {
 function addFiles(newFiles) {
   var added = [];
   newFiles.forEach(function(f) {
+    var ext = f.name.split('.').pop().toLowerCase();
+    if (['pdf','msg','eml'].indexOf(ext) === -1) return;
     if (!files.some(function(x) { return x.name === f.name && x.size === f.size; })) {
       files.push(f); added.push(files.length - 1);
     }
@@ -319,6 +321,16 @@ function renderItem(f, i) {
       badge = '<span class="bdg bdg-ok">✅ Fertig</span> ' + sepaBdg;
       sc = 'fitem s-ok';
     }
+  }
+
+  // Container item (MSG/EML with extracted PDFs)
+  if (r && r.isContainer) {
+    return '<div class="fitem s-ok" id="item-' + i + '">'
+      + '<div style="display:flex;align-items:center;gap:8px;padding:10px 14px">'
+      + '<span style="font-size:.8rem;color:var(--mut);flex:1">📧 ' + esc(f.name) + '</span>'
+      + '<span class="bdg bdg-ok">✅ ' + r.pdfCount + ' PDF(s) extrahiert</span>'
+      + '<button class="btn btn-sm btn-er" onclick="removeFile(' + i + ')">🗑️</button>'
+      + '</div></div>';
   }
 
   var resultHtml = '';
@@ -457,6 +469,30 @@ function addStoredTransfer(r, fileName) {
 function clearStoredTransfers() { localStorage.removeItem('re_transfers'); }
 
 // ── SEPA XML TABLE ────────────────────────────────────────
+function calcSkonto(steller, betrag, datum) {
+  // Returns { netto, skontoPct, skontoAmt, applies }
+  var sup = getSups().find(function(s){ return s.short === steller; });
+  var skontoPct = sup ? (parseFloat(sup.skonto) || 0) : 0;
+  var frist = sup ? (parseInt(sup.skontofrist) || 0) : 0;
+  var brutto = parseFloat((betrag||'0').replace(/[^\d,]/g,'').replace(',','.')) || 0;
+
+  if (!skontoPct || !frist || !datum) return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
+
+  // parse datum TT.MM.JJJJ
+  var parts = (datum||'').split('.');
+  if (parts.length !== 3) return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
+  var rechnDatum = new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
+  var deadline = new Date(rechnDatum.getTime() + frist * 86400000);
+  var today = new Date(); today.setHours(0,0,0,0);
+
+  if (today <= deadline) {
+    var skontoAmt = Math.round(brutto * skontoPct / 100 * 100) / 100;
+    var netto = Math.round((brutto - skontoAmt) * 100) / 100;
+    return { netto: netto, skontoPct: skontoPct, skontoAmt: skontoAmt, applies: true };
+  }
+  return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
+}
+
 function renderSepaTable() {
   var wrap = document.getElementById('xml-table-wrap');
   // Collect from current file results
@@ -485,11 +521,20 @@ function renderSepaTable() {
   }
 
   var html = '<table class="xml-table">'
-    + '<thead><tr><th>Empfänger</th><th>Betrag</th><th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th><th></th></tr></thead><tbody>';
+    + '<thead><tr><th>Empfänger</th><th>Brutto</th><th>Skonto</th><th>Überweisen</th><th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th><th></th></tr></thead><tbody>';
   rows.forEach(function(row, k) {
+    var sk = calcSkonto(row.steller, row.betrag, row.datum);
+    var skontoCell = sk.applies
+      ? '<span style="color:var(--ok);font-size:.8rem">-' + esc(formatBetrag(String(sk.skontoAmt).replace('.',','))) + ' (' + sk.skontoPct + '%)</span>'
+      : '<span style="color:var(--mut);font-size:.75rem">—</span>';
+    var nettoFmt = sk.applies
+      ? '<b style="color:var(--ok)">' + esc(formatBetrag(String(sk.netto).replace('.',','))) + '</b>'
+      : '<b>' + esc(formatBetrag(row.betrag)) + '</b>';
     html += '<tr>'
       + '<td>' + esc(row.steller) + '</td>'
-      + '<td><b>' + esc(formatBetrag(row.betrag)) + '</b></td>'
+      + '<td>' + esc(formatBetrag(row.betrag)) + '</td>'
+      + '<td>' + skontoCell + '</td>'
+      + '<td>' + nettoFmt + '</td>'
       + '<td>' + esc(row.nr) + '</td>'
       + '<td><input class="xml-iban" data-k="' + k + '" value="' + esc(row.iban) + '" placeholder="DE…" style="font-family:Consolas;min-width:190px"></td>'
       + '<td><input class="xml-bic"  data-k="' + k + '" value="' + esc(row.bic)  + '" placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:100px"></td>'
@@ -540,10 +585,11 @@ function exportXML() {
     var bic  = bicInputs[k].value.replace(/\s/g,'').toUpperCase();
     var rawDate = dateInputs[k].value.trim();
     if (!iban) { toast('Bitte alle IBAN-Felder ausfüllen.', 'ter'); return; }
-    var amt = parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.'));
+    var sk = calcSkonto(row.steller || steller, betrag, row.datum || '');
+    var amt = sk.applies ? sk.netto : (parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.')) || 0);
     if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + steller, 'ter'); return; }
     var execDate = toISODate(rawDate);
-    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate, datum: row.datum || '', kundennr: row.kundennr || '' });
+    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate, datum: row.datum || '', kundennr: row.kundennr || '', skontoPct: sk.skontoPct, skontoApplied: sk.applies });
     updateSupBank(steller, iban, bic);
   }
 
@@ -578,12 +624,12 @@ function exportXML() {
     + (own.bic ? '      <DbtrAgt><FinInstnId><BIC>' + xmlEsc(own.bic) + '</BIC></FinInstnId></DbtrAgt>\n' : '')
     + txs.map(function(t, idx) {
         return '      <CdtTrfTxInf>\n'
-          + '        <PmtId><EndToEndId>' + xmlEsc('RECHNUNG-' + t.nr) + '</EndToEndId></PmtId>\n'
+          + '        <PmtId><EndToEndId>NOTPROVIDED</EndToEndId></PmtId>\n'
           + '        <Amt><InstdAmt Ccy="EUR">' + t.amt.toFixed(2) + '</InstdAmt></Amt>\n'
           + (t.bic ? '        <CdtrAgt><FinInstnId><BIC>' + xmlEsc(t.bic) + '</BIC></FinInstnId></CdtrAgt>\n' : '')
           + '        <Cdtr><Nm>' + xmlEsc(t.steller) + '</Nm></Cdtr>\n'
           + '        <CdtrAcct><Id><IBAN>' + xmlEsc(t.iban) + '</IBAN></Id></CdtrAcct>\n'
-          + '        <RmtInf><Ustrd>' + xmlEsc('RE ' + t.nr + ' vom ' + t.datum + (t.kundennr ? '\nKD-NR: ' + t.kundennr : '')) + '</Ustrd></RmtInf>\n'
+          + '        <RmtInf><Ustrd>' + xmlEsc('RE ' + t.nr + ' vom ' + t.datum) + (t.kundennr ? xmlEsc('\nKD-NR: ' + t.kundennr) : '') + (t.skontoApplied ? xmlEsc(' / Skonto ' + t.skontoPct + '%') : '') + '</Ustrd></RmtInf>\n'
           + '      </CdtTrfTxInf>';
       }).join('\n')
     + '\n    </PmtInf>\n'
@@ -647,6 +693,12 @@ function buildName(typ,nr,steller,datum,betrag) {
 }
 function san(s){return(s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim();}
 function toB64(file){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=function(){rej(new Error('Lesefehler'));};r.readAsDataURL(file);});}
+function b64ToBlob(b64, type) {
+  var binary = atob(b64);
+  var bytes = new Uint8Array(binary.length);
+  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+  return new Blob([bytes], { type: type });
+}
 function toast(msg,cls){var t=document.getElementById('toast');t.textContent=msg;t.className='show'+(cls?' '+cls:'');clearTimeout(t._timer);t._timer=setTimeout(function(){t.className='';},3200);}
 
 // ── SUPPLIER MATCHING ─────────────────────────────────────
@@ -680,8 +732,143 @@ function updateSupBank(short,iban,bic,kundennr){
 }
 
 // ── ANALYSE ───────────────────────────────────────────────
+// ── MSG / EML EXTRACTION ─────────────────────────────────
+async function extractPdfsFromFile(file) {
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'pdf') return [{ name: file.name, data: await toB64(file) }];
+  if (ext === 'eml') return extractPdfsFromEml(file);
+  if (ext === 'msg') return extractPdfsFromMsg(file);
+  return [];
+}
+
+async function extractPdfsFromEml(file) {
+  var text = await file.text();
+  var pdfs = [];
+  // find all base64 encoded attachments with pdf content-type or .pdf filename
+  var parts = text.split(/--[^
+]+/);
+  parts.forEach(function(part) {
+    var nameMatch = part.match(/filename[*]?=["']?([^"'
+;]+\.pdf)["']?/i);
+    var b64Match = part.match(/Content-Transfer-Encoding:\s*base64[
+]+([\s\S]+?)(?:--|$)/i);
+    if (nameMatch && b64Match) {
+      var name = nameMatch[1].trim();
+      var b64 = b64Match[1].replace(/\s/g, '');
+      pdfs.push({ name: name, data: b64 });
+    }
+  });
+  return pdfs;
+}
+
+async function extractPdfsFromMsg(file) {
+  // MSG files are Compound Document (CFB) format
+  // PDFs are stored as attachment streams with base64 or raw binary
+  var buf = await file.arrayBuffer();
+  var bytes = new Uint8Array(buf);
+  var pdfs = [];
+
+  // Search for PDF magic bytes %PDF in the binary
+  var pdfMagic = [0x25, 0x50, 0x44, 0x46]; // %PDF
+  var eofMarker = [0x25, 0x25, 0x45, 0x4F, 0x46]; // %%EOF
+
+  var i = 0;
+  var pdfCount = 0;
+  while (i < bytes.length - 4) {
+    // find %PDF
+    if (bytes[i] === pdfMagic[0] && bytes[i+1] === pdfMagic[1] &&
+        bytes[i+2] === pdfMagic[2] && bytes[i+3] === pdfMagic[3]) {
+      var start = i;
+      // find %%EOF from this position
+      var end = -1;
+      for (var j = start + 100; j < Math.min(start + 20000000, bytes.length - 5); j++) {
+        if (bytes[j] === eofMarker[0] && bytes[j+1] === eofMarker[1] &&
+            bytes[j+2] === eofMarker[2] && bytes[j+3] === eofMarker[3] &&
+            bytes[j+4] === eofMarker[4]) {
+          end = j + 5;
+          break;
+        }
+      }
+      if (end > start) {
+        var pdfBytes = bytes.slice(start, end);
+        // convert to base64
+        var binary = '';
+        for (var k = 0; k < pdfBytes.length; k++) {
+          binary += String.fromCharCode(pdfBytes[k]);
+        }
+        var b64 = btoa(binary);
+        // try to extract filename from nearby bytes (look back 500 bytes for .pdf string)
+        var nameCandidate = 'Anlage_' + (++pdfCount) + '.pdf';
+        var lookback = Math.max(0, start - 500);
+        var region = '';
+        for (var m = lookback; m < start; m++) {
+          if (bytes[m] >= 0x20 && bytes[m] < 0x7F) region += String.fromCharCode(bytes[m]);
+          else region += ' ';
+        }
+        var fnMatch = region.match(/([A-Za-z0-9_\-\. ]{3,60}\.pdf)/i);
+        if (fnMatch) nameCandidate = fnMatch[fnMatch.length - 1].trim();
+        pdfs.push({ name: nameCandidate, data: b64 });
+        i = end;
+        continue;
+      }
+    }
+    i++;
+  }
+
+  // fallback: try base64 search if no raw PDF found
+  if (!pdfs.length) {
+    var text = '';
+    for (var i2 = 0; i2 < Math.min(bytes.length, 2000000); i2++) {
+      text += String.fromCharCode(bytes[i2]);
+    }
+    var b64Blocks = text.match(/[A-Za-z0-9+\/]{100,}={0,2}/g) || [];
+    b64Blocks.forEach(function(block, idx) {
+      try {
+        var decoded = atob(block);
+        if (decoded.startsWith('%PDF')) {
+          pdfs.push({ name: 'Anhang_' + (idx+1) + '.pdf', data: block });
+        }
+      } catch(e) {}
+    });
+  }
+
+  return pdfs;
+}
+
 async function analyseOne(i, attempt){
   if(!attempt) attempt = 1;
+  var ext = files[i].name.split('.').pop().toLowerCase();
+  // For MSG/EML: extract PDFs first, create virtual entries
+  if (ext === 'msg' || ext === 'eml') {
+    results[i] = { analyzing: true };
+    reRender(i);
+    try {
+      var pdfs = await extractPdfsFromFile(files[i]);
+      if (!pdfs.length) {
+        results[i] = { error: 'Keine PDF-Anhänge in dieser E-Mail gefunden.' };
+        reRender(i); return;
+      }
+      // mark original as processed container
+      results[i] = { isContainer: true, pdfCount: pdfs.length, confirmed: false, nr: 'EMAIL' };
+      reRender(i);
+      // inject extracted PDFs as new virtual file entries
+      var inserted = [];
+      pdfs.forEach(function(pdf) {
+        var blob = b64ToBlob(pdf.data, 'application/pdf');
+        var virtualFile = new File([blob], pdf.name, { type: 'application/pdf' });
+        files.push(virtualFile);
+        var newIdx = files.length - 1;
+        results[newIdx] = { analyzing: true };
+        inserted.push(newIdx);
+      });
+      renderList();
+      await Promise.all(inserted.map(function(ni) { return analyseOne(ni, 1); }));
+    } catch(e) {
+      results[i] = { error: 'E-Mail konnte nicht gelesen werden: ' + e.message };
+      reRender(i);
+    }
+    return;
+  }
   try{
     var b64=await toB64(files[i]);
     var prompt='Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurueck, ohne Erklaerungen:\n'
@@ -869,6 +1056,11 @@ function renderSups(){
       +'<div><div class="slabel">BIC</div><input class="sin sb sin-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX"></div>'
       +'<div><div class="slabel">Kunden-Nr.</div><input class="sin sk" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21"></div>'
       +'</div>'
+      +'<div class="srow-bot" style="margin-top:6px;grid-template-columns:120px 120px 1fr">'
+      +'<div><div class="slabel">Skonto %</div><input class="sin sp" type="number" min="0" max="100" step="0.1" value="'+esc(String(s.skonto||''))+'" placeholder="z.B. 3"></div>'
+      +'<div><div class="slabel">Skonto-Frist (Tage)</div><input class="sin sf" type="number" min="0" max="90" step="1" value="'+esc(String(s.skontofrist||''))+'" placeholder="z.B. 5"></div>'
+      +'<div style="display:flex;align-items:flex-end;padding-bottom:1px"><span style="font-size:.75rem;color:var(--mut)">Leer = kein Skonto. Wird automatisch angewendet wenn Frist noch nicht abgelaufen.</span></div>'
+      +'</div>'
       +'</div>';
   }).join('');
 }
@@ -880,7 +1072,9 @@ function saveSupsFromUI(){
       zahlart:row.querySelector('.sz')?row.querySelector('.sz').value||'auto':'auto',
       iban:(row.querySelector('.si').value||'').replace(/\s/g,'').toUpperCase(),
       bic:(row.querySelector('.sb').value||'').replace(/\s/g,'').toUpperCase(),
-      kundennr:(row.querySelector('.sk')?(row.querySelector('.sk').value||'').trim():'')};
+      kundennr:(row.querySelector('.sk')?(row.querySelector('.sk').value||'').trim():''),
+      skonto:row.querySelector('.sp')?(parseFloat(row.querySelector('.sp').value)||0):0,
+      skontofrist:row.querySelector('.sf')?(parseInt(row.querySelector('.sf').value)||0):0};
   }).filter(function(s){return s.raw;});
   var seen=[];
   sups=sups.filter(function(s){var n=normalize(s.raw);if(seen.indexOf(n)!==-1)return false;seen.push(n);return true;});
