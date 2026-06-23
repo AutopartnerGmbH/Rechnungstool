@@ -525,10 +525,10 @@ function renderSepaTable() {
   rows.forEach(function(row, k) {
     var sk = calcSkonto(row.steller, row.betrag, row.datum);
     var skontoCell = sk.applies
-      ? '<span style="color:var(--ok);font-size:.8rem">-' + esc(formatBetrag(String(sk.skontoAmt).replace('.',','))) + ' (' + sk.skontoPct + '%)</span>'
+      ? '<span style="color:var(--ok);font-size:.8rem">-' + esc(fmtNum(sk.skontoAmt)) + ' (' + sk.skontoPct + '%)</span>'
       : '<span style="color:var(--mut);font-size:.75rem">—</span>';
     var nettoFmt = sk.applies
-      ? '<b style="color:var(--ok)">' + esc(formatBetrag(String(sk.netto).replace('.',','))) + '</b>'
+      ? '<b style="color:var(--ok)">' + esc(fmtNum(sk.netto)) + '</b>'
       : '<b>' + esc(formatBetrag(row.betrag)) + '</b>';
     html += '<tr>'
       + '<td>' + esc(row.steller) + '</td>'
@@ -585,7 +585,7 @@ function exportXML() {
     var bic  = bicInputs[k].value.replace(/\s/g,'').toUpperCase();
     var rawDate = dateInputs[k].value.trim();
     if (!iban) { toast('Bitte alle IBAN-Felder ausfüllen.', 'ter'); return; }
-    var sk = calcSkonto(row.steller || steller, betrag, row.datum || '');
+    var sk = calcSkonto(steller, betrag, row.datum || '');
     var amt = sk.applies ? sk.netto : (parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.')) || 0);
     if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + steller, 'ter'); return; }
     var execDate = toISODate(rawDate);
@@ -686,6 +686,10 @@ function formatBetrag(raw) {
   return num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) + '€';
 }
 
+function fmtNum(num) {
+  if (isNaN(num)) return '0,00€';
+  return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
+}
 function buildName(typ,nr,steller,datum,betrag) {
   if (!nr&&!steller) return '';
   var s=san(steller||'Unbekannt'),n=san(nr||''),d=(datum||'').trim(),b=formatBetrag(betrag);
@@ -744,18 +748,21 @@ async function extractPdfsFromFile(file) {
 async function extractPdfsFromEml(file) {
   var text = await file.text();
   var pdfs = [];
-  // find all base64 encoded attachments with pdf content-type or .pdf filename
-  var parts = text.split(/--[^
-]+/);
+  var boundary = '';
+  var boundaryMatch = text.match(/boundary=["']?([^"'\r\n;]+)/i);
+  if (boundaryMatch) boundary = boundaryMatch[1].trim();
+  var splitRe = boundary ? new RegExp('--' + boundary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) : /--[A-Za-z0-9_\-]+/;
+  var parts = text.split(splitRe);
   parts.forEach(function(part) {
-    var nameMatch = part.match(/filename[*]?=["']?([^"'
-;]+\.pdf)["']?/i);
-    var b64Match = part.match(/Content-Transfer-Encoding:\s*base64[
-]+([\s\S]+?)(?:--|$)/i);
-    if (nameMatch && b64Match) {
-      var name = nameMatch[1].trim();
-      var b64 = b64Match[1].replace(/\s/g, '');
-      pdfs.push({ name: name, data: b64 });
+    var nameMatch = part.match(/filename[*]?=["']?([^"'\r\n;]+\.pdf)["']?/i);
+    var encMatch = part.match(/Content-Transfer-Encoding:\s*base64/i);
+    if (nameMatch && encMatch) {
+      var bodyStart = part.indexOf('\r\n\r\n');
+      if (bodyStart === -1) bodyStart = part.indexOf('\n\n');
+      if (bodyStart !== -1) {
+        var b64 = part.slice(bodyStart).replace(/[\r\n\s]/g, '');
+        pdfs.push({ name: nameMatch[1].trim(), data: b64 });
+      }
     }
   });
   return pdfs;
