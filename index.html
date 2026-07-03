@@ -272,36 +272,7 @@ function showPg(id) {
   document.getElementById('pg-' + id).classList.add('on');
   document.getElementById('nav-' + id).classList.add('on');
   if (id === 'lieferanten') renderSups();
-  if (id === 'einstellungen') // ── THEME ─────────────────────────────────────────────────
-function applyTheme(mode) {
-  if (mode === 'light') {
-    document.body.classList.add('light');
-    var btn = document.getElementById('theme-icon');
-    var lbl = document.getElementById('theme-label');
-    if (btn) btn.textContent = '🌙';
-    if (lbl) lbl.textContent = 'Dunkel';
-  } else {
-    document.body.classList.remove('light');
-    var btn = document.getElementById('theme-icon');
-    var lbl = document.getElementById('theme-label');
-    if (btn) btn.textContent = '☀️';
-    if (lbl) lbl.textContent = 'Hell';
-  }
-}
-function toggleTheme() {
-  var current = localStorage.getItem('re_theme') || 'dark';
-  var next = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('re_theme', next);
-  applyTheme(next);
-}
-// apply saved theme immediately
-(function() {
-  var saved = localStorage.getItem('re_theme') || 'dark';
-  applyTheme(saved);
-})();
-
-loadSettings();
-  if (id === 'sepa') renderSepaTable();
+  if (id === 'einstellungen')   if (id === 'sepa') renderSepaTable();
 }
 
 // ── DROP ─────────────────────────────────────────────────
@@ -1275,7 +1246,35 @@ function loadSettings(){
   if(st&&own.iban)st.innerHTML='<span style="color:var(--ok)">✅ Konto gespeichert: '+esc(own.name)+' · '+esc(own.iban)+'</span>';
 }
 
+// ── THEME ─────────────────────────────────────────────────
+function applyTheme(mode) {
+  if (mode === 'light') {
+    document.body.classList.add('light');
+    var icon = document.getElementById('theme-icon');
+    var lbl  = document.getElementById('theme-label');
+    if (icon) icon.textContent = '🌙';
+    if (lbl)  lbl.textContent  = 'Dunkel';
+  } else {
+    document.body.classList.remove('light');
+    var icon = document.getElementById('theme-icon');
+    var lbl  = document.getElementById('theme-label');
+    if (icon) icon.textContent = '☀️';
+    if (lbl)  lbl.textContent  = 'Hell';
+  }
+}
+function toggleTheme() {
+  var current = localStorage.getItem('re_theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('re_theme', next);
+  applyTheme(next);
+}
+
 loadSettings();
+// apply saved theme after DOM is ready
+(function() {
+  var saved = localStorage.getItem('re_theme') || 'dark';
+  applyTheme(saved);
+})();
 </script>
 </body>
 </html>
