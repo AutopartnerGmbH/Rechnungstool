@@ -18,6 +18,15 @@
   --in-bg:rgba(79,142,247,.1);--in-bd:rgba(79,142,247,.3);
   --r:10px;--rs:6px;
 }
+body.light{
+  --bg:#f4f6fb;--sur:#ffffff;--sur2:#f0f2f8;--sur3:#e4e8f4;
+  --acc:#2563eb;--acc2:#7c3aed;--txt:#1a1d2e;--mut:#64748b;--brd:#d1d9ef;
+  --ok:#16a34a;--ok-bg:rgba(22,163,74,.08);--ok-bd:rgba(22,163,74,.3);
+  --er:#dc2626;--er-bg:rgba(220,38,38,.08);--er-bd:rgba(220,38,38,.3);
+  --wa:#d97706;--wa-bg:rgba(217,119,6,.08);--wa-bd:rgba(217,119,6,.3);
+  --pu:#7c3aed;--pu-bg:rgba(124,58,237,.08);--pu-bd:rgba(124,58,237,.3);
+  --in-bg:rgba(37,99,235,.08);--in-bd:rgba(37,99,235,.3);
+}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:15px}
 header{background:var(--sur);border-bottom:1px solid var(--brd);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100}
@@ -129,7 +138,13 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
     <button class="nb" id="nav-lieferanten" onclick="showPg('lieferanten')">🏪 Lieferanten</button>
     <button class="nb" id="nav-einstellungen" onclick="showPg('einstellungen')">⚙️ Einstellungen</button>
   </nav>
+  <div style="display:flex;align-items:center;gap:12px">
+  <button id="theme-btn" onclick="toggleTheme()" title="Hell/Dunkel umschalten"
+    style="background:var(--sur2);border:1px solid var(--brd);border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.85rem;color:var(--txt);font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px">
+    <span id="theme-icon">☀️</span><span id="theme-label" style="font-size:.78rem">Hell</span>
+  </button>
   <div class="kdot" id="kdot" title="API Key" onclick="showPg('einstellungen')"></div>
+</div>
 </header>
 <main>
 
@@ -257,7 +272,35 @@ function showPg(id) {
   document.getElementById('pg-' + id).classList.add('on');
   document.getElementById('nav-' + id).classList.add('on');
   if (id === 'lieferanten') renderSups();
-  if (id === 'einstellungen') loadSettings();
+  if (id === 'einstellungen') // ── THEME ─────────────────────────────────────────────────
+function applyTheme(mode) {
+  if (mode === 'light') {
+    document.body.classList.add('light');
+    var btn = document.getElementById('theme-icon');
+    var lbl = document.getElementById('theme-label');
+    if (btn) btn.textContent = '🌙';
+    if (lbl) lbl.textContent = 'Dunkel';
+  } else {
+    document.body.classList.remove('light');
+    var btn = document.getElementById('theme-icon');
+    var lbl = document.getElementById('theme-label');
+    if (btn) btn.textContent = '☀️';
+    if (lbl) lbl.textContent = 'Hell';
+  }
+}
+function toggleTheme() {
+  var current = localStorage.getItem('re_theme') || 'dark';
+  var next = current === 'dark' ? 'light' : 'dark';
+  localStorage.setItem('re_theme', next);
+  applyTheme(next);
+}
+// apply saved theme immediately
+(function() {
+  var saved = localStorage.getItem('re_theme') || 'dark';
+  applyTheme(saved);
+})();
+
+loadSettings();
   if (id === 'sepa') renderSepaTable();
 }
 
