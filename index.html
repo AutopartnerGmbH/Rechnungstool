@@ -475,12 +475,11 @@ function updToolbar() {
 function isTransfer(i) {
   var r = results[i];
   if (!r || !r.confirmed || r.error || !r.nr) return false;
-  // check supplier payment preference
   var sup = findSup(r.steller) || findSupByShort(r.steller);
-  if (sup && sup.zahlart === 'uew') return true;
-  if (sup && sup.zahlart === 'sepa') return false;
-  // fallback to AI detection
-  return !r.sepa;
+  var zahlart = sup ? (sup.zahlart || 'auto') : 'auto';
+  if (zahlart === 'uew') return true;
+  if (zahlart === 'sepa') return false;
+  return !r.sepa; // auto: use AI detection
 }
 
 function findSupByShort(short) {
@@ -999,13 +998,13 @@ async function analyseOne(i, attempt){
     if(known) updateSupBank(known.short,iban,bic,parsed.kundennr||'');
 
     if(known){
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
+      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:(parsed.sepa===true||parsed.sepa==='true'),sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
       reRender(i);
       await dlOne(i);
       updToolbar();
     } else {
       var shortSug=stellerRoh.split(/[\s,]+/).slice(0,2).join(' ');
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
+      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:(parsed.sepa===true||parsed.sepa==='true'),sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
       reRender(i);
     }
   }catch(e){
@@ -1079,9 +1078,10 @@ async function dlOne(i){
     (function(ri){
       var sup2 = findSup(ri.steller) || findSupByShort(ri.steller);
       var isUew2 = false;
-      if (sup2 && sup2.zahlart === 'uew') isUew2 = true;
-      else if (sup2 && sup2.zahlart === 'sepa') isUew2 = false;
-      else isUew2 = !ri.sepa;
+      var zahlart2 = sup2 ? (sup2.zahlart || 'auto') : 'auto';
+      if (zahlart2 === 'uew') isUew2 = true;
+      else if (zahlart2 === 'sepa') isUew2 = false;
+      else isUew2 = !ri.sepa; // auto: use AI detection
       if (isUew2) { addStoredTransfer(ri, name); updToolbar(); }
     })(r);
     var el=document.getElementById('item-'+i);
@@ -1235,7 +1235,7 @@ function saveSupsFromUI(){
   }
   saveSupList(sups);renderSups();toast('Lieferanten gespeichert.','tok');
 }
-function addSupManual(){var sups=getSups();sups.push({raw:'',short:'',typ:'RE',iban:'',bic:''});saveSupList(sups);renderSups();}
+function addSupManual(){var sups=getSups();sups.push({raw:'',short:'',typ:'RE',zahlart:'auto',iban:'',bic:'',kundennr:'',skonto:0,skontofrist:0});saveSupList(sups);renderSups();}
 function delSup(i){var sups=getSups();sups.splice(i,1);saveSupList(sups);renderSups();}
 
 // ── SETTINGS ──────────────────────────────────────────────
