@@ -105,14 +105,20 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
 .xml-table td input:focus{border-color:var(--acc)}
 .xml-empty{text-align:center;padding:24px;color:var(--mut);font-size:.88rem}
 /* SUPPLIER PAGE */
-.srow{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);padding:12px 14px;margin-bottom:8px}
+.srow{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);margin-bottom:6px;overflow:hidden}
 .srow:last-child{margin-bottom:0}
-.srow-top{display:flex;gap:8px;align-items:center;margin-bottom:8px}
-.srow-bot{display:grid;grid-template-columns:1fr 120px 120px;gap:8px}
-.sin{flex:1;background:var(--sur3);border:1px solid var(--brd);border-radius:var(--rs);padding:6px 9px;color:var(--txt);font-size:.83rem;font-family:inherit;outline:none;transition:border-color .15s;width:100%}
-.sin:focus{border-color:var(--acc)}
+.srow-main{display:grid;grid-template-columns:2fr 1.2fr 70px 130px 40px;align-items:center;gap:0;border-bottom:1px solid var(--brd)}
+.srow-main:last-child{border-bottom:none}
+.srow-bank{display:grid;grid-template-columns:2fr 120px 110px;gap:0;background:var(--sur3)}
+.scell{padding:8px 10px;border-right:1px solid var(--brd)}
+.scell:last-child{border-right:none}
+.shead{display:grid;grid-template-columns:2fr 1.2fr 70px 130px 40px;background:var(--sur3);border-bottom:1px solid var(--brd);border-radius:var(--r) var(--r) 0 0}
+.shead-bank{display:grid;grid-template-columns:2fr 120px 110px;background:rgba(79,142,247,.06);border-bottom:1px solid var(--brd)}
+.shcell{padding:6px 10px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);border-right:1px solid var(--brd)}
+.shcell:last-child{border-right:none}
+.sin{width:100%;background:transparent;border:none;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;padding:0}
+.sin:focus{outline:none}
 .sin-mono{font-family:'Consolas',monospace;font-size:.78rem}
-.sin-sm{max-width:120px}
 .slabel{font-size:.68rem;color:var(--mut);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
 .empty{text-align:center;padding:32px;color:var(--mut);font-size:.88rem}
 /* SETTINGS */
@@ -996,6 +1002,7 @@ async function analyseOne(i, attempt){
       results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
       reRender(i);
       await dlOne(i);
+      updToolbar();
     } else {
       var shortSug=stellerRoh.split(/[\s,]+/).slice(0,2).join(' ');
       results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:!!parsed.sepa,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
@@ -1068,6 +1075,15 @@ async function dlOne(i){
     document.body.appendChild(a);a.click();document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     toast('⬇️ '+name,'tok');
+    // ALWAYS save to transfer store if this is a transfer (outside DOM check)
+    (function(ri){
+      var sup2 = findSup(ri.steller) || findSupByShort(ri.steller);
+      var isUew2 = false;
+      if (sup2 && sup2.zahlart === 'uew') isUew2 = true;
+      else if (sup2 && sup2.zahlart === 'sepa') isUew2 = false;
+      else isUew2 = !ri.sepa;
+      if (isUew2) { addStoredTransfer(ri, name); updToolbar(); }
+    })(r);
     var el=document.getElementById('item-'+i);
     if(el){
       el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;">'
@@ -1077,12 +1093,6 @@ async function dlOne(i){
         +'</div>';
       el.className='fitem s-ok';
       el.style.transition='opacity 0.4s';
-      // if transfer: save to persistent store before removal
-      if(!r.sepa){
-        var sup = findSupByShort(r.steller);
-        var isUew = !sup || sup.zahlart !== 'sepa';
-        if(isUew) addStoredTransfer(r, name);
-      }
       (function(el,idx){
         setTimeout(function(){
           el.style.opacity='0';
@@ -1142,42 +1152,62 @@ function renderSups(){
   if(ctr) ctr.innerHTML = '<span style="color:var(--pu)">💸 ' + uewSups + ' Überweisung</span>'
     + ' &nbsp;·&nbsp; <span style="color:var(--acc)">🔄 ' + sepaSups + ' SEPA</span>'
     + ' &nbsp;·&nbsp; <span>🤖 ' + autoSups + ' Auto</span>';
-  list.innerHTML=sups.map(function(s,i){
-    var zahlBadge = s.zahlart==='uew'
-      ? '<span style="color:var(--pu);font-size:.75rem">💸 Überweisung</span>'
-      : s.zahlart==='sepa'
-        ? '<span style="color:var(--acc);font-size:.75rem">🔄 SEPA</span>'
-        : '<span style="color:var(--mut);font-size:.75rem">🤖 Auto</span>';
+  list.innerHTML = (!sups.length ? '<div class="empty">Keine Lieferanten gefunden.</div>' : '') +
+  (sups.length ? (
+    // Header row
+    '<div class="shead">'
+    + '<div class="shcell">Erkennungsname → Kurzname</div>'
+    + '<div class="shcell">Zahlungsart</div>'
+    + '<div class="shcell">Typ</div>'
+    + '<div class="shcell">Kunden-Nr.</div>'
+    + '<div class="shcell"></div>'
+    + '</div>'
+    + '<div class="shead-bank">'
+    + '<div class="shcell">IBAN</div>'
+    + '<div class="shcell">BIC</div>'
+    + '<div class="shcell">Skonto % / Frist</div>'
+    + '</div>'
+    + sups.map(function(s,i){
+    var zahlColor = s.zahlart==='uew' ? 'var(--pu)' : s.zahlart==='sepa' ? 'var(--acc)' : 'var(--mut)';
+    var zahlText  = s.zahlart==='uew' ? '💸 Überweisung' : s.zahlart==='sepa' ? '🔄 SEPA' : '🤖 Auto';
     return '<div class="srow">'
-      // TOP ROW: name → short, typ, zahlart, delete
-      +'<div class="srow-top">'
-      +'<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung (Erkennungsname)">'
-      +'<span style="color:var(--mut);flex-shrink:0;font-size:.85rem">→</span>'
-      +'<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" style="max-width:140px">'
-      +'<select class="sin st" style="max-width:70px" title="Dokumenttyp">'
-      +'<option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option>'
-      +'<option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option>'
-      +'</select>'
-      +'<select class="sin sz" style="max-width:150px" title="Zahlungsart">'
-      +'<option value="auto"'+((!s.zahlart||s.zahlart==='auto')?' selected':'')+'>🤖 Auto</option>'
-      +'<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
-      +'<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA-Abbuchung</option>'
-      +'</select>'
-      +'<button class="btn btn-sm btn-er" style="flex-shrink:0" onclick="delSup('+i+')">🗑️</button>'
-      +'</div>'
-      // BOTTOM ROW: IBAN, BIC, Kd-Nr
-      +'<div class="srow-bot">'
-      +'<div><div class="slabel">IBAN</div><input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="DE12 3456 …"></div>'
-      +'<div><div class="slabel">BIC</div><input class="sin sb sin-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX"></div>'
-      +'<div><div class="slabel">Kunden-Nr.</div><input class="sin sk" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21"></div>'
-      +'</div>'
-      +'<div class="srow-bot" style="margin-top:6px;grid-template-columns:120px 120px 1fr">'
-      +'<div><div class="slabel">Skonto %</div><input class="sin sp" type="number" min="0" max="100" step="0.1" value="'+esc(String(s.skonto||''))+'" placeholder="z.B. 3"></div>'
-      +'<div><div class="slabel">Skonto-Frist (Tage)</div><input class="sin sf" type="number" min="0" max="90" step="1" value="'+esc(String(s.skontofrist||''))+'" placeholder="z.B. 5"></div>'
-      +'<div style="display:flex;align-items:flex-end;padding-bottom:1px"><span style="font-size:.75rem;color:var(--mut)">Leer = kein Skonto. Wird automatisch angewendet wenn Frist noch nicht abgelaufen.</span></div>'
-      +'</div>'
-      +'</div>';
-  }).join('');
+      // Main row
+      + '<div class="srow-main">'
+      + '<div class="scell" style="display:flex;align-items:center;gap:6px">'
+      + '<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung" title="Erkennungsname">'
+      + '<span style="color:var(--mut);flex-shrink:0">→</span>'
+      + '<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" title="Kurzname für Dateiname">'
+      + '</div>'
+      + '<div class="scell">'
+      + '<select class="sin sz" style="color:'+zahlColor+';font-weight:500;cursor:pointer" title="Zahlungsart">'
+      + '<option value="auto"'+(!s.zahlart||s.zahlart==='auto'?' selected':'')+'>🤖 Auto</option>'
+      + '<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
+      + '<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA</option>'
+      + '</select>'
+      + '</div>'
+      + '<div class="scell">'
+      + '<select class="sin st" style="cursor:pointer" title="Dokumenttyp">'
+      + '<option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option>'
+      + '<option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option>'
+      + '</select>'
+      + '</div>'
+      + '<div class="scell"><input class="sin sk" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21" title="Kundennummer"></div>'
+      + '<div class="scell" style="text-align:center"><button class="btn btn-sm btn-er" onclick="delSup('+i+')" title="Löschen">🗑️</button></div>'
+      + '</div>'
+      // Bank row
+      + '<div class="srow-bank">'
+      + '<div class="scell"><input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="DE12 3456 7890 …" title="IBAN"></div>'
+      + '<div class="scell"><input class="sin sb sin-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX" title="BIC"></div>'
+      + '<div class="scell" style="display:flex;gap:6px;align-items:center">'
+      + '<input class="sin sp" type="number" min="0" max="100" step="0.1" value="'+esc(String(s.skonto||''))+'" placeholder="%" title="Skonto %" style="max-width:50px">'
+      + '<span style="color:var(--mut);font-size:.78rem">%</span>'
+      + '<input class="sin sf" type="number" min="0" max="90" step="1" value="'+esc(String(s.skontofrist||''))+'" placeholder="Tage" title="Skonto-Frist in Tagen" style="max-width:50px">'
+      + '<span style="color:var(--mut);font-size:.78rem">Tage</span>'
+      + '</div>'
+      + '</div>'
+      + '</div>';
+  }).join('')
+  ) : '');
 }
 function saveSupsFromUI(){
   var rows=document.querySelectorAll('.srow');
