@@ -1210,30 +1210,51 @@ function renderSups(){
   ) : '');
 }
 function saveSupsFromUI(){
-  var rows=document.querySelectorAll('.srow');
-  var sups=Array.from(rows).map(function(row){
-    return{raw:(row.querySelector('.sr').value||'').trim(),short:(row.querySelector('.ss').value||'').trim(),
-      typ:row.querySelector('.st').value||'RE',
-      zahlart:row.querySelector('.sz')?row.querySelector('.sz').value||'auto':'auto',
-      iban:(row.querySelector('.si').value||'').replace(/\s/g,'').toUpperCase(),
-      bic:(row.querySelector('.sb').value||'').replace(/\s/g,'').toUpperCase(),
-      kundennr:(row.querySelector('.sk')?(row.querySelector('.sk').value||'').trim():''),
-      skonto:row.querySelector('.sp')?(parseFloat(row.querySelector('.sp').value)||0):0,
-      skontofrist:row.querySelector('.sf')?(parseInt(row.querySelector('.sf').value)||0):0};
-  }).filter(function(s){return s.raw;});
-  var seen=[];
-  sups=sups.filter(function(s){var n=normalize(s.raw);if(seen.indexOf(n)!==-1)return false;seen.push(n);return true;});
-  // IBAN/BIC validation
+  // Read current values from DOM rows
+  var rows = document.querySelectorAll('.srow');
+  var domData = Array.from(rows).map(function(row){
+    return {
+      raw:      (row.querySelector('.sr') ? row.querySelector('.sr').value || '' : '').trim(),
+      short:    (row.querySelector('.ss') ? row.querySelector('.ss').value || '' : '').trim(),
+      typ:       row.querySelector('.st') ? row.querySelector('.st').value || 'RE' : 'RE',
+      zahlart:   row.querySelector('.sz') ? row.querySelector('.sz').value || 'auto' : 'auto',
+      iban:     (row.querySelector('.si') ? row.querySelector('.si').value || '' : '').replace(/\s/g,'').toUpperCase(),
+      bic:      (row.querySelector('.sb') ? row.querySelector('.sb').value || '' : '').replace(/\s/g,'').toUpperCase(),
+      kundennr: (row.querySelector('.sk') ? row.querySelector('.sk').value || '' : '').trim(),
+      skonto:    row.querySelector('.sp') ? parseFloat(row.querySelector('.sp').value)||0 : 0,
+      skontofrist: row.querySelector('.sf') ? parseInt(row.querySelector('.sf').value)||0 : 0
+    };
+  });
+  // Merge with full list (filter-safe: update matching entries, keep hidden ones)
+  var allSups = getSups();
+  var filterVal = (document.getElementById('sup-filter')||{}).value || '';
+  if (filterVal.trim()) {
+    // Filter active: only update matching entries
+    domData.forEach(function(d, idx) {
+      var match = allSups.findIndex(function(s){ return normalize(s.raw)===normalize(d.raw) || normalize(s.short)===normalize(d.short); });
+      if (match >= 0) allSups[match] = Object.assign(allSups[match], d);
+    });
+  } else {
+    // No filter: full replace, but keep entries with raw value
+    allSups = domData.filter(function(s){ return s.raw; });
+    var seen=[];
+    allSups=allSups.filter(function(s){var n=normalize(s.raw);if(seen.indexOf(n)!==-1)return false;seen.push(n);return true;});
+  }
+  // IBAN/BIC validation (only warn, don't block)
   var warnings = [];
-  sups.forEach(function(s) {
-    var msgs = validateAndWarn(s.iban, s.bic, s.short || s.raw);
-    warnings = warnings.concat(msgs);
+  allSups.forEach(function(s) {
+    if (s.iban || s.bic) {
+      var msgs = validateAndWarn(s.iban, s.bic, s.short || s.raw);
+      warnings = warnings.concat(msgs);
+    }
   });
   if (warnings.length) {
-    toast('\u274C ' + warnings[0] + (warnings.length > 1 ? ' (und ' + (warnings.length-1) + ' weitere)' : ''), 'ter');
-    return;
+    toast('\u26A0\uFE0F IBAN/BIC-Hinweis: ' + warnings[0], 'ter');
+    // Don't block saving - just warn
   }
-  saveSupList(sups);renderSups();toast('Lieferanten gespeichert.','tok');
+  saveSupList(allSups);
+  renderSups();
+  toast('Lieferanten gespeichert.','tok');
 }
 function addSupManual(){var sups=getSups();sups.push({raw:'',short:'',typ:'RE',zahlart:'auto',iban:'',bic:'',kundennr:'',skonto:0,skontofrist:0});saveSupList(sups);renderSups();}
 function delSup(i){var sups=getSups();sups.splice(i,1);saveSupList(sups);renderSups();}
