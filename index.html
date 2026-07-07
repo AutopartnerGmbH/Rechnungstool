@@ -4,46 +4,47 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-<meta http-equiv="Pragma" content="no-cache">
-<meta http-equiv="Expires" content="0">
-<title>Rechnungs-Umbenenner v2.1</title>
+<title>Rechnungs-Umbenenner v3</title>
 <style>
-:root{
-  --bg:#0f1117;--sur:#1a1d27;--sur2:#22263a;--sur3:#2a2f47;
-  --acc:#4f8ef7;--acc2:#7c5cbf;--txt:#e8eaf0;--mut:#6b7194;--brd:#2e3250;
-  --ok:#3ecf8e;--ok-bg:rgba(62,207,142,.1);--ok-bd:rgba(62,207,142,.3);
-  --er:#f76f6f;--er-bg:rgba(247,111,111,.1);--er-bd:rgba(247,111,111,.3);
-  --wa:#f0a500;--wa-bg:rgba(240,165,0,.1);--wa-bd:rgba(240,165,0,.3);
-  --pu:#a78bfa;--pu-bg:rgba(124,92,191,.12);--pu-bd:rgba(124,92,191,.35);
-  --in-bg:rgba(79,142,247,.1);--in-bd:rgba(79,142,247,.3);
-  --r:10px;--rs:6px;
+:root {
+  --bg:#0f1117; --sur:#1a1d27; --sur2:#22263a; --sur3:#2a2f47;
+  --acc:#4f8ef7; --acc2:#7c5cbf; --txt:#e8eaf0; --mut:#6b7194; --brd:#2e3250;
+  --ok:#3ecf8e; --ok-bg:rgba(62,207,142,.1); --ok-bd:rgba(62,207,142,.3);
+  --er:#f76f6f; --er-bg:rgba(247,111,111,.1); --er-bd:rgba(247,111,111,.3);
+  --wa:#f0a500; --wa-bg:rgba(240,165,0,.1); --wa-bd:rgba(240,165,0,.3);
+  --pu:#a78bfa; --pu-bg:rgba(124,92,191,.12); --pu-bd:rgba(124,92,191,.35);
+  --in-bg:rgba(79,142,247,.1); --in-bd:rgba(79,142,247,.3);
+  --r:10px; --rs:6px;
 }
-body.light{
-  --bg:#f4f6fb;--sur:#ffffff;--sur2:#f0f2f8;--sur3:#e4e8f4;
-  --acc:#2563eb;--acc2:#7c3aed;--txt:#1a1d2e;--mut:#64748b;--brd:#d1d9ef;
-  --ok:#16a34a;--ok-bg:rgba(22,163,74,.08);--ok-bd:rgba(22,163,74,.3);
-  --er:#dc2626;--er-bg:rgba(220,38,38,.08);--er-bd:rgba(220,38,38,.3);
-  --wa:#d97706;--wa-bg:rgba(217,119,6,.08);--wa-bd:rgba(217,119,6,.3);
-  --pu:#7c3aed;--pu-bg:rgba(124,58,237,.08);--pu-bd:rgba(124,58,237,.3);
-  --in-bg:rgba(37,99,235,.08);--in-bd:rgba(37,99,235,.3);
+body.light {
+  --bg:#f4f6fb; --sur:#fff; --sur2:#f0f2f8; --sur3:#e4e8f4;
+  --acc:#2563eb; --acc2:#7c3aed; --txt:#1a1d2e; --mut:#64748b; --brd:#d1d9ef;
+  --ok:#16a34a; --ok-bg:rgba(22,163,74,.08); --ok-bd:rgba(22,163,74,.3);
+  --er:#dc2626; --er-bg:rgba(220,38,38,.08); --er-bd:rgba(220,38,38,.3);
+  --wa:#d97706; --wa-bg:rgba(217,119,6,.08); --wa-bd:rgba(217,119,6,.3);
+  --pu:#7c3aed; --pu-bg:rgba(124,58,237,.08); --pu-bd:rgba(124,58,237,.3);
+  --in-bg:rgba(37,99,235,.08); --in-bd:rgba(37,99,235,.3);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--txt);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;font-size:15px}
 header{background:var(--sur);border-bottom:1px solid var(--brd);padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:62px;position:sticky;top:0;z-index:100}
-.logo{display:flex;align-items:center;gap:10px;font-size:1rem;font-weight:600}
-.logo-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.logo{display:flex;align-items:center;gap:10px;font-size:1.05rem;font-weight:600}
+.logo-icon{width:34px;height:34px;background:linear-gradient(135deg,var(--acc),var(--acc2));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px}
 nav{display:flex;gap:2px;background:var(--sur2);border-radius:8px;padding:3px}
 .nb{background:none;border:none;color:var(--mut);padding:8px 18px;border-radius:6px;cursor:pointer;font-size:.88rem;font-family:inherit;transition:all .15s}
-.nb:hover{color:var(--txt)}.nb.on{background:var(--sur3);color:var(--txt)}
-.kdot{width:9px;height:9px;border-radius:50%;background:var(--er);cursor:pointer;transition:background .2s;flex-shrink:0}
+.nb:hover{color:var(--txt)} .nb.on{background:var(--sur3);color:var(--txt)}
+.hdr-right{display:flex;align-items:center;gap:12px}
+.theme-btn{background:var(--sur2);border:1px solid var(--brd);border-radius:20px;padding:6px 14px;cursor:pointer;font-size:.85rem;color:var(--txt);font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px}
+.theme-btn:hover{border-color:var(--acc)}
+.kdot{width:9px;height:9px;border-radius:50%;background:var(--er);cursor:pointer;transition:background .2s}
 .kdot.ok{background:var(--ok)}
 main{max-width:1100px;margin:0 auto;padding:32px 24px}
-.pg{display:none}.pg.on{display:block}
+.pg{display:none} .pg.on{display:block}
 .card{background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:24px 28px;margin-bottom:18px}
 .ctitle{font-size:.72rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--acc);margin-bottom:16px}
-.dz{border:2px dashed var(--brd);border-radius:var(--r);padding:32px 20px;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
+.dz{border:2px dashed var(--brd);border-radius:var(--r);padding:36px 20px;text-align:center;cursor:pointer;transition:all .2s;user-select:none}
 .dz:hover,.dz.over{border-color:var(--acc);background:rgba(79,142,247,.04)}
-.dz p{color:var(--mut);font-size:.88rem;margin-top:6px}
+.dz p{color:var(--mut);font-size:.9rem;margin-top:6px}
 .btn{padding:10px 18px;border-radius:var(--rs);font-size:.88rem;cursor:pointer;border:1px solid var(--brd);background:var(--sur2);color:var(--txt);font-family:inherit;transition:all .15s;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
 .btn:hover{border-color:var(--acc);color:var(--acc)}
 .btn:disabled{opacity:.35;cursor:not-allowed;pointer-events:none}
@@ -54,85 +55,83 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
 .btn-er{color:var(--er);border-color:var(--er-bd)}
 .btn-er:hover{background:var(--er-bg);border-color:var(--er);color:var(--er)}
 .btn-wa{background:var(--wa-bg);border-color:var(--wa-bd);color:var(--wa)}
-.btn-wa:hover{background:rgba(240,165,0,.2);border-color:var(--wa);color:var(--wa)}
-.btn-pu{background:var(--pu-bg);border-color:var(--pu-bd);color:var(--pu)}
-.btn-pu:hover{background:rgba(124,92,191,.25);color:var(--pu);border-color:var(--pu)}
-.btn-sm{padding:5px 11px;font-size:.78rem}
-.toolbar{display:flex;align-items:center;gap:8px;margin-top:4px;flex-wrap:wrap}
-.tl{flex:1;font-size:.85rem;color:var(--mut)}
-.flist{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.btn-sm{padding:6px 12px;font-size:.82rem}
+.toolbar{display:flex;align-items:center;gap:10px;margin-top:6px;flex-wrap:wrap}
+.tl{flex:1;font-size:.88rem;color:var(--mut)}
+.flist{display:flex;flex-direction:column;gap:12px;margin-top:18px}
 .fitem{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);overflow:hidden;transition:border-color .2s}
-.fitem.s-ok{border-color:var(--ok-bd)}.fitem.s-anlz{border-color:var(--in-bd)}
-.fitem.s-new{border-color:var(--pu-bd)}.fitem.s-conf{border-color:var(--wa-bd)}
-.fitem.s-err{border-color:var(--er-bd)}.fitem.s-sepa{border-color:var(--in-bd)}
-.fhead{display:flex;align-items:center;gap:8px;padding:12px 14px 0;flex-wrap:wrap}
-.forig{font-size:.79rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
-.bdg{display:inline-flex;align-items:center;gap:4px;font-size:.7rem;font-weight:600;padding:3px 8px;border-radius:20px;white-space:nowrap;flex-shrink:0}
-.bdg-pend{background:var(--wa-bg);color:var(--wa);border:1px solid var(--wa-bd)}
-.bdg-anlz{background:var(--in-bg);color:var(--acc);border:1px solid var(--in-bd)}
-.bdg-conf{background:var(--wa-bg);color:var(--wa);border:1px solid var(--wa-bd)}
-.bdg-new{background:var(--pu-bg);color:var(--pu);border:1px solid var(--pu-bd)}
-.bdg-ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
-.bdg-err{background:var(--er-bg);color:var(--er);border:1px solid var(--er-bd)}
-.bdg-sepa{background:var(--in-bg);color:var(--acc);border:1px solid var(--in-bd)}
-.bdg-uew{background:var(--pu-bg);color:var(--pu);border:1px solid var(--pu-bd)}
-.rblock{padding:10px 14px 0}
-.rname{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:9px 12px;font-size:.85rem;color:var(--ok);font-family:'Consolas',monospace;word-break:break-all}
-.rmeta{display:flex;gap:12px;margin-top:7px;flex-wrap:wrap}
-.rmeta span{font-size:.74rem;color:var(--mut)}.rmeta b{color:var(--txt)}
-.sepa-info{background:var(--in-bg);border:1px solid var(--in-bd);border-radius:var(--rs);padding:7px 12px;font-size:.78rem;color:var(--acc);margin-top:7px}
-.uew-info{background:var(--pu-bg);border:1px solid var(--pu-bd);border-radius:var(--rs);padding:7px 12px;font-size:.78rem;color:var(--pu);margin-top:7px}
-.missing-bank{background:var(--wa-bg);border:1px solid var(--wa-bd);border-radius:var(--rs);padding:7px 12px;font-size:.78rem;color:var(--wa);margin-top:7px}
-.cpanel{background:var(--wa-bg);border-top:1px solid var(--wa-bd);padding:10px 14px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.cpanel p{font-size:.81rem;color:var(--wa);flex:1;min-width:140px}
-.spanel{background:var(--pu-bg);border-top:1px solid var(--pu-bd);padding:12px 14px}
-.spanel h3{font-size:.84rem;font-weight:600;color:var(--pu);margin-bottom:5px}
-.spanel p{font-size:.79rem;color:var(--mut);margin-bottom:10px;line-height:1.6}
-.sgrid{display:grid;grid-template-columns:1fr 1fr auto;gap:7px;align-items:end;margin-bottom:8px}
-.sfield label{font-size:.7rem;color:var(--mut);display:block;margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
-.sfield input,.sfield select{width:100%;background:var(--sur3);border:1px solid var(--brd);border-radius:var(--rs);padding:6px 9px;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;transition:border-color .15s}
-.sfield input:focus,.sfield select:focus{border-color:var(--acc)}
-.sprev{font-size:.74rem;color:var(--pu);font-family:'Consolas',monospace;padding:5px 9px;background:rgba(124,92,191,.08);border-radius:var(--rs);margin-bottom:8px;word-break:break-all}
-.ffoot{display:flex;align-items:center;justify-content:space-between;padding:8px 14px 12px;gap:8px;flex-wrap:wrap}
-.fhint{font-size:.74rem;color:var(--wa)}
-/* SEPA XML panel */
-.xml-panel{background:var(--sur);border:1px solid var(--pu-bd);border-radius:var(--r);padding:20px 24px;margin-bottom:16px}
-.xml-panel h2{font-size:.95rem;font-weight:600;color:var(--pu);margin-bottom:12px}
-.xml-table{width:100%;border-collapse:collapse;font-size:.82rem;margin-bottom:14px}
-.xml-table th{text-align:left;color:var(--mut);font-weight:500;padding:6px 8px;border-bottom:1px solid var(--brd)}
-.xml-table td{padding:7px 8px;border-bottom:1px solid rgba(46,50,80,.5);color:var(--txt);vertical-align:middle}
-.xml-table td input{background:var(--sur2);border:1px solid var(--brd);border-radius:4px;padding:4px 7px;color:var(--txt);font-size:.82rem;font-family:inherit;outline:none;width:100%;transition:border-color .15s}
+.fitem.s-ok{border-color:var(--ok-bd)} .fitem.s-anlz{border-color:var(--in-bd)}
+.fitem.s-new{border-color:var(--pu-bd)} .fitem.s-conf{border-color:var(--wa-bd)}
+.fitem.s-err{border-color:var(--er-bd)}
+.fhead{display:flex;align-items:center;gap:10px;padding:14px 16px 0;flex-wrap:wrap}
+.forig{font-size:.82rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.bdg{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:600;padding:3px 10px;border-radius:20px;white-space:nowrap;flex-shrink:0}
+.b-pend{background:var(--wa-bg);color:var(--wa);border:1px solid var(--wa-bd)}
+.b-anlz{background:var(--in-bg);color:var(--acc);border:1px solid var(--in-bd)}
+.b-conf{background:var(--wa-bg);color:var(--wa);border:1px solid var(--wa-bd)}
+.b-new{background:var(--pu-bg);color:var(--pu);border:1px solid var(--pu-bd)}
+.b-ok{background:var(--ok-bg);color:var(--ok);border:1px solid var(--ok-bd)}
+.b-err{background:var(--er-bg);color:var(--er);border:1px solid var(--er-bd)}
+.b-sepa{background:var(--in-bg);color:var(--acc);border:1px solid var(--in-bd)}
+.b-uew{background:var(--pu-bg);color:var(--pu);border:1px solid var(--pu-bd)}
+.rblock{padding:12px 16px 0}
+.rname{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:10px 14px;font-size:.88rem;color:var(--ok);font-family:'Consolas',monospace;word-break:break-all}
+.rmeta{display:flex;gap:14px;margin-top:8px;flex-wrap:wrap}
+.rmeta span{font-size:.78rem;color:var(--mut)} .rmeta b{color:var(--txt)}
+.sepa-info{background:var(--in-bg);border:1px solid var(--in-bd);border-radius:var(--rs);padding:7px 12px;font-size:.8rem;color:var(--acc);margin-top:8px}
+.uew-info{background:var(--pu-bg);border:1px solid var(--pu-bd);border-radius:var(--rs);padding:7px 12px;font-size:.8rem;color:var(--pu);margin-top:8px}
+.cpanel{background:var(--wa-bg);border-top:1px solid var(--wa-bd);padding:12px 16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.cpanel p{font-size:.84rem;color:var(--wa);flex:1;min-width:140px}
+.spanel{background:var(--pu-bg);border-top:1px solid var(--pu-bd);padding:14px 16px}
+.spanel h3{font-size:.88rem;font-weight:600;color:var(--pu);margin-bottom:6px}
+.spanel p{font-size:.82rem;color:var(--mut);margin-bottom:12px;line-height:1.6}
+.sgrid{display:grid;grid-template-columns:1fr 1fr auto;gap:8px;align-items:end;margin-bottom:10px}
+.sf label{font-size:.72rem;color:var(--mut);display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em}
+.sf input,.sf select{width:100%;background:var(--sur3);border:1px solid var(--brd);border-radius:var(--rs);padding:8px 10px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none;transition:border-color .15s}
+.sf input:focus,.sf select:focus{border-color:var(--acc)}
+.sprev{font-size:.78rem;color:var(--pu);font-family:'Consolas',monospace;padding:7px 10px;background:rgba(124,92,191,.08);border-radius:var(--rs);margin-bottom:10px;word-break:break-all}
+.ffoot{display:flex;align-items:center;justify-content:space-between;padding:10px 16px 14px;gap:10px;flex-wrap:wrap}
+.fhint{font-size:.78rem;color:var(--wa)}
+/* XML TABLE */
+.xml-panel{background:var(--sur);border:1px solid var(--pu-bd);border-radius:var(--r);padding:24px 28px;margin-bottom:18px}
+.xml-table{width:100%;border-collapse:collapse;font-size:.85rem;margin-bottom:16px}
+.xml-table th{text-align:left;color:var(--mut);font-weight:500;padding:8px 10px;border-bottom:1px solid var(--brd);font-size:.78rem;text-transform:uppercase;letter-spacing:.05em}
+.xml-table td{padding:8px 10px;border-bottom:1px solid rgba(46,50,80,.4);color:var(--txt);vertical-align:middle}
+.xml-table td input{background:var(--sur2);border:1px solid var(--brd);border-radius:4px;padding:5px 8px;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;width:100%;transition:border-color .15s}
 .xml-table td input:focus{border-color:var(--acc)}
-.xml-empty{text-align:center;padding:24px;color:var(--mut);font-size:.88rem}
-/* SUPPLIER PAGE */
-.srow{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--r);margin-bottom:6px;overflow:hidden}
-.srow:last-child{margin-bottom:0}
-.srow-main{display:grid;grid-template-columns:2fr 1.2fr 70px 130px 40px;align-items:center;gap:0;border-bottom:1px solid var(--brd)}
-.srow-main:last-child{border-bottom:none}
-.srow-bank{display:grid;grid-template-columns:2fr 120px 110px;gap:0;background:var(--sur3)}
-.scell{padding:8px 10px;border-right:1px solid var(--brd)}
-.scell:last-child{border-right:none}
-.shead{display:grid;grid-template-columns:2fr 1.2fr 70px 130px 40px;background:var(--sur3);border-bottom:1px solid var(--brd);border-radius:var(--r) var(--r) 0 0}
-.shead-bank{display:grid;grid-template-columns:2fr 120px 110px;background:rgba(79,142,247,.06);border-bottom:1px solid var(--brd)}
-.shcell{padding:6px 10px;font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);border-right:1px solid var(--brd)}
-.shcell:last-child{border-right:none}
-.sin{width:100%;background:transparent;border:none;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;padding:0}
-.sin:focus{outline:none}
-.sin-mono{font-family:'Consolas',monospace;font-size:.78rem}
-.slabel{font-size:.68rem;color:var(--mut);margin-bottom:3px;text-transform:uppercase;letter-spacing:.05em}
-.empty{text-align:center;padding:32px;color:var(--mut);font-size:.88rem}
+.xml-empty{text-align:center;padding:28px;color:var(--mut);font-size:.9rem}
+/* SUPPLIERS */
+.sup-toolbar{display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap}
+.sup-search{flex:1;min-width:180px;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:9px 14px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none;transition:border-color .15s}
+.sup-search:focus{border-color:var(--acc)}
+.sup-sort-sel{background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:9px 12px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none;cursor:pointer}
+/* Supplier table */
+.sup-table{width:100%;border-collapse:collapse;font-size:.85rem}
+.sup-table th{background:var(--sur3);text-align:left;padding:9px 10px;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--mut);border-bottom:1px solid var(--brd)}
+.sup-table td{padding:8px 10px;border-bottom:1px solid rgba(46,50,80,.35);vertical-align:middle}
+.sup-table tr:last-child td{border-bottom:none}
+.sup-table tr:hover td{background:rgba(255,255,255,.02)}
+.sup-in{width:100%;background:transparent;border:none;color:var(--txt);font-size:.85rem;font-family:inherit;outline:none;padding:0}
+.sup-in:focus{outline:2px solid var(--acc);border-radius:3px;outline-offset:2px}
+.sup-in-mono{font-family:'Consolas',monospace;font-size:.78rem}
+.sup-sel{width:100%;background:var(--sur2);border:1px solid var(--brd);border-radius:4px;color:var(--txt);font-size:.84rem;font-family:inherit;outline:none;padding:4px 6px;cursor:pointer}
+.sup-sel:focus{border-color:var(--acc)}
+.tag-uew{color:var(--pu);font-weight:500;font-size:.84rem}
+.tag-sepa{color:var(--acc);font-weight:500;font-size:.84rem}
+.tag-auto{color:var(--mut);font-size:.84rem}
 /* SETTINGS */
-.slbl{font-size:.82rem;color:var(--mut);margin-bottom:6px;display:block}
-.sinp{width:100%;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:8px 12px;color:var(--txt);font-size:.87rem;font-family:inherit;outline:none;transition:border-color .15s}
+.slbl{font-size:.84rem;color:var(--mut);margin-bottom:7px;display:block}
+.sinp{width:100%;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:10px 14px;color:var(--txt);font-size:.9rem;font-family:inherit;outline:none;transition:border-color .15s}
 .sinp:focus{border-color:var(--acc)}
-.irow{display:flex;gap:8px}.irow .sinp{flex:1}
-.fbox{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:9px 12px;display:flex;align-items:center;gap:8px}
-.fbox span{font-size:.82rem;color:var(--ok);font-family:'Consolas',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.hintbox{background:var(--wa-bg);border:1px solid var(--wa-bd);border-radius:var(--rs);padding:9px 12px;font-size:.79rem;color:var(--wa);margin-top:10px}
-#toast{position:fixed;bottom:24px;right:24px;background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:10px 16px;font-size:.84rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:360px}
-#toast.show{opacity:1}#toast.tok{border-color:var(--ok-bd);color:var(--ok)}#toast.ter{border-color:var(--er-bd);color:var(--er)}
+.irow{display:flex;gap:8px} .irow .sinp{flex:1}
+.fbox{background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:10px 14px;display:flex;align-items:center;gap:10px}
+.fbox span{font-size:.85rem;color:var(--ok);font-family:'Consolas',monospace;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hintbox{background:var(--wa-bg);border:1px solid var(--wa-bd);border-radius:var(--rs);padding:10px 14px;font-size:.82rem;color:var(--wa);margin-top:10px}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--sur);border:1px solid var(--brd);border-radius:var(--r);padding:12px 20px;font-size:.88rem;z-index:9999;opacity:0;transition:opacity .3s;pointer-events:none;max-width:380px}
+#toast.show{opacity:1} #toast.tok{border-color:var(--ok-bd);color:var(--ok)} #toast.ter{border-color:var(--er-bd);color:var(--er)}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spin{display:inline-block;width:11px;height:11px;border:2px solid currentColor;border-top-color:transparent;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle}
+.empty{text-align:center;padding:32px;color:var(--mut);font-size:.9rem}
 </style>
 </head>
 <body>
@@ -140,48 +139,48 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
   <div class="logo"><div class="logo-icon">📄</div>Rechnungs-Umbenenner</div>
   <nav>
     <button class="nb on" id="nav-analyse" onclick="showPg('analyse')">📥 Analyse</button>
-    <button class="nb" id="nav-sepa" onclick="showPg('sepa')">🏦 Überweisungen <span id="sepa-badge" style="display:none;background:var(--pu);color:#fff;font-size:.65rem;font-weight:700;padding:1px 6px;border-radius:10px;margin-left:3px;vertical-align:middle">0</span></button>
+    <button class="nb" id="nav-sepa" onclick="showPg('sepa')">🏦 Überweisungen <span id="sepa-badge" style="display:none;background:var(--pu);color:#fff;font-size:.65rem;font-weight:700;padding:2px 7px;border-radius:10px;margin-left:3px;vertical-align:middle">0</span></button>
     <button class="nb" id="nav-lieferanten" onclick="showPg('lieferanten')">🏪 Lieferanten</button>
     <button class="nb" id="nav-einstellungen" onclick="showPg('einstellungen')">⚙️ Einstellungen</button>
   </nav>
-  <div style="display:flex;align-items:center;gap:12px">
-  <button id="theme-btn" onclick="toggleTheme()" title="Hell/Dunkel umschalten"
-    style="background:var(--sur2);border:1px solid var(--brd);border-radius:20px;padding:5px 12px;cursor:pointer;font-size:.85rem;color:var(--txt);font-family:inherit;transition:all .2s;display:flex;align-items:center;gap:6px">
-    <span id="theme-icon">☀️</span><span id="theme-label" style="font-size:.78rem">Hell</span>
-  </button>
-  <div class="kdot" id="kdot" title="API Key" onclick="showPg('einstellungen')"></div>
-</div>
+  <div class="hdr-right">
+    <button class="theme-btn" id="theme-btn" onclick="toggleTheme()"><span id="theme-icon">☀️</span><span id="theme-lbl" style="font-size:.8rem">Hell</span></button>
+    <div class="kdot" id="kdot" title="API Key" onclick="showPg('einstellungen')"></div>
+  </div>
 </header>
-<main>
 
+<main>
   <!-- ANALYSE -->
   <div class="pg on" id="pg-analyse">
     <div class="card">
       <div class="ctitle">📥 Rechnungen einlesen</div>
       <div class="dz" id="dz">
-        <div style="font-size:2rem;margin-bottom:8px">📂</div>
-        <strong>PDFs oder Outlook-Emails hier ablegen oder klicken</strong>
-        <p>PDF-Dateien oder .msg-Email-Dateien — Analyse startet automatisch</p>
+        <div style="font-size:2.2rem;margin-bottom:10px">📂</div>
+        <strong style="font-size:1.05rem">PDFs oder Outlook-E-Mails hier ablegen oder klicken</strong>
+        <p>Analyse startet automatisch — SEPA-Erkennung inklusive</p>
       </div>
       <input type="file" id="fi" accept=".pdf,.PDF,.msg,.MSG,.eml,.EML" multiple style="display:none">
       <div class="flist" id="flist"></div>
     </div>
     <div class="toolbar">
-      <div class="tl"><b id="fcnt">0</b> Datei(en) &nbsp;|&nbsp; <b id="uew-cnt" style="color:var(--pu)">0</b> zu überweisen</div>
-      <button class="btn btn-pu" id="btn-sepa-pg" onclick="showPg('sepa')" disabled>🏦 Überweisungen anzeigen</button>
+      <div class="tl"><b id="fcnt">0</b> Datei(en) &nbsp;·&nbsp; <b id="uew-cnt" style="color:var(--pu)">0</b> zu überweisen</div>
+      <button class="btn" id="btn-sepa-pg" onclick="showPg('sepa')" disabled>🏦 Überweisungen</button>
       <button class="btn btn-p" id="btn-dla" onclick="dlAll()" disabled>⬇️ Alle herunterladen</button>
     </div>
   </div>
 
-  <!-- SEPA XML -->
+  <!-- ÜBERWEISUNGEN -->
   <div class="pg" id="pg-sepa">
     <div class="xml-panel">
-      <h2>🏦 Offene Überweisungen</h2>
-      <p style="font-size:.83rem;color:var(--mut);margin-bottom:14px">Rechnungen ohne SEPA-Lastschrift — bereit für den Export als <code style="color:var(--acc)">pain.001.003.03</code> XML.</p>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+        <div style="font-size:1rem;font-weight:600;color:var(--pu)">🏦 Offene Überweisungen</div>
+        <button class="btn btn-sm" onclick="renderSepaTable()">🔄 Aktualisieren</button>
+      </div>
+      <p style="font-size:.85rem;color:var(--mut);margin-bottom:16px">Rechnungen die überwiesen werden müssen. Export als <code style="color:var(--acc)">pain.001.003.03</code> XML für ProfiCash.</p>
       <div id="xml-table-wrap"></div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-pu" id="btn-xml-export" onclick="exportXML()" disabled>📤 XML exportieren</button>
-        <button class="btn btn-sm" onclick="showPg('einstellungen')">⚙️ Mein Konto hinterlegen</button>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
+        <button class="btn btn-p" id="btn-xml" onclick="exportXML()" disabled>📤 XML exportieren</button>
+        <button class="btn btn-sm" onclick="showPg('einstellungen')">⚙️ Mein Konto</button>
       </div>
     </div>
   </div>
@@ -189,24 +188,22 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
   <!-- LIEFERANTEN -->
   <div class="pg" id="pg-lieferanten">
     <div class="card">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
-        <div class="ctitle" style="margin-bottom:0">🏪 Gespeicherte Lieferanten</div>
-        <div id="sup-uew-counter" style="font-size:.82rem;color:var(--mut)"></div>
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <div class="ctitle" style="margin-bottom:0">🏪 Lieferanten</div>
+        <div id="sup-counter" style="font-size:.82rem;color:var(--mut)"></div>
       </div>
-      <p style="font-size:.85rem;color:var(--mut);margin-bottom:14px">IBAN, BIC und Kundennummer werden automatisch aus der Rechnung gelesen. Zahlungsart überschreibt die KI-Erkennung.</p>
-      <div style="display:flex;gap:8px;margin-bottom:14px;align-items:center;flex-wrap:wrap">
-        <input type="text" id="sup-filter" placeholder="🔍 Lieferant suchen…" oninput="renderSups()"
-          style="flex:1;min-width:180px;background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:8px 12px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none">
-        <select id="sup-sort" onchange="renderSups()"
-          style="background:var(--sur2);border:1px solid var(--brd);border-radius:var(--rs);padding:8px 12px;color:var(--txt);font-size:.88rem;font-family:inherit;outline:none;cursor:pointer">
+      <p style="font-size:.85rem;color:var(--mut);margin-bottom:14px">Werden automatisch beim ersten Hochladen angelegt. <b>Zahlungsart</b> überschreibt die KI-Erkennung.</p>
+      <div class="sup-toolbar">
+        <input type="text" class="sup-search" id="sup-filter" placeholder="🔍 Suchen nach Name, Kurzname, IBAN…" oninput="renderSups()">
+        <select class="sup-sort-sel" id="sup-sort" onchange="renderSups()">
           <option value="alpha">🔤 A–Z</option>
           <option value="zahlart">💳 Zahlungsart</option>
         </select>
       </div>
       <div id="slist"></div>
-      <div style="margin-top:14px;display:flex;gap:8px">
+      <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-sm" onclick="addSupManual()">➕ Hinzufügen</button>
-        <button class="btn btn-sm btn-ok" onclick="saveSupsFromUI()">💾 Speichern</button>
+        <button class="btn btn-sm btn-ok" onclick="saveSupsFromUI()">💾 Änderungen speichern</button>
       </div>
     </div>
   </div>
@@ -215,86 +212,73 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
   <div class="pg" id="pg-einstellungen">
     <div class="card">
       <div class="ctitle">🔑 API Key</div>
-      <label class="slbl">Anthropic API Key — wird nur lokal gespeichert</label>
-      <div class="irow" style="margin-bottom:7px">
-        <input type="password" class="sinp" id="kfield" placeholder="sk-ant-api03-..." autocomplete="off" style="font-family:'Consolas',monospace;font-size:.82rem">
+      <label class="slbl">Anthropic API Key — wird nur lokal im Browser gespeichert</label>
+      <div class="irow" style="margin-bottom:8px">
+        <input type="password" class="sinp" id="kfield" placeholder="sk-ant-api03-…" autocomplete="off" style="font-family:'Consolas',monospace;font-size:.84rem">
         <button class="btn" onclick="saveKey()">💾 Speichern</button>
         <button class="btn btn-er btn-sm" onclick="delKey()">🗑️</button>
       </div>
-      <div id="kstatus" style="font-size:.79rem"></div>
+      <div id="kstatus" style="font-size:.82rem"></div>
     </div>
     <div class="card">
       <div class="ctitle">🏦 Mein Konto (für XML-Export)</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
-        <div>
-          <label class="slbl">Kontoinhaber</label>
-          <input type="text" class="sinp" id="own-name" placeholder="Autopartner GmbH">
-        </div>
-        <div>
-          <label class="slbl">IBAN</label>
-          <input type="text" class="sinp" id="own-iban" placeholder="DE12 3456 7890 1234 5678 90" style="font-family:'Consolas',monospace">
-        </div>
-        <div>
-          <label class="slbl">BIC</label>
-          <input type="text" class="sinp" id="own-bic" placeholder="COBADEFFXXX" style="font-family:'Consolas',monospace">
-        </div>
-        <div>
-          <label class="slbl">Bank</label>
-          <input type="text" class="sinp" id="own-bank" placeholder="Commerzbank">
-        </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+        <div><label class="slbl">Kontoinhaber</label><input type="text" class="sinp" id="own-name" placeholder="Autopartner GmbH"></div>
+        <div><label class="slbl">IBAN</label><input type="text" class="sinp" id="own-iban" placeholder="DE12 3456 7890 …" style="font-family:'Consolas',monospace"></div>
+        <div><label class="slbl">BIC</label><input type="text" class="sinp" id="own-bic" placeholder="COBADEFFXXX" style="font-family:'Consolas',monospace"></div>
+        <div><label class="slbl">Bank</label><input type="text" class="sinp" id="own-bank" placeholder="Commerzbank"></div>
       </div>
       <button class="btn btn-ok" onclick="saveOwnAccount()">💾 Konto speichern</button>
-      <div id="own-status" style="font-size:.79rem;margin-top:7px"></div>
+      <div id="own-status" style="font-size:.82rem;margin-top:8px"></div>
     </div>
     <div class="card">
-      <div class="ctitle">📁 Speicherort</div>
-      <p style="font-size:.83rem;color:var(--mut);margin-bottom:12px">Wird beim Download als Erinnerung angezeigt.</p>
+      <div class="ctitle">📁 Speicherort (Erinnerung)</div>
+      <p style="font-size:.85rem;color:var(--mut);margin-bottom:12px">Wird beim Download als Hinweis angezeigt. Browser speichert immer im Download-Ordner.</p>
       <div id="fui-empty">
-        <div class="irow" style="margin-bottom:7px">
-          <input type="text" class="sinp" id="ffield" placeholder="z.B. C:\Buchhaltung\Rechnungen 2026">
-          <button class="btn" onclick="saveFolder()">💾 Speichern</button>
-        </div>
+        <div class="irow"><input type="text" class="sinp" id="ffield" placeholder="z.B. C:\Buchhaltung\Rechnungen 2026"><button class="btn" onclick="saveFolder()">💾</button></div>
       </div>
       <div id="fui-set" style="display:none">
-        <div class="fbox"><span>📁</span><span id="fdisplay"></span><button class="btn btn-sm" onclick="changeFolder()">✏️ Ändern</button></div>
+        <div class="fbox"><span>📁</span><span id="fdisplay"></span><button class="btn btn-sm" onclick="changeFolder()">✏️</button></div>
       </div>
-      <div class="hintbox">ℹ️ Tipp: In Chrome → Einstellungen → Downloads deinen Rechnungsordner als Standard setzen.</div>
+      <div class="hintbox" style="margin-top:10px">💡 Tipp: In Chrome → Einstellungen → Downloads → Speicherort auf deinen Rechnungsordner setzen.</div>
     </div>
   </div>
-
 </main>
 <div id="toast"></div>
 
 <script>
+// ═══════════════════════════════ STATE ══════════════════════════════
 var files = [];
 var results = {};
 
-// ── NAV ──────────────────────────────────────────────────
+// ═══════════════════════════════ NAV ════════════════════════════════
 function showPg(id) {
-  ['analyse','sepa','lieferanten','einstellungen'].forEach(function(n) {
-    document.getElementById('pg-' + n).classList.remove('on');
-    document.getElementById('nav-' + n).classList.remove('on');
+  ['analyse','sepa','lieferanten','einstellungen'].forEach(function(n){
+    document.getElementById('pg-'+n).classList.remove('on');
+    document.getElementById('nav-'+n).classList.remove('on');
   });
-  document.getElementById('pg-' + id).classList.add('on');
-  document.getElementById('nav-' + id).classList.add('on');
+  document.getElementById('pg-'+id).classList.add('on');
+  document.getElementById('nav-'+id).classList.add('on');
   if (id === 'lieferanten') renderSups();
-  if (id === 'einstellungen')   if (id === 'sepa') renderSepaTable();
+  if (id === 'einstellungen') loadSettings();
+  if (id === 'sepa') renderSepaTable();
 }
 
-// ── DROP ─────────────────────────────────────────────────
-(function() {
+// ═══════════════════════════════ DROP ═══════════════════════════════
+(function(){
   var dz = document.getElementById('dz');
-  dz.addEventListener('click', function() { document.getElementById('fi').click(); });
-  ['dragenter','dragover'].forEach(function(ev) {
-    dz.addEventListener(ev, function(e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
-  });
-  dz.addEventListener('dragleave', function(e) { e.preventDefault(); e.stopPropagation(); dz.classList.remove('over'); });
-  dz.addEventListener('drop', function(e) {
+  dz.addEventListener('click', function(){ document.getElementById('fi').click(); });
+  dz.addEventListener('dragenter', function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragover',  function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave', function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('over'); });
+  dz.addEventListener('drop', function(e){
     e.preventDefault(); e.stopPropagation(); dz.classList.remove('over');
-    var dropped = Array.from(e.dataTransfer.files).filter(function(f) { return f.name.toLowerCase().endsWith('.pdf'); });
+    var dropped = Array.from(e.dataTransfer.files).filter(function(f){
+      return /\.(pdf|msg|eml)$/i.test(f.name);
+    });
     if (dropped.length) addFiles(dropped);
   });
-  document.getElementById('fi').addEventListener('change', function(e) {
+  document.getElementById('fi').addEventListener('change', function(e){
     var sel = Array.from(e.target.files);
     if (sel.length) addFiles(sel);
     e.target.value = '';
@@ -303,423 +287,127 @@ function showPg(id) {
 
 function addFiles(newFiles) {
   var added = [];
-  newFiles.forEach(function(f) {
-    var ext = f.name.split('.').pop().toLowerCase();
-    if (['pdf','msg','eml'].indexOf(ext) === -1) return;
-    if (!files.some(function(x) { return x.name === f.name && x.size === f.size; })) {
-      files.push(f); added.push(files.length - 1);
+  newFiles.forEach(function(f){
+    if (!files.some(function(x){ return x.name===f.name && x.size===f.size; })) {
+      files.push(f); added.push(files.length-1);
     }
   });
   if (!added.length) return;
   renderList();
-  if (!getKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.', 'ter'); showPg('einstellungen'); return; }
-  added.forEach(function(i) { results[i] = { analyzing: true }; });
+  if (!getKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.','ter'); showPg('einstellungen'); return; }
+  added.forEach(function(i){ results[i] = { analyzing:true }; });
   renderList();
-  Promise.all(added.map(function(i) { return analyseOne(i); }))
-    .then(function() { toast('Analyse abgeschlossen.', 'tok'); updToolbar(); });
+  Promise.all(added.map(function(i){ return analyseOne(i); }))
+    .then(function(){ toast('Analyse abgeschlossen.','tok'); updToolbar(); });
 }
 
 function removeFile(i) {
-  files.splice(i, 1);
+  files.splice(i,1);
   var nr = {};
-  Object.keys(results).forEach(function(k) {
+  Object.keys(results).forEach(function(k){
     var ki = parseInt(k);
     if (ki < i) nr[ki] = results[ki];
-    else if (ki > i) nr[ki - 1] = results[ki];
+    else if (ki > i) nr[ki-1] = results[ki];
   });
   results = nr;
   renderList(); updToolbar();
 }
 
-// ── RENDER LIST ───────────────────────────────────────────
+// ═══════════════════════════════ RENDER LIST ═════════════════════════
 function renderList() {
   var list = document.getElementById('flist');
   document.getElementById('fcnt').textContent = files.length;
-  list.innerHTML = files.map(function(f, i) { return renderItem(f, i); }).join('');
-  updDlAll();
+  document.getElementById('btn-dla').disabled = !files.some(function(_,i){
+    return results[i] && results[i].confirmed && !results[i].error && results[i].nr;
+  });
+  list.innerHTML = files.map(function(f,i){ return renderItem(f,i); }).join('');
 }
 
-function renderItem(f, i) {
+function renderItem(f,i) {
   var r = results[i];
   var folder = getFolder();
   var isDone = r && !r.error && !r.analyzing && r.confirmed && r.nr;
-
-  var badge = '<span class="bdg bdg-pend">⏳ Ausstehend</span>';
+  var badge = '<span class="bdg b-pend">⏳ Ausstehend</span>';
   var sc = 'fitem';
   if (r) {
-    if (r.analyzing) { badge = r.retrying ? '<span class="bdg bdg-anlz"><span class="spin"></span> Erneuter Versuch…</span>' : '<span class="bdg bdg-anlz"><span class="spin"></span> Analysiere…</span>'; sc = 'fitem s-anlz'; }
-    else if (r.error) { badge = '<span class="bdg bdg-err">❌ Fehler</span>'; sc = 'fitem s-err'; }
-    else if (r.pendingSup && !r.supSaved) { badge = '<span class="bdg bdg-new">🆕 Neuer Lieferant</span>'; sc = 'fitem s-new'; }
-    else if (!r.confirmed) { badge = '<span class="bdg bdg-conf">👀 Bitte bestätigen</span>'; sc = 'fitem s-conf'; }
+    if (r.analyzing) { badge = r.retrying ? '<span class="bdg b-anlz"><span class="spin"></span> Erneuter Versuch…</span>' : '<span class="bdg b-anlz"><span class="spin"></span> Analysiere…</span>'; sc='fitem s-anlz'; }
+    else if (r.error) { badge='<span class="bdg b-err">❌ Fehler</span>'; sc='fitem s-err'; }
+    else if (r.pendingSup && !r.supSaved) { badge='<span class="bdg b-new">🆕 Neuer Lieferant</span>'; sc='fitem s-new'; }
+    else if (!r.confirmed) { badge='<span class="bdg b-conf">👀 Bestätigen</span>'; sc='fitem s-conf'; }
     else {
-      var sepaBdg = r.sepa ? '<span class="bdg bdg-sepa">🔄 SEPA-Lastschrift</span>' : '<span class="bdg bdg-uew">💸 Zu überweisen</span>';
-      badge = '<span class="bdg bdg-ok">✅ Fertig</span> ' + sepaBdg;
-      sc = 'fitem s-ok';
+      var sepaBdg = isTransfer(i) ? '<span class="bdg b-uew">💸 Überweisung</span>' : '<span class="bdg b-sepa">🔄 SEPA</span>';
+      badge = '<span class="bdg b-ok">✅ Fertig</span> '+sepaBdg; sc='fitem s-ok';
     }
   }
-
-  // Container item (MSG/EML with extracted PDFs)
-  if (r && r.isContainer) {
-    return '<div class="fitem s-ok" id="item-' + i + '">'
-      + '<div style="display:flex;align-items:center;gap:8px;padding:10px 14px">'
-      + '<span style="font-size:.8rem;color:var(--mut);flex:1">📧 ' + esc(f.name) + '</span>'
-      + '<span class="bdg bdg-ok">✅ ' + r.pdfCount + ' PDF(s) extrahiert</span>'
-      + '<button class="btn btn-sm btn-er" onclick="removeFile(' + i + ')">🗑️</button>'
-      + '</div></div>';
-  }
-
   var resultHtml = '';
   if (r && !r.analyzing && r.nr) {
-    var name = buildName(r.typ, r.nr, r.steller, r.datum, r.betrag);
-    resultHtml = '<div class="rblock">'
-      + '<div class="rname" id="rname-' + i + '">📄 ' + esc(name) + '.pdf</div>'
-      + '<div class="rmeta">'
-      + '<span>Typ: <b>' + esc(r.typ) + '</b></span>'
-      + '<span>Nr: <b>' + esc(r.nr) + '</b></span>'
-      + '<span>Steller: <b>' + esc(r.steller) + '</b></span>'
-      + '<span>Datum: <b>' + esc(r.datum) + '</b></span>'
-      + '<span>Betrag: <b>' + esc(r.betrag) + '</b></span>'
-      + '</div>';
-    if (r.sepa) {
-      resultHtml += '<div class="sepa-info">🔄 Wird per SEPA-Lastschrift abgebucht' + (r.sepaInfo ? ' — ' + esc(r.sepaInfo) : '') + '</div>';
-    } else if (r.confirmed) {
-      var missingBank = !r.iban && !getSupIban(r.steller);
-      resultHtml += '<div class="uew-info">💸 Überweisung erforderlich'
-        + (r.iban ? ' · IBAN: <b style="font-family:Consolas">' + esc(r.iban) + '</b>' : '')
-        + '</div>';
-      if (missingBank) {
-        resultHtml += '<div class="missing-bank">⚠️ Keine IBAN für diesen Lieferanten — bitte unter Lieferanten ergänzen.</div>';
-      }
+    var name = buildName(r.typ,r.nr,r.steller,r.datum,r.betrag);
+    resultHtml = '<div class="rblock"><div class="rname">📄 '+esc(name)+'.pdf</div>'
+      +'<div class="rmeta"><span>Typ: <b>'+esc(r.typ)+'</b></span><span>Nr: <b>'+esc(r.nr)+'</b></span>'
+      +'<span>Steller: <b>'+esc(r.steller)+'</b></span><span>Datum: <b>'+esc(r.datum)+'</b></span>'
+      +'<span>Betrag: <b>'+esc(r.betrag)+'</b></span></div>';
+    if (r.confirmed) {
+      if (!isTransfer(i)) resultHtml += '<div class="sepa-info">🔄 Wird per SEPA-Lastschrift abgebucht'+(r.sepaInfo?' — '+esc(r.sepaInfo):'')+'</div>';
+      else resultHtml += '<div class="uew-info">💸 Überweisung erforderlich'+(r.iban?' · IBAN: <b style="font-family:Consolas">'+esc(r.iban)+'</b>':'')+'</div>';
     }
     resultHtml += '</div>';
   }
-  if (r && r.error) {
-    resultHtml = '<div class="rblock"><div style="font-size:.82rem;color:var(--er);padding:7px 0">' + esc(r.error) + '</div></div>';
-  }
-
+  if (r && r.error) resultHtml = '<div class="rblock"><div style="font-size:.84rem;color:var(--er);padding:8px 0">'+esc(r.error)+'</div></div>';
   var supHtml = '';
   if (r && r.pendingSup && !r.supSaved) {
-    supHtml = '<div class="spanel">'
-      + '<h3>🆕 Neuer Lieferant erkannt</h3>'
-      + '<p>Claude hat <strong style="color:var(--pu)">' + esc(r.stellerRoh) + '</strong> erkannt. Lege diesen Lieferanten einmalig an.</p>'
-      + '<div class="sgrid">'
-      + '<div class="sfield"><label>Erkennungsname</label><input id="sraw-' + i + '" value="' + esc(r.stellerRoh) + '" oninput="updSprev(' + i + ')"></div>'
-      + '<div class="sfield"><label>Kurzname (Dateiname)</label><input id="sshort-' + i + '" value="' + esc(r.steller) + '" oninput="updSprev(' + i + ')"></div>'
-      + '<div class="sfield"><label>Typ</label><select id="styp-' + i + '" onchange="updSprev(' + i + ')">'
-      + '<option value="RE"' + (r.typ === 'RE' ? ' selected' : '') + '>RE</option>'
-      + '<option value="GS"' + (r.typ === 'GS' ? ' selected' : '') + '>GS</option>'
-      + '</select></div>'
-      + '</div>'
-      + '<div class="sprev" id="sprev-' + i + '">📄 ' + esc(buildName(r.typ, r.nr, r.steller, r.datum, r.betrag)) + '.pdf</div>'
-      + '<div style="display:flex;gap:7px">'
-      + '<button class="btn btn-sm" onclick="skipSup(' + i + ')">Überspringen</button>'
-      + '<button class="btn btn-sm btn-p" onclick="confirmSup(' + i + ')">💾 Lieferant speichern</button>'
-      + '</div></div>';
+    supHtml = '<div class="spanel"><h3>🆕 Neuer Lieferant erkannt</h3>'
+      +'<p>Claude hat <strong style="color:var(--pu)">'+esc(r.stellerRoh)+'</strong> erkannt. Lege diesen Lieferanten einmalig an.</p>'
+      +'<div class="sgrid">'
+      +'<div class="sf"><label>Erkennungsname</label><input id="sraw-'+i+'" value="'+esc(r.stellerRoh)+'" oninput="updSprev('+i+')"></div>'
+      +'<div class="sf"><label>Kurzname (Dateiname)</label><input id="sshort-'+i+'" value="'+esc(r.steller)+'" oninput="updSprev('+i+')"></div>'
+      +'<div class="sf"><label>Zahlungsart</label><select id="szahlart-'+i+'" onchange="updSprev('+i+')">'
+      +'<option value="auto">🤖 Auto</option><option value="uew">💸 Überweisung</option><option value="sepa">🔄 SEPA</option>'
+      +'</select></div></div>'
+      +'<div class="sf"><label>Typ</label><select id="styp-'+i+'"><option value="RE"'+(r.typ==='RE'?' selected':'')+'>RE</option><option value="GS"'+(r.typ==='GS'?' selected':'')+'>GS</option></select></div>'
+      +'<div class="sprev" id="sprev-'+i+'">📄 '+esc(buildName(r.typ,r.nr,r.steller,r.datum,r.betrag))+'.pdf</div>'
+      +'<div style="display:flex;gap:8px"><button class="btn btn-sm" onclick="skipSup('+i+')">Überspringen</button>'
+      +'<button class="btn btn-sm btn-p" onclick="confirmSup('+i+')">💾 Lieferant speichern</button></div></div>';
   }
-
   var confirmHtml = '';
-  if (r && !r.analyzing && !r.error && r.nr && (!r.pendingSup || r.supSaved) && !r.confirmed) {
+  if (r && !r.analyzing && !r.error && r.nr && (!r.pendingSup||r.supSaved) && !r.confirmed) {
     confirmHtml = '<div class="cpanel"><p>Dateiname prüfen und bestätigen:</p>'
-      + '<div style="display:flex;gap:7px;flex-wrap:wrap">'
-      + '<button class="btn btn-sm btn-wa" onclick="editName(' + i + ')">✏️ Bearbeiten</button>'
-      + '<button class="btn btn-sm btn-ok" onclick="confirmFile(' + i + ')">✅ Bestätigen & herunterladen</button>'
-      + '</div></div>';
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +'<button class="btn btn-sm btn-wa" onclick="editName('+i+')">✏️ Bearbeiten</button>'
+      +'<button class="btn btn-sm btn-ok" onclick="confirmFile('+i+')">✅ Bestätigen & herunterladen</button>'
+      +'</div></div>';
   }
-
-  var hintHtml = (folder && isDone) ? '<span class="fhint">📁 ' + esc(folder) + '</span>' : '<span></span>';
-  var dlDis = isDone ? '' : ' disabled';
-
-  return '<div class="' + sc + '" id="item-' + i + '">'
-    + '<div class="fhead"><span class="forig" title="' + esc(f.name) + '">📄 ' + esc(f.name) + '</span>' + badge + '</div>'
-    + resultHtml + supHtml + confirmHtml
-    + '<div class="ffoot">' + hintHtml
-    + '<div style="display:flex;gap:7px">'
-    + '<button class="btn btn-sm btn-er" onclick="removeFile(' + i + ')">🗑️</button>'
-    + '<button class="btn btn-sm btn-ok" id="dl-' + i + '" onclick="dlOne(' + i + ')"' + dlDis + '>⬇️ Herunterladen</button>'
-    + '</div></div></div>';
+  var hint = (folder && isDone) ? '<span class="fhint">📁 '+esc(folder)+'</span>' : '<span></span>';
+  return '<div class="'+sc+'" id="item-'+i+'">'
+    +'<div class="fhead"><span class="forig" title="'+esc(f.name)+'">📄 '+esc(f.name)+'</span>'+badge+'</div>'
+    +resultHtml+supHtml+confirmHtml
+    +'<div class="ffoot">'+hint+'<div style="display:flex;gap:8px">'
+    +'<button class="btn btn-sm btn-er" onclick="removeFile('+i+')">🗑️</button>'
+    +'<button class="btn btn-sm btn-ok" id="dl-'+i+'" onclick="dlOne('+i+')"'+(isDone?'':' disabled')+'>⬇️ Herunterladen</button>'
+    +'</div></div></div>';
 }
 
 function reRender(i) {
-  var el = document.getElementById('item-' + i);
+  var el = document.getElementById('item-'+i);
   if (!el) { renderList(); return; }
   var tmp = document.createElement('div');
-  tmp.innerHTML = renderItem(files[i], i);
+  tmp.innerHTML = renderItem(files[i],i);
   el.replaceWith(tmp.firstElementChild);
-  updDlAll(); updToolbar();
-}
-
-function updDlAll() {
-  document.getElementById('btn-dla').disabled = !files.some(function(_, i) {
-    return results[i] && results[i].confirmed && !results[i].error && results[i].nr;
-  });
+  updToolbar();
 }
 
 function updToolbar() {
-  var uewCount = 0;
-  // count all pending transfers: confirmed, not sepa (or sepa overridden by supplier setting), not yet xml-exported
-  files.forEach(function(_, i) {
-    if (isTransfer(i)) uewCount++;
-  });
-  // also count stored transfers not in current file list
-  var stored = getStoredTransfers();
-  var totalUew = uewCount + stored.length;
-  document.getElementById('uew-cnt').textContent = uewCount;
-  document.getElementById('btn-sepa-pg').disabled = totalUew === 0;
+  var live = 0;
+  files.forEach(function(_,i){ if(isTransfer(i)) live++; });
+  var stored = getStoredTransfers().length;
+  var total = live + stored;
+  document.getElementById('uew-cnt').textContent = live;
+  document.getElementById('btn-sepa-pg').disabled = total === 0;
   var badge = document.getElementById('sepa-badge');
-  if (badge) {
-    badge.textContent = totalUew;
-    badge.style.display = totalUew > 0 ? 'inline' : 'none';
-  }
+  if (badge) { badge.textContent = total; badge.style.display = total>0?'inline':'none'; }
 }
 
-function isTransfer(i) {
-  var r = results[i];
-  if (!r || !r.confirmed || r.error || !r.nr) return false;
-  var sup = findSup(r.steller) || findSupByShort(r.steller);
-  var zahlart = sup ? (sup.zahlart || 'auto') : 'auto';
-  if (zahlart === 'uew') return true;
-  if (zahlart === 'sepa') return false;
-  return !r.sepa; // auto: use AI detection
-}
-
-function findSupByShort(short) {
-  return getSups().find(function(s){ return s.short === short; }) || null;
-}
-
-// Persistent transfer store - survives file removal
-function getStoredTransfers() {
-  try { return JSON.parse(localStorage.getItem('re_transfers') || '[]'); } catch(e) { return []; }
-}
-function saveStoredTransfers(t) { localStorage.setItem('re_transfers', JSON.stringify(t)); }
-function addStoredTransfer(r, fileName) {
-  var transfers = getStoredTransfers();
-  // avoid duplicate by nr+steller
-  var exists = transfers.some(function(t){ return t.nr === r.nr && t.steller === r.steller; });
-  if (!exists) {
-    transfers.push({ steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: r.iban || '', bic: r.bic || '', kundennr: r.kundennr || '', fileName: fileName });
-    saveStoredTransfers(transfers);
-  }
-}
-function clearStoredTransfers() { localStorage.removeItem('re_transfers'); }
-
-// ── SEPA XML TABLE ────────────────────────────────────────
-function calcSkonto(steller, betrag, datum) {
-  // Returns { netto, skontoPct, skontoAmt, applies }
-  var sup = getSups().find(function(s){ return s.short === steller; });
-  var skontoPct = sup ? (parseFloat(sup.skonto) || 0) : 0;
-  var frist = sup ? (parseInt(sup.skontofrist) || 0) : 0;
-  var brutto = parseFloat((betrag||'0').replace(/[^\d,]/g,'').replace(',','.')) || 0;
-
-  if (!skontoPct || !frist || !datum) return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
-
-  // parse datum TT.MM.JJJJ
-  var parts = (datum||'').split('.');
-  if (parts.length !== 3) return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
-  var rechnDatum = new Date(parseInt(parts[2]), parseInt(parts[1])-1, parseInt(parts[0]));
-  var deadline = new Date(rechnDatum.getTime() + frist * 86400000);
-  var today = new Date(); today.setHours(0,0,0,0);
-
-  if (today <= deadline) {
-    var skontoAmt = Math.round(brutto * skontoPct / 100 * 100) / 100;
-    var netto = Math.round((brutto - skontoAmt) * 100) / 100;
-    return { netto: netto, skontoPct: skontoPct, skontoAmt: skontoAmt, applies: true };
-  }
-  return { netto: brutto, skontoPct: 0, skontoAmt: 0, applies: false };
-}
-
-function renderSepaTable() {
-  var wrap = document.getElementById('xml-table-wrap');
-  // Collect from current file results
-  var rows = [];
-  files.forEach(function(f, i) {
-    if (isTransfer(i)) {
-      var r = results[i];
-      var supIban = getSupIban(r.steller) || r.iban || '';
-      var supBic  = getSupBic(r.steller)  || r.bic  || '';
-      var supKdNr = getSupKdNr(r.steller) || r.kundennr || '';
-      rows.push({ source: 'live', idx: i, steller: r.steller, nr: r.nr, betrag: r.betrag, datum: r.datum, iban: supIban, bic: supBic, kundennr: supKdNr });
-    }
-  });
-  // Add stored transfers (already downloaded, not yet exported)
-  getStoredTransfers().forEach(function(t, si) {
-    var supIban = getSupIban(t.steller) || t.iban || '';
-    var supBic  = getSupBic(t.steller)  || t.bic  || '';
-    var storedKdNr = getSupKdNr(t.steller) || t.kundennr || '';
-    rows.push({ source: 'stored', si: si, steller: t.steller, nr: t.nr, betrag: t.betrag, datum: t.datum, iban: supIban, bic: supBic, kundennr: storedKdNr });
-  });
-
-  if (!rows.length) {
-    wrap.innerHTML = '<div class="xml-empty">Noch keine offenen Überweisungen.</div>';
-    document.getElementById('btn-xml-export').disabled = true;
-    return;
-  }
-
-  var html = '<table class="xml-table">'
-    + '<thead><tr><th>Empfänger</th><th>Brutto</th><th>Skonto</th><th>Überweisen</th><th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th><th></th></tr></thead><tbody>';
-  rows.forEach(function(row, k) {
-    var sk = calcSkonto(row.steller, row.betrag, row.datum);
-    var skontoCell = sk.applies
-      ? '<span style="color:var(--ok);font-size:.8rem">-' + esc(fmtNum(sk.skontoAmt)) + ' (' + sk.skontoPct + '%)</span>'
-      : '<span style="color:var(--mut);font-size:.75rem">—</span>';
-    var nettoFmt = sk.applies
-      ? '<b style="color:var(--ok)">' + esc(fmtNum(sk.netto)) + '</b>'
-      : '<b>' + esc(formatBetrag(row.betrag)) + '</b>';
-    html += '<tr>'
-      + '<td>' + esc(row.steller) + '</td>'
-      + '<td>' + esc(formatBetrag(row.betrag)) + '</td>'
-      + '<td>' + skontoCell + '</td>'
-      + '<td>' + nettoFmt + '</td>'
-      + '<td>' + esc(row.nr) + '</td>'
-      + '<td><input class="xml-iban" data-k="' + k + '" value="' + esc(row.iban) + '" placeholder="DE…" style="font-family:Consolas;min-width:190px"></td>'
-      + '<td><input class="xml-bic"  data-k="' + k + '" value="' + esc(row.bic)  + '" placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:100px"></td>'
-      + '<td><input class="xml-date" data-k="' + k + '" value="' + todayDE() + '" placeholder="TT.MM.JJJJ" style="min-width:90px"></td>'
-      + '<td><button class="btn btn-sm btn-er" onclick="removeTransferRow(' + k + ')">🗑️</button></td>'
-      + '</tr>';
-  });
-  html += '</tbody></table>';
-  // store rows reference for export
-  window._sepaRows = rows;
-  wrap.innerHTML = html;
-  document.getElementById('btn-xml-export').disabled = false;
-}
-
-function removeTransferRow(k) {
-  var rows = window._sepaRows || [];
-  var row = rows[k];
-  if (!row) return;
-  if (row.source === 'stored') {
-    var stored = getStoredTransfers();
-    stored.splice(row.si, 1);
-    saveStoredTransfers(stored);
-  }
-  renderSepaTable();
-  updToolbar();
-}
-
-function exportXML() {
-  var own = getOwnAccount();
-  if (!own.iban || !own.name) {
-    toast('Bitte zuerst dein Konto unter Einstellungen hinterlegen.', 'ter');
-    showPg('einstellungen'); return;
-  }
-  // Validate own IBAN
-  var ownIbanCheck = validateIBAN(own.iban);
-  if (!ownIbanCheck.ok) {
-    toast('Eigene IBAN ungültig: ' + ownIbanCheck.msg, 'ter');
-    showPg('einstellungen'); return;
-  }
-
-  var ibanInputs = document.querySelectorAll('.xml-iban');
-  var bicInputs  = document.querySelectorAll('.xml-bic');
-  var dateInputs = document.querySelectorAll('.xml-date');
-  var rows = window._sepaRows || [];
-
-  // collect transactions
-  var txs = [];
-  for (var k = 0; k < ibanInputs.length; k++) {
-    var row = rows[k] || {};
-    var steller = row.steller || '';
-    var nr = row.nr || '';
-    var betrag = row.betrag || '0';
-    var iban = ibanInputs[k].value.replace(/\s/g,'').toUpperCase();
-    var bic  = bicInputs[k].value.replace(/\s/g,'').toUpperCase();
-    var rawDate = dateInputs[k].value.trim();
-    if (!iban) { toast('Bitte IBAN für ' + steller + ' ausfüllen.', 'ter'); return; }
-    var ibanVal = validateIBAN(iban);
-    var bicVal  = validateBIC(bic);
-    if (!ibanVal.ok) { toast('❌ ' + steller + ' — ' + ibanVal.msg, 'ter'); return; }
-    if (!bicVal.ok)  { toast('❌ ' + steller + ' — ' + bicVal.msg,  'ter'); return; }
-    var sk = calcSkonto(steller, betrag, row.datum || '');
-    var amt = sk.applies ? sk.netto : (parseFloat(betrag.replace(/[^\d,]/g,'').replace(',','.')) || 0);
-    if (isNaN(amt) || amt <= 0) { toast('Ungültiger Betrag bei ' + steller, 'ter'); return; }
-    var execDate = toISODate(rawDate);
-    txs.push({ steller: steller, iban: iban, bic: bic, amt: amt, nr: nr, execDate: execDate, datum: row.datum || '', kundennr: row.kundennr || '', skontoPct: sk.skontoPct, skontoApplied: sk.applies });
-    updateSupBank(steller, iban, bic);
-  }
-
-  if (!txs.length) { toast('Keine Überweisungen vorhanden.', 'ter'); return; }
-
-  var msgId = 'AUTOP-' + Date.now();
-  var creDate = new Date().toISOString().slice(0,19);
-  var totalAmt = txs.reduce(function(s,t){return s+t.amt;},0).toFixed(2);
-  var ctrlSum = totalAmt;
-
-  var xml = '<?xml version="1.0" encoding="UTF-8"?>\n'
-    + '<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03"\n'
-    + '  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"\n'
-    + '  xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03 pain.001.003.03.xsd">\n'
-    + '  <CstmrCdtTrfInitn>\n'
-    + '    <GrpHdr>\n'
-    + '      <MsgId>' + xmlEsc(msgId) + '</MsgId>\n'
-    + '      <CreDtTm>' + creDate + '</CreDtTm>\n'
-    + '      <NbOfTxs>' + txs.length + '</NbOfTxs>\n'
-    + '      <CtrlSum>' + ctrlSum + '</CtrlSum>\n'
-    + '      <InitgPty><Nm>' + xmlEsc(own.name) + '</Nm></InitgPty>\n'
-    + '    </GrpHdr>\n'
-    + '    <PmtInf>\n'
-    + '      <PmtInfId>' + xmlEsc(msgId) + '-1</PmtInfId>\n'
-    + '      <PmtMtd>TRF</PmtMtd>\n'
-    + '      <NbOfTxs>' + txs.length + '</NbOfTxs>\n'
-    + '      <CtrlSum>' + ctrlSum + '</CtrlSum>\n'
-    + '      <PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl></PmtTpInf>\n'
-    + '      <ReqdExctnDt>' + (txs[0].execDate || toISODate('')) + '</ReqdExctnDt>\n'
-    + '      <Dbtr><Nm>' + xmlEsc(own.name) + '</Nm></Dbtr>\n'
-    + '      <DbtrAcct><Id><IBAN>' + xmlEsc(own.iban.replace(/\s/g,'')) + '</IBAN></Id></DbtrAcct>\n'
-    + (own.bic ? '      <DbtrAgt><FinInstnId><BIC>' + xmlEsc(own.bic) + '</BIC></FinInstnId></DbtrAgt>\n' : '')
-    + txs.map(function(t, idx) {
-        return '      <CdtTrfTxInf>\n'
-          + '        <PmtId><EndToEndId>NOTPROVIDED</EndToEndId></PmtId>\n'
-          + '        <Amt><InstdAmt Ccy="EUR">' + t.amt.toFixed(2) + '</InstdAmt></Amt>\n'
-          + (t.bic ? '        <CdtrAgt><FinInstnId><BIC>' + xmlEsc(t.bic) + '</BIC></FinInstnId></CdtrAgt>\n' : '')
-          + '        <Cdtr><Nm>' + xmlEsc(t.steller) + '</Nm></Cdtr>\n'
-          + '        <CdtrAcct><Id><IBAN>' + xmlEsc(t.iban) + '</IBAN></Id></CdtrAcct>\n'
-          + '        <RmtInf><Ustrd>' + xmlEsc('RE ' + t.nr + ' vom ' + t.datum) + (t.kundennr ? xmlEsc('\nKD-NR: ' + t.kundennr) : '') + (t.skontoApplied ? xmlEsc(' / Skonto ' + t.skontoPct + '%') : '') + '</Ustrd></RmtInf>\n'
-          + '      </CdtTrfTxInf>';
-      }).join('\n')
-    + '\n    </PmtInf>\n'
-    + '  </CstmrCdtTrfInitn>\n'
-    + '</Document>';
-
-  var blob = new Blob([xml], { type: 'application/xml' });
-  var a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'Ueberweisungen_' + new Date().toISOString().slice(0,10) + '.xml';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  URL.revokeObjectURL(a.href);
-  // Stored transfers leeren + Bestätigungsmeldung
-  clearStoredTransfers();
-  window._sepaRows = [];
-  updToolbar();
-  var wrap = document.getElementById('xml-table-wrap');
-  if(wrap){
-    wrap.innerHTML = '<div style="background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:18px 20px;text-align:center">'
-      + '<div style="font-size:1.05rem;color:var(--ok);font-weight:600;margin-bottom:6px">✅ XML erfolgreich erstellt und heruntergeladen</div>'
-      + '<div style="font-size:.82rem;color:var(--mut)">' + txs.length + ' Überweisung(en) exportiert &nbsp;·&nbsp; ' + esc(a.download) + '</div>'
-      + '</div>';
-  }
-  document.getElementById('btn-xml-export').disabled = true;
-  toast('✅ XML mit ' + txs.length + ' Überweisung(en) exportiert.', 'tok');
-}
-
-function toISODate(ddmmyyyy) {
-  if (!ddmmyyyy) { return new Date().toISOString().slice(0,10); }
-  var p = ddmmyyyy.split('.');
-  if (p.length === 3 && p[2].length === 4) return p[2] + '-' + p[1].padStart(2,'0') + '-' + p[0].padStart(2,'0');
-  return new Date().toISOString().slice(0,10);
-}
-
-function todayDE() {
-  var d = new Date();
-  var dd = String(d.getDate()).padStart(2,'0');
-  var mm = String(d.getMonth()+1).padStart(2,'0');
-  var yyyy = d.getFullYear();
-  return dd + '.' + mm + '.' + yyyy;
-}
-
-function xmlEsc(s) { return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-// ── HELPERS ───────────────────────────────────────────────
-function esc(s) { return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+// ═══════════════════════════════ HELPERS ════════════════════════════
+function esc(s){ return (s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 function formatBetrag(raw) {
   if (!raw) return '';
@@ -727,255 +415,135 @@ function formatBetrag(raw) {
   s = s.replace(/\./g,'').replace(',','.');
   var num = parseFloat(s);
   if (isNaN(num)) return raw;
-  return num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2}) + '€';
+  return num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+'€';
 }
 
 function fmtNum(num) {
   if (isNaN(num)) return '0,00€';
-  return num.toLocaleString('de-DE', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '€';
+  return num.toLocaleString('de-DE',{minimumFractionDigits:2,maximumFractionDigits:2})+'€';
 }
 
-// ── IBAN / BIC VALIDATION ─────────────────────────────────
+function buildName(typ,nr,steller,datum,betrag) {
+  if (!nr&&!steller) return '';
+  var s=san(steller||'Unbekannt'), n=san(nr||''), d=(datum||'').trim(), b=formatBetrag(betrag);
+  return (typ+' '+n+' '+s+' '+d+(b?' '+b:'')).replace(/\s+/g,' ').trim();
+}
+
+function san(s){ return (s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim(); }
+
+function toB64(file) {
+  return new Promise(function(res,rej){
+    var r = new FileReader();
+    r.onload = function(){ res(r.result.split(',')[1]); };
+    r.onerror = function(){ rej(new Error('Lesefehler')); };
+    r.readAsDataURL(file);
+  });
+}
+
+function toast(msg,cls) {
+  var t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'show'+(cls?' '+cls:'');
+  clearTimeout(t._timer); t._timer = setTimeout(function(){ t.className=''; },3200);
+}
+
+// ═══════════════════════════════ IBAN / BIC VALIDATION ══════════════
 function validateIBAN(iban) {
-  if (!iban) return { ok: true, msg: '' }; // empty = skip (optional field)
-  var s = iban.replace(/\s/g, '').toUpperCase();
-  if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/.test(s)) return { ok: false, msg: 'IBAN hat ungültiges Format (muss mit 2 Buchstaben + 2 Ziffern beginnen).' };
-  if (s.length < 15 || s.length > 34) return { ok: false, msg: 'IBAN hat ungültige Länge (' + s.length + ' Zeichen).' };
-  // country-specific length checks
-  var lengths = { DE:22, AT:20, CH:21, NL:18, BE:16, FR:27, IT:27, ES:24, PL:28, GB:22 };
-  var country = s.slice(0, 2);
-  if (lengths[country] && s.length !== lengths[country]) {
-    return { ok: false, msg: 'IBAN für ' + country + ' muss ' + lengths[country] + ' Zeichen lang sein (aktuell: ' + s.length + ').' };
-  }
-  // MOD-97 check
-  var rearranged = s.slice(4) + s.slice(0, 4);
-  var numeric = rearranged.split('').map(function(c) {
-    var code = c.charCodeAt(0);
-    return code >= 65 ? String(code - 55) : c;
-  }).join('');
-  var remainder = 0;
-  for (var i = 0; i < numeric.length; i++) {
-    remainder = (remainder * 10 + parseInt(numeric[i])) % 97;
-  }
-  if (remainder !== 1) return { ok: false, msg: 'IBAN-Prüfziffer ist falsch — bitte nochmals prüfen.' };
-  return { ok: true, msg: '' };
+  if (!iban) return { ok:true, msg:'' };
+  var s = iban.replace(/\s/g,'').toUpperCase();
+  if (!/^[A-Z]{2}[0-9]{2}[A-Z0-9]+$/.test(s)) return { ok:false, msg:'IBAN hat ungültiges Format.' };
+  if (s.length < 15 || s.length > 34) return { ok:false, msg:'IBAN-Länge ungültig ('+s.length+' Zeichen).' };
+  var lengths = {DE:22,AT:20,CH:21,NL:18,BE:16,FR:27,IT:27,ES:24,PL:28,GB:22};
+  var country = s.slice(0,2);
+  if (lengths[country] && s.length !== lengths[country]) return { ok:false, msg:'IBAN für '+country+' muss '+lengths[country]+' Zeichen lang sein.' };
+  var rearranged = s.slice(4)+s.slice(0,4);
+  var numeric = rearranged.split('').map(function(c){ var code=c.charCodeAt(0); return code>=65?String(code-55):c; }).join('');
+  var rem = 0;
+  for (var i=0;i<numeric.length;i++) rem = (rem*10+parseInt(numeric[i]))%97;
+  if (rem !== 1) return { ok:false, msg:'IBAN-Prüfziffer falsch — bitte nochmals prüfen.' };
+  return { ok:true, msg:'' };
 }
 
 function validateBIC(bic) {
-  if (!bic) return { ok: true, msg: '' }; // empty = skip
-  var s = bic.replace(/\s/g, '').toUpperCase();
-  if (!/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(s)) {
-    return { ok: false, msg: 'BIC hat ungültiges Format (z.B. COBADEFFXXX oder COBADEFF).' };
-  }
-  return { ok: true, msg: '' };
+  if (!bic) return { ok:true, msg:'' };
+  var s = bic.replace(/\s/g,'').toUpperCase();
+  if (!/^[A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?$/.test(s)) return { ok:false, msg:'BIC hat ungültiges Format (z.B. COBADEFFXXX).' };
+  return { ok:true, msg:'' };
 }
 
-function validateAndWarn(iban, bic, context) {
-  var ibanResult = validateIBAN(iban);
-  var bicResult  = validateBIC(bic);
-  var msgs = [];
-  if (!ibanResult.ok) msgs.push('IBAN' + (context ? ' (' + context + ')' : '') + ': ' + ibanResult.msg);
-  if (!bicResult.ok)  msgs.push('BIC'  + (context ? ' (' + context + ')' : '') + ': ' + bicResult.msg);
-  return msgs;
-}
-function buildName(typ,nr,steller,datum,betrag) {
-  if (!nr&&!steller) return '';
-  var s=san(steller||'Unbekannt'),n=san(nr||''),d=(datum||'').trim(),b=formatBetrag(betrag);
-  return (typ+' '+n+' '+s+' '+d+(b?' '+b:'')).replace(/\s+/g,' ').trim();
-}
-function san(s){return(s||'').replace(/[\/\\:*?"<>|]/g,'_').replace(/\s+/g,' ').trim();}
-function toB64(file){return new Promise(function(res,rej){var r=new FileReader();r.onload=function(){res(r.result.split(',')[1]);};r.onerror=function(){rej(new Error('Lesefehler'));};r.readAsDataURL(file);});}
-function b64ToBlob(b64, type) {
-  var binary = atob(b64);
-  var bytes = new Uint8Array(binary.length);
-  for (var i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-  return new Blob([bytes], { type: type });
-}
-function toast(msg,cls){var t=document.getElementById('toast');t.textContent=msg;t.className='show'+(cls?' '+cls:'');clearTimeout(t._timer);t._timer=setTimeout(function(){t.className='';},3200);}
-
-// ── SUPPLIER MATCHING ─────────────────────────────────────
-function normalize(s){
-  return(s||'').toLowerCase()
+// ═══════════════════════════════ SUPPLIER MATCHING ══════════════════
+function normalize(s) {
+  return (s||'').toLowerCase()
     .replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss')
     .replace(/[^a-z0-9\s]/g,' ').replace(/\s+/g,' ').trim();
 }
-function findSup(stellerRoh){
-  if(!stellerRoh) return null;
-  var sups=getSups(), needle=normalize(stellerRoh);
-  for(var i=0;i<sups.length;i++){if(!sups[i].raw)continue;if(normalize(sups[i].raw)===needle)return sups[i];}
-  for(var i=0;i<sups.length;i++){if(!sups[i].raw)continue;var h=normalize(sups[i].raw);if(!h)continue;if(needle.includes(h)||h.includes(needle))return sups[i];}
-  for(var i=0;i<sups.length;i++){if(!sups[i].raw)continue;var ws=normalize(sups[i].raw).split(' ').filter(function(w){return w.length>2;});if(!ws.length)continue;if(ws.every(function(w){return needle.includes(w);}))return sups[i];}
-  for(var i=0;i<sups.length;i++){if(!sups[i].raw)continue;var h=normalize(sups[i].raw),ws=needle.split(' ').filter(function(w){return w.length>2;});if(!ws.length)continue;if(ws.every(function(w){return h.includes(w);}))return sups[i];}
+
+function findSup(stellerRoh) {
+  if (!stellerRoh) return null;
+  var sups = getSups(), needle = normalize(stellerRoh);
+  // Pass 1: exact
+  for (var i=0;i<sups.length;i++) { if(sups[i].raw&&normalize(sups[i].raw)===needle) return sups[i]; }
+  // Pass 2: one contains the other
+  for (var i=0;i<sups.length;i++) { if(!sups[i].raw) continue; var h=normalize(sups[i].raw); if(h&&(needle.includes(h)||h.includes(needle))) return sups[i]; }
+  // Pass 3: all words of stored name in detected
+  for (var i=0;i<sups.length;i++) { if(!sups[i].raw) continue; var ws=normalize(sups[i].raw).split(' ').filter(function(w){return w.length>2;}); if(ws.length&&ws.every(function(w){return needle.includes(w);})) return sups[i]; }
+  // Pass 4: all words of detected in stored
+  for (var i=0;i<sups.length;i++) { if(!sups[i].raw) continue; var h=normalize(sups[i].raw),ws=needle.split(' ').filter(function(w){return w.length>2;}); if(ws.length&&ws.every(function(w){return h.includes(w);})) return sups[i]; }
   return null;
 }
-function isDupSup(raw){return!!findSup(raw);}
-function getSupIban(short){var s=getSups().find(function(x){return x.short===short;});return s?s.iban||'':'';}
-function getSupBic(short){var s=getSups().find(function(x){return x.short===short;});return s?s.bic||'':'';}
-function getSupKdNr(short){var s=getSups().find(function(x){return x.short===short;});return s?s.kundennr||'':'';}  
-function updateSupBank(short,iban,bic,kundennr){
-  var sups=getSups();
-  var s=sups.find(function(x){return x.short===short;});
-  if(s){
-    if(iban)s.iban=iban;
-    if(bic)s.bic=bic;
-    if(kundennr)s.kundennr=kundennr;
-    saveSupList(sups);
-  }
+
+function findSupByShort(short) { return getSups().find(function(s){return s.short===short;})||null; }
+function getSupIban(short) { var s=findSupByShort(short); return s?s.iban||'':''; }
+function getSupBic(short)  { var s=findSupByShort(short); return s?s.bic||'':''; }
+function getSupKdNr(short) { var s=findSupByShort(short); return s?s.kundennr||'':''; }
+
+function updateSupBank(short,iban,bic,kundennr) {
+  var sups=getSups(), s=sups.find(function(x){return x.short===short;});
+  if(s){if(iban)s.iban=iban;if(bic)s.bic=bic;if(kundennr)s.kundennr=kundennr;saveSupList(sups);}
 }
 
-// ── ANALYSE ───────────────────────────────────────────────
-// ── MSG / EML EXTRACTION ─────────────────────────────────
-async function extractPdfsFromFile(file) {
-  var ext = file.name.split('.').pop().toLowerCase();
-  if (ext === 'pdf') return [{ name: file.name, data: await toB64(file) }];
-  if (ext === 'eml') return extractPdfsFromEml(file);
-  if (ext === 'msg') return extractPdfsFromMsg(file);
-  return [];
+function isTransfer(i) {
+  var r = results[i];
+  if (!r||!r.confirmed||r.error||!r.nr) return false;
+  var sup = findSup(r.steller)||findSupByShort(r.steller);
+  var zahlart = sup?(sup.zahlart||'auto'):'auto';
+  if (zahlart==='uew') return true;
+  if (zahlart==='sepa') return false;
+  // auto: use AI result (properly parsed as boolean)
+  return r.sepa===false;
 }
 
-async function extractPdfsFromEml(file) {
-  var text = await file.text();
-  var pdfs = [];
-  var boundary = '';
-  var boundaryMatch = text.match(/boundary=["']?([^"'\r\n;]+)/i);
-  if (boundaryMatch) boundary = boundaryMatch[1].trim();
-  var splitRe = boundary ? new RegExp('--' + boundary.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')) : /--[A-Za-z0-9_\-]+/;
-  var parts = text.split(splitRe);
-  parts.forEach(function(part) {
-    var nameMatch = part.match(/filename[*]?=["']?([^"'\r\n;]+\.pdf)["']?/i);
-    var encMatch = part.match(/Content-Transfer-Encoding:\s*base64/i);
-    if (nameMatch && encMatch) {
-      var bodyStart = part.indexOf('\r\n\r\n');
-      if (bodyStart === -1) bodyStart = part.indexOf('\n\n');
-      if (bodyStart !== -1) {
-        var b64 = part.slice(bodyStart).replace(/[\r\n\s]/g, '');
-        pdfs.push({ name: nameMatch[1].trim(), data: b64 });
-      }
-    }
-  });
-  return pdfs;
+// ═══════════════════════════════ SKONTO ═════════════════════════════
+function calcSkonto(steller,betrag,datum) {
+  var sup = findSup(steller)||findSupByShort(steller);
+  var skontoPct = sup?(parseFloat(sup.skonto)||0):0;
+  var frist = sup?(parseInt(sup.skontofrist)||0):0;
+  var brutto = parseFloat((betrag||'0').replace(/[^\d,]/g,'').replace(',','.'))||0;
+  if (!skontoPct||!frist||!datum) return {netto:brutto,skontoPct:0,skontoAmt:0,applies:false};
+  var parts = (datum||'').split('.');
+  if (parts.length!==3) return {netto:brutto,skontoPct:0,skontoAmt:0,applies:false};
+  var rechnDatum = new Date(parseInt(parts[2]),parseInt(parts[1])-1,parseInt(parts[0]));
+  var deadline = new Date(rechnDatum.getTime()+frist*86400000);
+  var today = new Date(); today.setHours(0,0,0,0);
+  if (today<=deadline) {
+    var skontoAmt = Math.round(brutto*skontoPct/100*100)/100;
+    return {netto:Math.round((brutto-skontoAmt)*100)/100,skontoPct:skontoPct,skontoAmt:skontoAmt,applies:true};
+  }
+  return {netto:brutto,skontoPct:0,skontoAmt:0,applies:false};
 }
 
-async function extractPdfsFromMsg(file) {
-  // MSG files are Compound Document (CFB) format
-  // PDFs are stored as attachment streams with base64 or raw binary
-  var buf = await file.arrayBuffer();
-  var bytes = new Uint8Array(buf);
-  var pdfs = [];
-
-  // Search for PDF magic bytes %PDF in the binary
-  var pdfMagic = [0x25, 0x50, 0x44, 0x46]; // %PDF
-  var eofMarker = [0x25, 0x25, 0x45, 0x4F, 0x46]; // %%EOF
-
-  var i = 0;
-  var pdfCount = 0;
-  while (i < bytes.length - 4) {
-    // find %PDF
-    if (bytes[i] === pdfMagic[0] && bytes[i+1] === pdfMagic[1] &&
-        bytes[i+2] === pdfMagic[2] && bytes[i+3] === pdfMagic[3]) {
-      var start = i;
-      // find %%EOF from this position
-      var end = -1;
-      for (var j = start + 100; j < Math.min(start + 20000000, bytes.length - 5); j++) {
-        if (bytes[j] === eofMarker[0] && bytes[j+1] === eofMarker[1] &&
-            bytes[j+2] === eofMarker[2] && bytes[j+3] === eofMarker[3] &&
-            bytes[j+4] === eofMarker[4]) {
-          end = j + 5;
-          break;
-        }
-      }
-      if (end > start) {
-        var pdfBytes = bytes.slice(start, end);
-        // convert to base64
-        var binary = '';
-        for (var k = 0; k < pdfBytes.length; k++) {
-          binary += String.fromCharCode(pdfBytes[k]);
-        }
-        var b64 = btoa(binary);
-        // try to extract filename from nearby bytes (look back 500 bytes for .pdf string)
-        var nameCandidate = 'Anlage_' + (++pdfCount) + '.pdf';
-        var lookback = Math.max(0, start - 500);
-        var region = '';
-        for (var m = lookback; m < start; m++) {
-          if (bytes[m] >= 0x20 && bytes[m] < 0x7F) region += String.fromCharCode(bytes[m]);
-          else region += ' ';
-        }
-        var fnMatch = region.match(/([A-Za-z0-9_\-\. ]{3,60}\.pdf)/i);
-        if (fnMatch) nameCandidate = fnMatch[fnMatch.length - 1].trim();
-        pdfs.push({ name: nameCandidate, data: b64 });
-        i = end;
-        continue;
-      }
-    }
-    i++;
-  }
-
-  // fallback: try base64 search if no raw PDF found
-  if (!pdfs.length) {
-    var text = '';
-    for (var i2 = 0; i2 < Math.min(bytes.length, 2000000); i2++) {
-      text += String.fromCharCode(bytes[i2]);
-    }
-    var b64Blocks = text.match(/[A-Za-z0-9+\/]{100,}={0,2}/g) || [];
-    b64Blocks.forEach(function(block, idx) {
-      try {
-        var decoded = atob(block);
-        if (decoded.startsWith('%PDF')) {
-          pdfs.push({ name: 'Anhang_' + (idx+1) + '.pdf', data: block });
-        }
-      } catch(e) {}
-    });
-  }
-
-  return pdfs;
-}
-
-async function analyseOne(i, attempt){
-  if(!attempt) attempt = 1;
-  var ext = files[i].name.split('.').pop().toLowerCase();
-  // For MSG/EML: extract PDFs first, create virtual entries
-  if (ext === 'msg' || ext === 'eml') {
-    results[i] = { analyzing: true };
-    reRender(i);
-    try {
-      var pdfs = await extractPdfsFromFile(files[i]);
-      if (!pdfs.length) {
-        results[i] = { error: 'Keine PDF-Anhänge in dieser E-Mail gefunden.' };
-        reRender(i); return;
-      }
-      // mark original as processed container
-      results[i] = { isContainer: true, pdfCount: pdfs.length, confirmed: false, nr: 'EMAIL' };
-      reRender(i);
-      // inject extracted PDFs as new virtual file entries
-      var inserted = [];
-      pdfs.forEach(function(pdf) {
-        var blob = b64ToBlob(pdf.data, 'application/pdf');
-        var virtualFile = new File([blob], pdf.name, { type: 'application/pdf' });
-        files.push(virtualFile);
-        var newIdx = files.length - 1;
-        results[newIdx] = { analyzing: true };
-        inserted.push(newIdx);
-      });
-      renderList();
-      await Promise.all(inserted.map(function(ni) { return analyseOne(ni, 1); }));
-    } catch(e) {
-      results[i] = { error: 'E-Mail konnte nicht gelesen werden: ' + e.message };
-      reRender(i);
-    }
-    return;
-  }
-  try{
-    var b64=await toB64(files[i]);
-    var prompt='Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurueck, ohne Erklaerungen:\n'
-      +'{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung)","nr":"Rechnungsnummer","steller_roh":"Firmenname Rechnungssteller exakt wie auf Rechnung, nicht Autopartner GmbH","datum":"TT.MM.JJJJ","betrag":"Brutto-Gesamtbetrag z.B. 238,00EUR","sepa":true oder false,"sepa_info":"Kurzer Hinweis falls SEPA z.B. Abbuchung am 13.06.2026 oder leer","iban":"IBAN des Lieferanten falls auf Rechnung angegeben sonst leer","bic":"BIC des Lieferanten falls auf Rechnung angegeben sonst leer","kundennr":"Kundennummer von Autopartner beim Lieferanten falls erkennbar sonst leer"}';
-
+// ═══════════════════════════════ ANALYSE ════════════════════════════
+async function analyseOne(i,attempt) {
+  if (!attempt) attempt=1;
+  try {
+    var b64 = await toB64(files[i]);
+    var prompt = 'Analysiere diese Rechnung. Gib NUR ein JSON-Objekt zurück, ohne Text davor oder danach:\n'
+      +'{"typ":"RE oder GS (GS=Gutschrift/Stornorechnung)","nr":"Rechnungsnummer","steller_roh":"Firmenname Rechnungssteller exakt wie auf Rechnung (nicht Autopartner GmbH)","datum":"TT.MM.JJJJ","betrag":"Bruttobetrag mit Komma und Euro-Zeichen z.B. 238,00EUR","sepa":true oder false (true NUR wenn explizit SEPA-Lastschrift/Einzugsermaechtigung/Abbuchung erwaehnt),"sepa_info":"kurzer Hinweis falls SEPA","iban":"IBAN Lieferant falls angegeben sonst leer","bic":"BIC Lieferant falls angegeben sonst leer","kundennr":"Kundennummer von Autopartner beim Lieferanten falls erkennbar sonst leer"}';
     var controller = new AbortController();
-    var timeout = setTimeout(function(){ controller.abort(); }, 30000);
+    var timeout = setTimeout(function(){ controller.abort(); },30000);
     var resp;
     try {
-      resp=await fetch('https://api.anthropic.com/v1/messages',{
-        method:'POST',
-        signal:controller.signal,
+      resp = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST', signal:controller.signal,
         headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
         body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:500,messages:[{role:'user',content:[
           {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
@@ -983,303 +551,465 @@ async function analyseOne(i, attempt){
         ]}]})
       });
     } finally { clearTimeout(timeout); }
-    if(!resp.ok) throw new Error('Server-Fehler: '+resp.status);
-    var data=await resp.json();
-    if(data.error) throw new Error(data.error.message);
-    var rawText=(data.content||[]).map(function(c){return c.text||'';}).join('');
-    var parsed=JSON.parse(rawText.replace(/```json|```/g,'').trim());
-
-    var stellerRoh=(parsed.steller_roh||'').trim();
-    var known=findSup(stellerRoh);
-    var iban=(parsed.iban||'').replace(/\s/g,'').toUpperCase();
-    var bic=(parsed.bic||'').replace(/\s/g,'').toUpperCase();
-
-    // update stored IBAN/BIC if found on invoice
-    if(known) updateSupBank(known.short,iban,bic,parsed.kundennr||'');
-
-    if(known){
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:(parsed.sepa===true||parsed.sepa==='true'),sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
+    if (!resp.ok) throw new Error('Server-Fehler: '+resp.status);
+    var data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    var rawText = (data.content||[]).map(function(c){return c.text||'';}).join('');
+    var parsed = JSON.parse(rawText.replace(/```json|```/g,'').trim());
+    // Properly parse sepa as boolean (AI might return string "false")
+    var sepaVal = (parsed.sepa===true || parsed.sepa==='true');
+    var stellerRoh = (parsed.steller_roh||'').trim();
+    var iban = (parsed.iban||'').replace(/\s/g,'').toUpperCase();
+    var bic  = (parsed.bic||'').replace(/\s/g,'').toUpperCase();
+    var known = findSup(stellerRoh);
+    if (known) updateSupBank(known.short,iban,bic,parsed.kundennr||'');
+    if (known) {
+      results[i] = {typ:parsed.typ||'RE',nr:parsed.nr||'',steller:known.short,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:sepaVal,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',confirmed:true};
       reRender(i);
       await dlOne(i);
       updToolbar();
     } else {
-      var shortSug=stellerRoh.split(/[\s,]+/).slice(0,2).join(' ');
-      results[i]={typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:(parsed.sepa===true||parsed.sepa==='true'),sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
+      var shortSug = stellerRoh.split(/[\s,]+/).slice(0,2).join(' ');
+      results[i] = {typ:parsed.typ||'RE',nr:parsed.nr||'',steller:shortSug,datum:parsed.datum||'',betrag:parsed.betrag||'',sepa:sepaVal,sepaInfo:parsed.sepa_info||'',iban:iban,bic:bic,kundennr:parsed.kundennr||'',pendingSup:true,stellerRoh:stellerRoh,confirmed:false};
       reRender(i);
     }
-  }catch(e){
-    if(e.name === 'AbortError' && attempt < 2){
-      // erster Timeout: automatisch nochmal versuchen
-      results[i]={analyzing:true,retrying:true};
+  } catch(e) {
+    if (e.name==='AbortError' && attempt<2) {
+      results[i] = {analyzing:true,retrying:true};
       reRender(i);
-      return analyseOne(i, 2);
+      return analyseOne(i,2);
     }
-    var msg = e.name === 'AbortError'
-      ? 'Zeitüberschreitung nach 2 Versuchen — bitte Verbindung prüfen.'
-      : 'Analysefehler: '+e.message;
-    results[i]={error:msg};
+    results[i] = {error: e.name==='AbortError'?'Zeitüberschreitung nach 2 Versuchen.':'Analysefehler: '+e.message};
     reRender(i);
   }
 }
 
-// ── SUPPLIER FLOW ─────────────────────────────────────────
-function updSprev(i){
-  var s=document.getElementById('sshort-'+i),t=document.getElementById('styp-'+i);
+// MSG/EML extraction
+async function extractPdfsFromFile(file) {
+  var ext = file.name.split('.').pop().toLowerCase();
+  if (ext==='pdf') return [{name:file.name,data:await toB64(file)}];
+  if (ext==='eml') return extractPdfsFromEml(file);
+  if (ext==='msg') return extractPdfsFromMsg(file);
+  return [];
+}
+
+async function extractPdfsFromEml(file) {
+  var text = await file.text();
+  var pdfs = [];
+  var boundary='';
+  var bMatch = text.match(/boundary=["']?([^"'\r\n;]+)/i);
+  if (bMatch) boundary=bMatch[1].trim();
+  var splitRe = boundary ? new RegExp('--'+boundary.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')) : /--[A-Za-z0-9_\-]+/;
+  var parts = text.split(splitRe);
+  parts.forEach(function(part){
+    var nameMatch = part.match(/filename[*]?=["']?([^"'\r\n;]+\.pdf)["']?/i);
+    var encMatch = part.match(/Content-Transfer-Encoding:\s*base64/i);
+    if (nameMatch && encMatch) {
+      var bodyStart = part.indexOf('\r\n\r\n');
+      if (bodyStart===-1) bodyStart = part.indexOf('\n\n');
+      if (bodyStart!==-1) {
+        var b64 = part.slice(bodyStart).replace(/[\r\n\s]/g,'');
+        pdfs.push({name:nameMatch[1].trim(),data:b64});
+      }
+    }
+  });
+  return pdfs;
+}
+
+async function extractPdfsFromMsg(file) {
+  var buf = await file.arrayBuffer();
+  var bytes = new Uint8Array(buf);
+  var pdfs = [];
+  var pdfMagic = [0x25,0x50,0x44,0x46];
+  var eofMarker = [0x25,0x25,0x45,0x4F,0x46];
+  var i=0, pdfCount=0;
+  while (i<bytes.length-4) {
+    if (bytes[i]===pdfMagic[0]&&bytes[i+1]===pdfMagic[1]&&bytes[i+2]===pdfMagic[2]&&bytes[i+3]===pdfMagic[3]) {
+      var start=i, end=-1;
+      for (var j=start+100;j<Math.min(start+20000000,bytes.length-5);j++) {
+        if (bytes[j]===eofMarker[0]&&bytes[j+1]===eofMa&&bytes[j+2]===eofMarker[2]&&bytes[j+3]===eofMarker[3]&&bytes[j+4]===eofMarker[4]) { end=j+5; break; }
+      }
+      if (end>start) {
+        var pdfBytes=bytes.slice(start,end), binary='';
+        for (var k=0;k<pdfBytes.length;k++) binary+=String.fromCharCode(pdfBytes[k]);
+        var b64=btoa(binary);
+        var nameCandidate='Anlage_'+(++pdfCount)+'.pdf';
+        var lookback=Math.max(0,start-500), region='';
+        for (var m=lookback;m<start;m++) region+=(bytes[m]>=0x20&&bytes[m]<0x7F)?String.fromCharCode(bytes[m]):' ';
+        var fnMatch=region.match(/([A-Za-z0-9_\-\. ]{3,60}\.pdf)/i);
+        if (fnMatch) nameCandidate=fnMatch[fnMatch.length-1].trim();
+        pdfs.push({name:nameCandidate,data:b64});
+        i=end; continue;
+      }
+    }
+    i++;
+  }
+  return pdfs;
+}
+
+function b64ToBlob(b64,type) {
+  var binary=atob(b64), bytes=new Uint8Array(binary.length);
+  for (var i=0;i<binary.length;i++) bytes[i]=binary.charCodeAt(i);
+  return new Blob([bytes],{type:type});
+}
+
+// ═══════════════════════════════ SUPPLIER FLOW ══════════════════════
+function updSprev(i) {
+  var s=document.getElementById('sshort-'+i), t=document.getElementById('styp-'+i);
   var r=results[i]||{};
   var p=buildName(t?t.value:'RE',r.nr||'NR',s?s.value:'Lieferant',r.datum||'TT.MM.JJJJ',r.betrag||'0,00EUR');
-  var el=document.getElementById('sprev-'+i);if(el)el.textContent='📄 '+p+'.pdf';
+  var el=document.getElementById('sprev-'+i); if(el) el.textContent='📄 '+p+'.pdf';
 }
-function confirmSup(i){
-  var rawEl=document.getElementById('sraw-'+i),shortEl=document.getElementById('sshort-'+i),typEl=document.getElementById('styp-'+i);
-  var raw=rawEl?rawEl.value.trim():'',short=shortEl?shortEl.value.trim():'',typ=typEl?typEl.value:'RE';
+
+function confirmSup(i) {
+  var raw=((document.getElementById('sraw-'+i)||{}).value||'').trim();
+  var short=((document.getElementById('sshort-'+i)||{}).value||'').trim();
+  var typ=(document.getElementById('styp-'+i)||{}).value||'RE';
+  var zahlart=(document.getElementById('szahlart-'+i)||{}).value||'auto';
   if(!raw||!short){toast('Bitte beide Felder ausfüllen.','ter');return;}
-  if(isDupSup(raw)){
+  if(findSup(raw)){
     var ex=findSup(raw);
     results[i]=Object.assign({},results[i],{steller:ex?ex.short:short,supSaved:true,pendingSup:false});
-    reRender(i);toast('Lieferant bereits vorhanden — wurde zugeordnet.','tok');return;
+    reRender(i); toast('Lieferant bereits vorhanden — wurde zugeordnet.','tok'); return;
   }
   var sups=getSups();
-  sups.push({raw:raw,short:short,typ:typ,zahlart:'auto',iban:results[i].iban||'',bic:results[i].bic||'',kundennr:results[i].kundennr||''});
+  sups.push({raw:raw,short:short,typ:typ,zahlart:zahlart,iban:results[i].iban||'',bic:results[i].bic||'',kundennr:results[i].kundennr||'',skonto:0,skontofrist:0});
   saveSupList(sups);
   results[i]=Object.assign({},results[i],{steller:short,typ:typ,supSaved:true,pendingSup:false});
-  reRender(i);toast('Lieferant "'+short+'" gespeichert.','tok');
+  reRender(i); toast('Lieferant "'+short+'" gespeichert.','tok');
 }
+
 function skipSup(i){results[i]=Object.assign({},results[i],{supSaved:true,pendingSup:false});reRender(i);}
 
-// ── CONFIRM FLOW ──────────────────────────────────────────
-function editName(i){
-  var el=document.getElementById('rname-'+i);if(!el)return;
+// ═══════════════════════════════ CONFIRM FLOW ═══════════════════════
+function editName(i) {
+  var el=document.getElementById('item-'+i); if(!el) return;
+  var rname=el.querySelector('.rname'); if(!rname) return;
   var r=results[i];
-  el.contentEditable='true';
-  el.style.background='var(--sur3)';el.style.color='var(--txt)';el.style.borderColor='var(--acc)';
-  el.textContent=buildName(r.typ,r.nr,r.steller,r.datum,r.betrag)+'.pdf';
-  el.focus();
-}
-function confirmFile(i){
-  var el=document.getElementById('rname-'+i);
-  if(el&&el.contentEditable==='true'){var ed=el.textContent.trim().replace(/\.pdf$/i,'');if(ed)results[i]._customName=ed;}
-  results[i].confirmed=true;reRender(i);dlOne(i);
+  rname.contentEditable='true';
+  rname.style.background='var(--sur3)'; rname.style.color='var(--txt)'; rname.style.borderColor='var(--acc)';
+  rname.textContent=buildName(r.typ,r.nr,r.steller,r.datum,r.betrag)+'.pdf';
+  rname.focus();
 }
 
-// ── DOWNLOAD ──────────────────────────────────────────────
-async function dlOne(i){
+function confirmFile(i) {
+  var el=document.getElementById('item-'+i);
+  if(el){var rname=el.querySelector('.rname');if(rname&&rname.contentEditable==='true'){var ed=rname.textContent.trim().replace(/\.pdf$/i,'');if(ed)results[i]._customName=ed;}}
+  results[i].confirmed=true; reRender(i); dlOne(i);
+}
+
+// ═══════════════════════════════ DOWNLOAD ═══════════════════════════
+async function dlOne(i) {
   var r=results[i];
-  if(!r||!r.confirmed||!r.nr)return;
+  if(!r||!r.confirmed||!r.nr) return;
   var name=(r._customName||buildName(r.typ,r.nr,r.steller,r.datum,r.betrag))+'.pdf';
-  try{
+  try {
     var data=await files[i].arrayBuffer();
     var blob=new Blob([data],{type:'application/pdf'});
     var a=document.createElement('a');
-    a.href=URL.createObjectURL(blob);a.download=name;
-    document.body.appendChild(a);a.click();document.body.removeChild(a);
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
     toast('⬇️ '+name,'tok');
-    // ALWAYS save to transfer store if this is a transfer (outside DOM check)
-    (function(ri){
-      var sup2 = findSup(ri.steller) || findSupByShort(ri.steller);
-      var isUew2 = false;
-      var zahlart2 = sup2 ? (sup2.zahlart || 'auto') : 'auto';
-      if (zahlart2 === 'uew') isUew2 = true;
-      else if (zahlart2 === 'sepa') isUew2 = false;
-      else isUew2 = !ri.sepa; // auto: use AI detection
-      if (isUew2) { addStoredTransfer(ri, name); updToolbar(); }
-    })(r);
+    // Save to transfer store BEFORE DOM manipulation
+    var sup2=findSup(r.steller)||findSupByShort(r.steller);
+    var zahlart2=sup2?(sup2.zahlart||'auto'):'auto';
+    var isUew2 = zahlart2==='uew' ? true : zahlart2==='sepa' ? false : (r.sepa===false);
+    if(isUew2) { addStoredTransfer(r,name); updToolbar(); }
+    // Fade out after 2s
     var el=document.getElementById('item-'+i);
     if(el){
-      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 14px;">'
-        +'<span style="font-size:.85rem;color:var(--ok);font-weight:500">✅ Erfolgreich heruntergeladen &mdash; </span>'
-        +'<span style="font-size:.78rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</span>'
-        +(r.sepa?'<span class="bdg bdg-sepa">🔄 SEPA</span>':'<span class="bdg bdg-uew">💸 Überweisen</span>')
+      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 16px;">'
+        +'<span style="font-size:.88rem;color:var(--ok);font-weight:500">✅ Heruntergeladen — </span>'
+        +'<span style="font-size:.82rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</span>'
+        +(isUew2?'<span class="bdg b-uew">💸 Überweisung</span>':'<span class="bdg b-sepa">🔄 SEPA</span>')
         +'</div>';
       el.className='fitem s-ok';
       el.style.transition='opacity 0.4s';
-      (function(el,idx){
-        setTimeout(function(){
-          el.style.opacity='0';
-          setTimeout(function(){ removeFile(idx); updToolbar(); },420);
-        },2000);
-      })(el,i);
+      (function(el,idx){ setTimeout(function(){ el.style.opacity='0'; setTimeout(function(){ removeFile(idx); },420); },2000); })(el,i);
     }
-  }catch(e){toast('Download fehlgeschlagen.','ter');}
+  } catch(e) { toast('Download fehlgeschlagen.','ter'); }
 }
-function expandItem(i){var el=document.getElementById('item-'+i);if(!el)return;var tmp=document.createElement('div');tmp.innerHTML=renderItem(files[i],i);el.replaceWith(tmp.firstElementChild);}
-async function dlAll(){
+
+async function dlAll() {
   var count=0;
   for(var i=0;i<files.length;i++){
     if(results[i]&&results[i].confirmed&&!results[i].error&&results[i].nr){
-      await dlOne(i);count++;await new Promise(function(r){setTimeout(r,400);});
+      await dlOne(i); count++;
+      await new Promise(function(r){setTimeout(r,400);});
     }
   }
-  if(count)toast(count+' Datei(en) heruntergeladen.','tok');
+  if(count) toast(count+' Datei(en) heruntergeladen.','tok');
 }
 
-// ── SUPPLIERS (Storage) ───────────────────────────────────
+// ═══════════════════════════════ SEPA TABLE ═════════════════════════
+function renderSepaTable() {
+  var wrap=document.getElementById('xml-table-wrap');
+  var rows=[];
+  files.forEach(function(f,i){
+    if(isTransfer(i)){
+      var r=results[i];
+      rows.push({source:'live',idx:i,steller:r.steller,nr:r.nr,betrag:r.betrag,datum:r.datum,
+        iban:getSupIban(r.steller)||r.iban||'',bic:getSupBic(r.steller)||r.bic||'',
+        kundennr:getSupKdNr(r.steller)||r.kundennr||''});
+    }
+  });
+  getStoredTransfers().forEach(function(t,si){
+    rows.push({source:'stored',si:si,steller:t.steller,nr:t.nr,betrag:t.betrag,datum:t.datum,
+      iban:getSupIban(t.steller)||t.iban||'',bic:getSupBic(t.steller)||t.bic||'',
+      kundennr:getSupKdNr(t.steller)||t.kundennr||''});
+  });
+  if(!rows.length){
+    wrap.innerHTML='<div class="xml-empty">Keine offenen Überweisungen.<br><span style="font-size:.82rem">Rechnungen importieren und analysieren — Überweisungen erscheinen hier automatisch.</span></div>';
+    document.getElementById('btn-xml').disabled=true; return;
+  }
+  window._sepaRows=rows;
+  var html='<table class="xml-table"><thead><tr>'
+    +'<th>Empfänger</th><th>Brutto</th><th>Skonto</th><th>Überweisen</th>'
+    +'<th>Rechnungs-Nr.</th><th>IBAN</th><th>BIC</th><th>Fällig</th><th></th>'
+    +'</tr></thead><tbody>';
+  rows.forEach(function(row,k){
+    var sk=calcSkonto(row.steller,row.betrag,row.datum);
+    var skontoCell=sk.applies?'<span style="color:var(--ok);font-size:.82rem">-'+fmtNum(sk.skontoAmt)+' ('+sk.skontoPct+'%)</span>':'<span style="color:var(--mut)">—</span>';
+    var nettoCell=sk.applies?'<b style="color:var(--ok)">'+fmtNum(sk.netto)+'</b>':'<b>'+esc(formatBetrag(row.betrag))+'</b>';
+    html+='<tr>'
+      +'<td>'+esc(row.steller)+'</td>'
+      +'<td>'+esc(formatBetrag(row.betrag))+'</td>'
+      +'<td>'+skontoCell+'</td>'
+      +'<td>'+nettoCell+'</td>'
+      +'<td>'+esc(row.nr)+'</td>'
+      +'<td><input class="xml-iban" data-k="'+k+'" value="'+esc(row.iban)+'" placeholder="DE…" style="font-family:Consolas;min-width:190px"></td>'
+      +'<td><input class="xml-bic"  data-k="'+k+'" value="'+esc(row.bic)+'"  placeholder="COBADEFFXXX" style="font-family:Consolas;min-width:100px"></td>'
+      +'<td><input class="xml-date" data-k="'+k+'" value="'+todayDE()+'" style="min-width:90px"></td>'
+      +'<td><button class="btn btn-sm btn-er" onclick="removeTransferRow('+k+')">🗑️</button></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table>';
+  wrap.innerHTML=html;
+  document.getElementById('btn-xml').disabled=false;
+}
+
+function removeTransferRow(k){
+  var rows=window._sepaRows||[], row=rows[k]; if(!row) return;
+  if(row.source==='stored'){var s=getStoredTransfers();s.splice(row.si,1);saveStoredTransfers(s);}
+  renderSepaTable(); updToolbar();
+}
+
+// ═══════════════════════════════ XML EXPORT ═════════════════════════
+function todayDE(){var d=new Date(),dd=String(d.getDate()).padStart(2,'0'),mm=String(d.getMonth()+1).padStart(2,'0');return dd+'.'+mm+'.'+d.getFullYear();}
+function toISODate(ddmmyyyy){if(!ddmmyyyy)return new Date().toISOString().slice(0,10);var p=ddmmyyyy.split('.');if(p.length===3&&p[2].length===4)return p[2]+'-'+p[1].padStart(2,'0')+'-'+p[0].padStart(2,'0');return new Date().toISOString().slice(0,10);}
+function xmlEsc(s){return(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+
+function exportXML(){
+  var own=getOwnAccount();
+  if(!own.iban||!own.name){toast('Bitte zuerst dein Konto unter Einstellungen hinterlegen.','ter');showPg('einstellungen');return;}
+  var ibanChk=validateIBAN(own.iban);
+  if(!ibanChk.ok){toast('Eigene IBAN: '+ibanChk.msg,'ter');showPg('einstellungen');return;}
+  var ibanInputs=document.querySelectorAll('.xml-iban'), bicInputs=document.querySelectorAll('.xml-bic'), dateInputs=document.querySelectorAll('.xml-date');
+  var rows=window._sepaRows||[], txs=[];
+  for(var k=0;k<ibanInputs.length;k++){
+    var row=rows[k]||{};
+    var iban=ibanInputs[k].value.replace(/\s/g,'').toUpperCase();
+    var bic=bicInputs[k].value.replace(/\s/g,'').toUpperCase();
+    var rawDate=dateInputs[k].value.trim();
+    if(!iban){toast('Bitte IBAN für "'+row.steller+'" ausfüllen.','ter');return;}
+    var iV=validateIBAN(iban),bV=validateBIC(bic);
+    if(!iV.ok){toast('❌ '+row.steller+': '+iV.msg,'ter');return;}
+    if(!bV.ok){toast('❌ '+row.steller+': '+bV.msg,'ter');return;}
+    var sk=calcSkonto(row.steller||'',row.betrag||'',row.datum||'');
+    var amt=sk.applies?sk.netto:(parseFloat((row.betrag||'0').replace(/[^\d,]/g,'').replace(',','.'))||0);
+    if(!amt){toast('Ungültiger Betrag bei "'+row.steller+'".','ter');return;}
+    updateSupBank(row.steller||'',iban,bic,'');
+    txs.push({steller:row.steller||'',iban:iban,bic:bic,amt:amt,nr:row.nr||'',execDate:toISODate(rawDate),datum:row.datum||'',kundennr:row.kundennr||'',skontoPct:sk.skontoPct,skontoApplied:sk.applies});
+  }
+  if(!txs.length){toast('Keine Überweisungen vorhanden.','ter');return;}
+  var msgId='AUTOP-'+Date.now(), creDate=new Date().toISOString().slice(0,19);
+  var totalAmt=txs.reduce(function(s,t){return s+t.amt;},0).toFixed(2);
+  var xml='<?xml version="1.0" encoding="UTF-8"?>\n'
+    +'<Document xmlns="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:iso:std:iso:20022:tech:xsd:pain.001.003.03 pain.001.003.03.xsd">\n'
+    +'  <CstmrCdtTrfInitn>\n    <GrpHdr>\n'
+    +'      <MsgId>'+xmlEsc(msgId)+'</MsgId>\n      <CreDtTm>'+creDate+'</CreDtTm>\n'
+    +'      <NbOfTxs>'+txs.length+'</NbOfTxs>\n      <CtrlSum>'+totalAmt+'</CtrlSum>\n'
+    +'      <InitgPty><Nm>'+xmlEsc(own.name)+'</Nm></InitgPty>\n    </GrpHdr>\n'
+    +'    <PmtInf>\n      <PmtInfId>'+xmlEsc(msgId)+'-1</PmtInfId>\n      <PmtMtd>TRF</PmtMtd>\n'
+    +'      <NbOfTxs>'+txs.length+'</NbOfTxs>\n      <CtrlSum>'+totalAmt+'</CtrlSum>\n'
+    +'      <PmtTpInf><SvcLvl><Cd>SEPA</Cd></SvcLvl></PmtTpInf>\n'
+    +'      <ReqdExctnDt>'+txs[0].execDate+'</ReqdExctnDt>\n'
+    +'      <Dbtr><Nm>'+xmlEsc(own.name)+'</Nm></Dbtr>\n'
+    +'      <DbtrAcct><Id><IBAN>'+xmlEsc(own.iban.replace(/\s/g,''))+'</IBAN></Id></DbtrAcct>\n'
+    +(own.bic?'      <DbtrAgt><FinInstnId><BIC>'+xmlEsc(own.bic)+'</BIC></FinInstnId></DbtrAgt>\n':'')
+    +txs.map(function(t){
+      var vzweck='RE '+xmlEsc(t.nr)+' vom '+xmlEsc(t.datum)+(t.kundennr?'\nKD-NR: '+xmlEsc(t.kundennr):'')+(t.skontoApplied?' / Skonto '+t.skontoPct+'%':'');
+      return '      <CdtTrfTxInf>\n'
+        +'        <PmtId><EndToEndId>NOTPROVIDED</EndToEndId></PmtId>\n'
+        +'        <Amt><InstdAmt Ccy="EUR">'+t.amt.toFixed(2)+'</InstdAmt></Amt>\n'
+        +(t.bic?'        <CdtrAgt><FinInstnId><BIC>'+xmlEsc(t.bic)+'</BIC></FinInstnId></CdtrAgt>\n':'')
+        +'        <Cdtr><Nm>'+xmlEsc(t.steller)+'</Nm></Cdtr>\n'
+        +'        <CdtrAcct><Id><IBAN>'+xmlEsc(t.iban)+'</IBAN></Id></CdtrAcct>\n'
+        +'        <RmtInf><Ustrd>'+vzweck+'</Ustrd></RmtInf>\n'
+        +'      </CdtTrfTxInf>';
+    }).join('\n')
+    +'\n    </PmtInf>\n  </CstmrCdtTrfInitn>\n</Document>';
+  var blob=new Blob([xml],{type:'application/xml'});
+  var fname='Ueberweisungen_'+new Date().toISOString().slice(0,10)+'.xml';
+  var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(a.href);
+  clearStoredTransfers(); window._sepaRows=[]; updToolbar();
+  var wrap=document.getElementById('xml-table-wrap');
+  if(wrap) wrap.innerHTML='<div style="background:var(--ok-bg);border:1px solid var(--ok-bd);border-radius:var(--rs);padding:18px 20px;text-align:center">'
+    +'<div style="font-size:1.05rem;color:var(--ok);font-weight:600;margin-bottom:6px">✅ XML erfolgreich erstellt und heruntergeladen</div>'
+    +'<div style="font-size:.84rem;color:var(--mut)">'+txs.length+' Überweisung(en) · '+esc(fname)+'</div></div>';
+  document.getElementById('btn-xml').disabled=true;
+  toast('✅ XML mit '+txs.length+' Überweisung(en) exportiert.','tok');
+}
+
+// ═══════════════════════════════ TRANSFER STORE ══════════════════════
+function getStoredTransfers(){try{return JSON.parse(localStorage.getItem('re_transfers')||'[]');}catch(e){return[];}}
+function saveStoredTransfers(t){localStorage.setItem('re_transfers',JSON.stringify(t));}
+function clearStoredTransfers(){localStorage.removeItem('re_transfers');}
+function addStoredTransfer(r,fileName){
+  var transfers=getStoredTransfers();
+  var exists=transfers.some(function(t){return t.nr===r.nr&&t.steller===r.steller;});
+  if(!exists){
+    transfers.push({steller:r.steller,nr:r.nr,betrag:r.betrag,datum:r.datum,iban:r.iban||'',bic:r.bic||'',kundennr:r.kundennr||'',fileName:fileName});
+    saveStoredTransfers(transfers);
+  }
+}
+
+// ═══════════════════════════════ SUPPLIERS ═══════════════════════════
 function getSups(){try{return JSON.parse(localStorage.getItem('re_sups')||'[]');}catch(e){return[];}}
 function saveSupList(s){localStorage.setItem('re_sups',JSON.stringify(s));}
+
 function renderSups(){
   var allSups=getSups();
-  // apply filter
-  var filterEl = document.getElementById('sup-filter');
-  var sortEl   = document.getElementById('sup-sort');
-  var filterVal = filterEl ? filterEl.value.toLowerCase().trim() : '';
-  var sortVal   = sortEl   ? sortEl.value : 'alpha';
-  var sups = allSups;
-  if (filterVal) {
-    sups = sups.filter(function(s) {
-      return (s.raw||'').toLowerCase().includes(filterVal)
-          || (s.short||'').toLowerCase().includes(filterVal)
-          || (s.iban||'').toLowerCase().includes(filterVal)
-          || (s.kundennr||'').toLowerCase().includes(filterVal);
+  var filterVal=(document.getElementById('sup-filter')||{}).value||'';
+  var sortVal=(document.getElementById('sup-sort')||{}).value||'alpha';
+  var sups=allSups;
+  if(filterVal.trim()){
+    var fv=filterVal.toLowerCase();
+    sups=sups.filter(function(s){
+      return (s.raw||'').toLowerCase().includes(fv)||(s.short||'').toLowerCase().includes(fv)
+        ||(s.iban||'').toLowerCase().includes(fv)||(s.kundennr||'').toLowerCase().includes(fv);
     });
   }
-  // sort
-  sups = sups.slice().sort(function(a, b) {
-    if (sortVal === 'zahlart') {
-      var order = { uew: 0, auto: 1, sepa: 2 };
-      var ao = order[a.zahlart||'auto'] || 1;
-      var bo = order[b.zahlart||'auto'] || 1;
-      if (ao !== bo) return ao - bo;
+  sups=sups.slice().sort(function(a,b){
+    if(sortVal==='zahlart'){
+      var order={uew:0,auto:1,sepa:2};
+      var ao=order[a.zahlart||'auto']||1, bo=order[b.zahlart||'auto']||1;
+      if(ao!==bo) return ao-bo;
     }
-    return (a.short||a.raw||'').localeCompare(b.short||b.raw||'', 'de');
+    return (a.short||a.raw||'').localeCompare(b.short||b.raw||'','de');
   });
+  // Update counter
+  var uewSups=allSups.filter(function(s){return s.zahlart==='uew';}).length;
+  var sepaSups=allSups.filter(function(s){return s.zahlart==='sepa';}).length;
+  var autoSups=allSups.filter(function(s){return !s.zahlart||s.zahlart==='auto';}).length;
+  var ctr=document.getElementById('sup-counter');
+  if(ctr) ctr.innerHTML='<span style="color:var(--pu)">💸 '+uewSups+'</span> &nbsp;·&nbsp; <span style="color:var(--acc)">🔄 '+sepaSups+'</span> &nbsp;·&nbsp; <span style="color:var(--mut)">🤖 '+autoSups+'</span>';
   var list=document.getElementById('slist');
-  if(!sups.length){list.innerHTML='<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>';return;}
-  // update counter
-  var uewSups = sups.filter(function(s){ return s.zahlart === 'uew'; }).length;
-  var sepaSups = sups.filter(function(s){ return s.zahlart === 'sepa'; }).length;
-  var autoSups = sups.filter(function(s){ return !s.zahlart || s.zahlart === 'auto'; }).length;
-  var ctr = document.getElementById('sup-uew-counter');
-  if(ctr) ctr.innerHTML = '<span style="color:var(--pu)">💸 ' + uewSups + ' Überweisung</span>'
-    + ' &nbsp;·&nbsp; <span style="color:var(--acc)">🔄 ' + sepaSups + ' SEPA</span>'
-    + ' &nbsp;·&nbsp; <span>🤖 ' + autoSups + ' Auto</span>';
-  list.innerHTML = (!sups.length ? '<div class="empty">Keine Lieferanten gefunden.</div>' : '') +
-  (sups.length ? (
-    // Header row
-    '<div class="shead">'
-    + '<div class="shcell">Erkennungsname → Kurzname</div>'
-    + '<div class="shcell">Zahlungsart</div>'
-    + '<div class="shcell">Typ</div>'
-    + '<div class="shcell">Kunden-Nr.</div>'
-    + '<div class="shcell"></div>'
-    + '</div>'
-    + '<div class="shead-bank">'
-    + '<div class="shcell">IBAN</div>'
-    + '<div class="shcell">BIC</div>'
-    + '<div class="shcell">Skonto % / Frist</div>'
-    + '</div>'
-    + sups.map(function(s,i){
-    var zahlColor = s.zahlart==='uew' ? 'var(--pu)' : s.zahlart==='sepa' ? 'var(--acc)' : 'var(--mut)';
-    var zahlText  = s.zahlart==='uew' ? '💸 Überweisung' : s.zahlart==='sepa' ? '🔄 SEPA' : '🤖 Auto';
-    return '<div class="srow">'
-      // Main row
-      + '<div class="srow-main">'
-      + '<div class="scell" style="display:flex;align-items:center;gap:6px">'
-      + '<input class="sin sr" value="'+esc(s.raw)+'" placeholder="Name auf Rechnung" title="Erkennungsname">'
-      + '<span style="color:var(--mut);flex-shrink:0">→</span>'
-      + '<input class="sin ss" value="'+esc(s.short)+'" placeholder="Kurzname" title="Kurzname für Dateiname">'
-      + '</div>'
-      + '<div class="scell">'
-      + '<select class="sin sz" style="color:'+zahlColor+';font-weight:500;cursor:pointer" title="Zahlungsart">'
-      + '<option value="auto"'+(!s.zahlart||s.zahlart==='auto'?' selected':'')+'>🤖 Auto</option>'
-      + '<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
-      + '<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA</option>'
-      + '</select>'
-      + '</div>'
-      + '<div class="scell">'
-      + '<select class="sin st" style="cursor:pointer" title="Dokumenttyp">'
-      + '<option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option>'
-      + '<option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option>'
-      + '</select>'
-      + '</div>'
-      + '<div class="scell"><input class="sin sk" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21" title="Kundennummer"></div>'
-      + '<div class="scell" style="text-align:center"><button class="btn btn-sm btn-er" onclick="delSup('+i+')" title="Löschen">🗑️</button></div>'
-      + '</div>'
-      // Bank row
-      + '<div class="srow-bank">'
-      + '<div class="scell"><input class="sin si sin-mono" value="'+esc(s.iban||'')+'" placeholder="DE12 3456 7890 …" title="IBAN"></div>'
-      + '<div class="scell"><input class="sin sb sin-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX" title="BIC"></div>'
-      + '<div class="scell" style="display:flex;gap:6px;align-items:center">'
-      + '<input class="sin sp" type="number" min="0" max="100" step="0.1" value="'+esc(String(s.skonto||''))+'" placeholder="%" title="Skonto %" style="max-width:50px">'
-      + '<span style="color:var(--mut);font-size:.78rem">%</span>'
-      + '<input class="sin sf" type="number" min="0" max="90" step="1" value="'+esc(String(s.skontofrist||''))+'" placeholder="Tage" title="Skonto-Frist in Tagen" style="max-width:50px">'
-      + '<span style="color:var(--mut);font-size:.78rem">Tage</span>'
-      + '</div>'
-      + '</div>'
-      + '</div>';
-  }).join('')
-  ) : '');
+  if(!allSups.length){list.innerHTML='<div class="empty">Noch keine Lieferanten — werden automatisch angelegt.</div>';return;}
+  if(!sups.length){list.innerHTML='<div class="empty">Keine Lieferanten gefunden für "'+esc(filterVal)+'".</div>';return;}
+  // Render as table
+  var html='<table class="sup-table"><thead><tr>'
+    +'<th>Erkennungsname → Kurzname</th><th>Zahlungsart</th><th>Typ</th>'
+    +'<th>Kunden-Nr.</th><th>IBAN</th><th>BIC</th><th>Skonto % / Tage</th><th></th>'
+    +'</tr></thead><tbody>';
+  sups.forEach(function(s,idx){
+    // find real index in allSups for correct saving
+    var realIdx=allSups.findIndex(function(x){return normalize(x.raw)===normalize(s.raw);});
+    var zahlClass=s.zahlart==='uew'?'tag-uew':s.zahlart==='sepa'?'tag-sepa':'tag-auto';
+    html+='<tr data-idx="'+realIdx+'">'
+      +'<td style="display:flex;align-items:center;gap:6px;min-width:260px">'
+      +'<input class="sup-in sup-raw" value="'+esc(s.raw)+'" placeholder="Erkennungsname" title="Name wie auf der Rechnung">'
+      +'<span style="color:var(--mut);flex-shrink:0;font-size:.9rem">→</span>'
+      +'<input class="sup-in sup-short" value="'+esc(s.short)+'" placeholder="Kurzname" title="Kurzname für Dateinamen" style="max-width:130px">'
+      +'</td>'
+      +'<td style="min-width:140px">'
+      +'<select class="sup-sel sup-zahlart '+zahlClass+'">'
+      +'<option value="auto"'+(!s.zahlart||s.zahlart==='auto'?' selected':'')+'>🤖 Auto</option>'
+      +'<option value="uew"'+(s.zahlart==='uew'?' selected':'')+'>💸 Überweisung</option>'
+      +'<option value="sepa"'+(s.zahlart==='sepa'?' selected':'')+'>🔄 SEPA-Abbuchung</option>'
+      +'</select></td>'
+      +'<td><select class="sup-sel sup-typ" style="max-width:70px">'
+      +'<option value="RE"'+(s.typ==='RE'?' selected':'')+'>RE</option>'
+      +'<option value="GS"'+(s.typ==='GS'?' selected':'')+'>GS</option>'
+      +'</select></td>'
+      +'<td><input class="sup-in sup-kdnr" value="'+esc(s.kundennr||'')+'" placeholder="z.B. 21" style="max-width:80px"></td>'
+      +'<td><input class="sup-in sup-iban sup-in-mono" value="'+esc(s.iban||'')+'" placeholder="DE12…" style="min-width:180px"></td>'
+      +'<td><input class="sup-in sup-bic sup-in-mono" value="'+esc(s.bic||'')+'" placeholder="COBADEFFXXX" style="min-width:100px"></td>'
+      +'<td style="white-space:nowrap">'
+      +'<input class="sup-in sup-skonto" type="number" min="0" max="100" step="0.1" value="'+esc(String(s.skonto||''))+'" placeholder="%" style="max-width:48px" title="Skonto %">'
+      +'<span style="color:var(--mut);font-size:.78rem;margin:0 3px">%</span>'
+      +'<input class="sup-in sup-frist" type="number" min="0" max="90" step="1" value="'+esc(String(s.skontofrist||''))+'" placeholder="T" style="max-width:40px" title="Frist in Tagen">'
+      +'<span style="color:var(--mut);font-size:.78rem;margin-left:3px">T</span>'
+      +'</td>'
+      +'<td><button class="btn btn-sm btn-er" onclick="delSup(\''+normalize(s.raw)+'\')">🗑️</button></td>'
+      +'</tr>';
+  });
+  html+='</tbody></table>';
+  list.innerHTML=html;
 }
+
 function saveSupsFromUI(){
-  // Read current values from DOM rows
-  var rows = document.querySelectorAll('.srow');
-  var domData = Array.from(rows).map(function(row){
-    return {
-      raw:      (row.querySelector('.sr') ? row.querySelector('.sr').value || '' : '').trim(),
-      short:    (row.querySelector('.ss') ? row.querySelector('.ss').value || '' : '').trim(),
-      typ:       row.querySelector('.st') ? row.querySelector('.st').value || 'RE' : 'RE',
-      zahlart:   row.querySelector('.sz') ? row.querySelector('.sz').value || 'auto' : 'auto',
-      iban:     (row.querySelector('.si') ? row.querySelector('.si').value || '' : '').replace(/\s/g,'').toUpperCase(),
-      bic:      (row.querySelector('.sb') ? row.querySelector('.sb').value || '' : '').replace(/\s/g,'').toUpperCase(),
-      kundennr: (row.querySelector('.sk') ? row.querySelector('.sk').value || '' : '').trim(),
-      skonto:    row.querySelector('.sp') ? parseFloat(row.querySelector('.sp').value)||0 : 0,
-      skontofrist: row.querySelector('.sf') ? parseInt(row.querySelector('.sf').value)||0 : 0
-    };
+  var allSups=getSups();
+  var rows=document.querySelectorAll('#slist .sup-table tbody tr');
+  var changed=0;
+  rows.forEach(function(row){
+    var realIdx=parseInt(row.dataset.idx||'-1');
+    if(realIdx<0||realIdx>=allSups.length) return;
+    var s=allSups[realIdx];
+    var newRaw=(row.querySelector('.sup-raw')||{}).value||s.raw||'';
+    var newShort=(row.querySelector('.sup-short')||{}).value||s.short||'';
+    var newZahlart=(row.querySelector('.sup-zahlart')||{}).value||'auto';
+    var newTyp=(row.querySelector('.sup-typ')||{}).value||'RE';
+    var newKdnr=((row.querySelector('.sup-kdnr')||{}).value||'').trim();
+    var newIban=((row.querySelector('.sup-iban')||{}).value||'').replace(/\s/g,'').toUpperCase();
+    var newBic=((row.querySelector('.sup-bic')||{}).value||'').replace(/\s/g,'').toUpperCase();
+    var newSkonto=parseFloat((row.querySelector('.sup-skonto')||{}).value)||0;
+    var newFrist=parseInt((row.querySelector('.sup-frist')||{}).value)||0;
+    // Validate IBAN/BIC if provided
+    if(newIban){var iv=validateIBAN(newIban);if(!iv.ok){toast('⚠️ '+newShort+': '+iv.msg,'ter');return;}}
+    if(newBic){var bv=validateBIC(newBic);if(!bv.ok){toast('⚠️ '+newShort+': '+bv.msg,'ter');return;}}
+    allSups[realIdx]=Object.assign(s,{raw:newRaw,short:newShort,zahlart:newZahlart,typ:newTyp,kundennr:newKdnr,iban:newIban,bic:newBic,skonto:newSkonto,skontofrist:newFrist});
+    changed++;
   });
-  // Merge with full list (filter-safe: update matching entries, keep hidden ones)
-  var allSups = getSups();
-  var filterVal = (document.getElementById('sup-filter')||{}).value || '';
-  if (filterVal.trim()) {
-    // Filter active: only update matching entries
-    domData.forEach(function(d, idx) {
-      var match = allSups.findIndex(function(s){ return normalize(s.raw)===normalize(d.raw) || normalize(s.short)===normalize(d.short); });
-      if (match >= 0) allSups[match] = Object.assign(allSups[match], d);
-    });
-  } else {
-    // No filter: full replace, but keep entries with raw value
-    allSups = domData.filter(function(s){ return s.raw; });
-    var seen=[];
-    allSups=allSups.filter(function(s){var n=normalize(s.raw);if(seen.indexOf(n)!==-1)return false;seen.push(n);return true;});
-  }
-  // IBAN/BIC validation (only warn, don't block)
-  var warnings = [];
-  allSups.forEach(function(s) {
-    if (s.iban || s.bic) {
-      var msgs = validateAndWarn(s.iban, s.bic, s.short || s.raw);
-      warnings = warnings.concat(msgs);
-    }
-  });
-  if (warnings.length) {
-    toast('\u26A0\uFE0F IBAN/BIC-Hinweis: ' + warnings[0], 'ter');
-    // Don't block saving - just warn
-  }
   saveSupList(allSups);
   renderSups();
-  toast('Lieferanten gespeichert.','tok');
+  toast('Lieferanten gespeichert ('+changed+' geändert).','tok');
 }
-function addSupManual(){var sups=getSups();sups.push({raw:'',short:'',typ:'RE',zahlart:'auto',iban:'',bic:'',kundennr:'',skonto:0,skontofrist:0});saveSupList(sups);renderSups();}
-function delSup(i){var sups=getSups();sups.splice(i,1);saveSupList(sups);renderSups();}
 
-// ── SETTINGS ──────────────────────────────────────────────
+function addSupManual(){
+  var sups=getSups();
+  sups.push({raw:'',short:'',typ:'RE',zahlart:'auto',iban:'',bic:'',kundennr:'',skonto:0,skontofrist:0});
+  saveSupList(sups); renderSups();
+}
+
+function delSup(normalizedRaw){
+  var sups=getSups();
+  sups=sups.filter(function(s){return normalize(s.raw)!==normalizedRaw;});
+  saveSupList(sups); renderSups(); toast('Lieferant gelöscht.','tok');
+}
+
+// ═══════════════════════════════ SETTINGS ════════════════════════════
 function getKey(){return localStorage.getItem('re_key')||'';}
 function getFolder(){return localStorage.getItem('re_folder')||'';}
-function getOwnAccount(){try{return JSON.parse(localStorage.getItem('re_own')||'{}');}catch(e){return{};}}
-function saveKey(){var v=document.getElementById('kfield').value.trim();if(!v){toast('Bitte einen Key eingeben.','ter');return;}localStorage.setItem('re_key',v);loadSettings();toast('API Key gespeichert.','tok');}
+function getOwnAccount(){try{return JSON.parse(localStorage.getItem('re_own')||'{}');}catch(e){return {};}}
+
+function saveKey(){var v=(document.getElementById('kfield').value||'').trim();if(!v){toast('Bitte einen Key eingeben.','ter');return;}localStorage.setItem('re_key',v);loadSettings();toast('API Key gespeichert.','tok');}
 function delKey(){localStorage.removeItem('re_key');document.getElementById('kfield').value='';loadSettings();toast('Key gelöscht.','tok');}
-function saveFolder(){var v=(document.getElementById('ffield').value||'').trim();localStorage.setItem('re_folder',v);loadSettings();toast('Speicherort gespeichert.','tok');}
-function changeFolder(){document.getElementById('fui-set').style.display='none';document.getElementById('fui-empty').style.display='block';document.getElementById('ffield').value=getFolder();}
+function saveFolder(){var v=((document.getElementById('ffield')||{}).value||'').trim();localStorage.setItem('re_folder',v);loadSettings();toast('Speicherort gespeichert.','tok');}
+function changeFolder(){document.getElementById('fui-set').style.display='none';document.getElementById('fui-empty').style.display='block';(document.getElementById('ffield')||{value:''}).value=getFolder();}
+
 function saveOwnAccount(){
-  var acc={name:(document.getElementById('own-name').value||'').trim(),iban:(document.getElementById('own-iban').value||'').replace(/\s/g,'').toUpperCase(),bic:(document.getElementById('own-bic').value||'').replace(/\s/g,'').toUpperCase(),bank:(document.getElementById('own-bank').value||'').trim()};
-  if (acc.iban) {
-    var ibanChk = validateIBAN(acc.iban);
-    var bicChk  = validateBIC(acc.bic);
-    if (!ibanChk.ok) { toast('❌ IBAN: ' + ibanChk.msg, 'ter'); return; }
-    if (!bicChk.ok)  { toast('❌ BIC: '  + bicChk.msg,  'ter'); return; }
-  }
+  var acc={name:((document.getElementById('own-name')||{}).value||'').trim(),iban:((document.getElementById('own-iban')||{}).value||'').replace(/\s/g,'').toUpperCase(),bic:((document.getElementById('own-bic')||{}).value||'').replace(/\s/g,'').toUpperCase(),bank:((document.getElementById('own-bank')||{}).value||'').trim()};
+  if(acc.iban){var iv=validateIBAN(acc.iban);if(!iv.ok){toast('❌ IBAN: '+iv.msg,'ter');return;}}
+  if(acc.bic){var bv=validateBIC(acc.bic);if(!bv.ok){toast('❌ BIC: '+bv.msg,'ter');return;}}
   localStorage.setItem('re_own',JSON.stringify(acc));
   var st=document.getElementById('own-status');
-  if(st)st.innerHTML=acc.iban?'<span style="color:var(--ok)">✅ Konto gespeichert: '+esc(acc.name)+' · '+esc(acc.iban)+'</span>':'';
+  if(st)st.innerHTML=acc.iban?'<span style="color:var(--ok)">✅ Konto: '+esc(acc.name)+' · '+esc(acc.iban)+'</span>':'';
   toast('Konto gespeichert.','tok');
 }
+
 function loadSettings(){
   var k=getKey();
   document.getElementById('kdot').className='kdot'+(k?' ok':'');
@@ -1294,38 +1024,25 @@ function loadSettings(){
   var on=document.getElementById('own-name'),oi=document.getElementById('own-iban'),ob=document.getElementById('own-bic'),obn=document.getElementById('own-bank');
   if(on)on.value=own.name||'';if(oi)oi.value=own.iban||'';if(ob)ob.value=own.bic||'';if(obn)obn.value=own.bank||'';
   var st=document.getElementById('own-status');
-  if(st&&own.iban)st.innerHTML='<span style="color:var(--ok)">✅ Konto gespeichert: '+esc(own.name)+' · '+esc(own.iban)+'</span>';
+  if(st&&own.iban)st.innerHTML='<span style="color:var(--ok)">✅ Konto: '+esc(own.name)+' · '+esc(own.iban)+'</span>';
 }
 
-// ── THEME ─────────────────────────────────────────────────
-function applyTheme(mode) {
-  if (mode === 'light') {
-    document.body.classList.add('light');
-    var icon = document.getElementById('theme-icon');
-    var lbl  = document.getElementById('theme-label');
-    if (icon) icon.textContent = '🌙';
-    if (lbl)  lbl.textContent  = 'Dunkel';
-  } else {
-    document.body.classList.remove('light');
-    var icon = document.getElementById('theme-icon');
-    var lbl  = document.getElementById('theme-label');
-    if (icon) icon.textContent = '☀️';
-    if (lbl)  lbl.textContent  = 'Hell';
-  }
+// ═══════════════════════════════ THEME ═══════════════════════════════
+function applyTheme(mode){
+  document.body.classList.toggle('light',mode==='light');
+  var icon=document.getElementById('theme-icon'),lbl=document.getElementById('theme-lbl');
+  if(mode==='light'){if(icon)icon.textContent='🌙';if(lbl)lbl.textContent='Dunkel';}
+  else{if(icon)icon.textContent='☀️';if(lbl)lbl.textContent='Hell';}
 }
-function toggleTheme() {
-  var current = localStorage.getItem('re_theme') || 'dark';
-  var next = current === 'dark' ? 'light' : 'dark';
-  localStorage.setItem('re_theme', next);
-  applyTheme(next);
+function toggleTheme(){
+  var next=localStorage.getItem('re_theme')==='light'?'dark':'light';
+  localStorage.setItem('re_theme',next); applyTheme(next);
 }
 
+// ═══════════════════════════════ INIT ════════════════════════════════
 loadSettings();
-// apply saved theme after DOM is ready
-(function() {
-  var saved = localStorage.getItem('re_theme') || 'dark';
-  applyTheme(saved);
-})();
+applyTheme(localStorage.getItem('re_theme')||'dark');
+updToolbar();
 </script>
 </body>
 </html>
