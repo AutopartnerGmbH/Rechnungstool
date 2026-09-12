@@ -152,20 +152,35 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
 <main>
   <!-- ANALYSE -->
   <div class="pg on" id="pg-analyse">
-    <div class="card">
-      <div class="ctitle">📥 Rechnungen einlesen</div>
-      <div class="dz" id="dz">
-        <div style="font-size:2.2rem;margin-bottom:10px">📂</div>
-        <strong style="font-size:1.05rem">PDFs oder Outlook-E-Mails hier ablegen oder klicken</strong>
-        <p>Analyse startet automatisch — SEPA-Erkennung inklusive</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px">
+      <!-- Rechnungen -->
+      <div class="card" style="margin-bottom:0">
+        <div class="ctitle">📥 Rechnungen</div>
+        <div class="dz" id="dz">
+          <div style="font-size:2rem;margin-bottom:8px">📂</div>
+          <strong>PDFs oder Outlook-E-Mails</strong>
+          <p>Analyse startet automatisch</p>
+        </div>
+        <input type="file" id="fi" accept=".pdf,.PDF,.msg,.MSG,.eml,.EML" multiple style="display:none">
+        <div class="flist" id="flist"></div>
       </div>
-      <input type="file" id="fi" accept=".pdf,.PDF,.msg,.MSG,.eml,.EML" multiple style="display:none">
-      <div class="flist" id="flist"></div>
+      <!-- Kreditkartenbelege -->
+      <div class="card" style="margin-bottom:0">
+        <div class="ctitle">💳 Kreditkartenbelege (Mastercard)</div>
+        <div class="dz" id="dz-kk">
+          <div style="font-size:2rem;margin-bottom:8px">💳</div>
+          <strong>Kreditkartenbelege hier ablegen</strong>
+          <p>Händler, Datum und Betrag werden automatisch gelesen</p>
+        </div>
+        <input type="file" id="fi-kk" accept=".pdf,.PDF" multiple style="display:none">
+        <div class="flist" id="flist-kk"></div>
+      </div>
     </div>
     <div class="toolbar">
-      <div class="tl"><b id="fcnt">0</b> Datei(en) &nbsp;·&nbsp; <b id="uew-cnt" style="color:var(--pu)">0</b> zu überweisen</div>
+      <div class="tl"><b id="fcnt">0</b> Rechnung(en) &nbsp;·&nbsp; <b id="fcnt-kk">0</b> Beleg(e) &nbsp;·&nbsp; <b id="uew-cnt" style="color:var(--pu)">0</b> zu überweisen</div>
       <button class="btn" id="btn-sepa-pg" onclick="showPg('sepa')" disabled>🏦 Überweisungen</button>
-      <button class="btn btn-p" id="btn-dla" onclick="dlAll()" disabled>⬇️ Alle herunterladen</button>
+      <button class="btn btn-p" id="btn-dla" onclick="dlAll()" disabled>⬇️ Rechnungen herunterladen</button>
+      <button class="btn btn-p" id="btn-dla-kk" onclick="kkDlAll()" disabled>⬇️ Belege herunterladen</button>
     </div>
   </div>
 
@@ -1037,6 +1052,209 @@ function applyTheme(mode){
 function toggleTheme(){
   var next=localStorage.getItem('re_theme')==='light'?'dark':'light';
   localStorage.setItem('re_theme',next); applyTheme(next);
+}
+
+// ═══════════════════════════════ KREDITKARTE ═════════════════════════
+var kkFiles = [];
+var kkResults = {};
+
+(function(){
+  var dz = document.getElementById('dz-kk');
+  if (!dz) return;
+  dz.addEventListener('click', function(){ document.getElementById('fi-kk').click(); });
+  dz.addEventListener('dragenter', function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragover',  function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('over'); });
+  dz.addEventListener('dragleave', function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('over'); });
+  dz.addEventListener('drop', function(e){
+    e.preventDefault(); e.stopPropagation(); dz.classList.remove('over');
+    var dropped = Array.from(e.dataTransfer.files).filter(function(f){ return /\.pdf$/i.test(f.name); });
+    if (dropped.length) kkAddFiles(dropped);
+  });
+  document.getElementById('fi-kk').addEventListener('change', function(e){
+    var sel = Array.from(e.target.files);
+    if (sel.length) kkAddFiles(sel);
+    e.target.value = '';
+  });
+})();
+
+function kkAddFiles(newFiles) {
+  var added = [];
+  newFiles.forEach(function(f){
+    if (!kkFiles.some(function(x){ return x.name===f.name && x.size===f.size; })) {
+      kkFiles.push(f); added.push(kkFiles.length-1);
+    }
+  });
+  if (!added.length) return;
+  kkRenderList();
+  if (!getKey()) { toast('Bitte zuerst den API Key unter Einstellungen eintragen.','ter'); showPg('einstellungen'); return; }
+  added.forEach(function(i){ kkResults[i] = { analyzing:true }; });
+  kkRenderList();
+  Promise.all(added.map(function(i){ return kkAnalyseOne(i); }))
+    .then(function(){ toast('Kreditkartenbelege analysiert.','tok'); });
+}
+
+function kkRemoveFile(i) {
+  kkFiles.splice(i,1);
+  var nr = {};
+  Object.keys(kkResults).forEach(function(k){
+    var ki = parseInt(k);
+    if (ki<i) nr[ki]=kkResults[ki];
+    else if (ki>i) nr[ki-1]=kkResults[ki];
+  });
+  kkResults = nr;
+  kkRenderList();
+}
+
+function kkBuildName(haendler, datum, betrag) {
+  var h = san(haendler||'Unbekannt');
+  var d = (datum||'').trim();
+  var b = formatBetrag(betrag);
+  return ('KK '+h+' '+d+(b?' '+b:'')).replace(/\s+/g,' ').trim();
+}
+
+function kkRenderList() {
+  var list = document.getElementById('flist-kk');
+  if (!list) return;
+  document.getElementById('fcnt-kk').textContent = kkFiles.length;
+  var anyDone = kkFiles.some(function(_,i){ return kkResults[i]&&kkResults[i].confirmed&&kkResults[i].haendler; });
+  document.getElementById('btn-dla-kk').disabled = !anyDone;
+  if (!kkFiles.length) { list.innerHTML=''; return; }
+  list.innerHTML = kkFiles.map(function(f,i){ return kkRenderItem(f,i); }).join('');
+}
+
+function kkRenderItem(f,i) {
+  var r = kkResults[i];
+  var folder = getFolder();
+  var isDone = r && !r.error && !r.analyzing && r.confirmed && r.haendler;
+  var badge = '<span class="bdg b-pend">⏳ Ausstehend</span>';
+  var sc = 'fitem';
+  if (r) {
+    if (r.analyzing) { badge='<span class="bdg b-anlz"><span class="spin"></span> '+(r.retrying?'Erneuter Versuch…':'Analysiere…')+'</span>'; sc='fitem s-anlz'; }
+    else if (r.error) { badge='<span class="bdg b-err">❌ Fehler</span>'; sc='fitem s-err'; }
+    else if (!r.confirmed) { badge='<span class="bdg b-conf">👀 Bestätigen</span>'; sc='fitem s-conf'; }
+    else { badge='<span class="bdg b-ok">✅ Fertig</span>'; sc='fitem s-ok'; }
+  }
+  var resultHtml = '';
+  if (r && !r.analyzing && r.haendler) {
+    var name = kkBuildName(r.haendler,r.datum,r.betrag);
+    resultHtml = '<div class="rblock"><div class="rname">📄 '+esc(name)+'.pdf</div>'
+      +'<div class="rmeta"><span>Händler: <b>'+esc(r.haendler)+'</b></span>'
+      +'<span>Datum: <b>'+esc(r.datum)+'</b></span>'
+      +'<span>Betrag: <b>'+esc(r.betrag)+'</b></span></div></div>';
+  }
+  if (r && r.error) resultHtml = '<div class="rblock"><div style="font-size:.84rem;color:var(--er);padding:8px 0">'+esc(r.error)+'</div></div>';
+  var confirmHtml = '';
+  if (r && !r.analyzing && !r.error && r.haendler && !r.confirmed) {
+    confirmHtml = '<div class="cpanel"><p>Dateiname prüfen und bestätigen:</p>'
+      +'<div style="display:flex;gap:8px;flex-wrap:wrap">'
+      +'<button class="btn btn-sm btn-wa" onclick="kkEditName('+i+')">✏️ Bearbeiten</button>'
+      +'<button class="btn btn-sm btn-ok" onclick="kkConfirm('+i+')">✅ Bestätigen & herunterladen</button>'
+      +'</div></div>';
+  }
+  var hint = (folder&&isDone)?'<span class="fhint">📁 '+esc(folder)+'</span>':'<span></span>';
+  return '<div class="'+sc+'" id="kk-item-'+i+'">'
+    +'<div class="fhead"><span class="forig" title="'+esc(f.name)+'">💳 '+esc(f.name)+'</span>'+badge+'</div>'
+    +resultHtml+confirmHtml
+    +'<div class="ffoot">'+hint+'<div style="display:flex;gap:8px">'
+    +'<button class="btn btn-sm btn-er" onclick="kkRemoveFile('+i+')">🗑️</button>'
+    +'<button class="btn btn-sm btn-ok" id="kk-dl-'+i+'" onclick="kkDlOne('+i+')"'+(isDone?'':' disabled')+'>⬇️ Herunterladen</button>'
+    +'</div></div></div>';
+}
+
+function kkReRender(i) {
+  var el = document.getElementById('kk-item-'+i);
+  if (!el) { kkRenderList(); return; }
+  var tmp = document.createElement('div');
+  tmp.innerHTML = kkRenderItem(kkFiles[i],i);
+  el.replaceWith(tmp.firstElementChild);
+}
+
+async function kkAnalyseOne(i, attempt) {
+  if (!attempt) attempt=1;
+  try {
+    var b64 = await toB64(kkFiles[i]);
+    var prompt = 'Analysiere diesen Kreditkartenbeleg (Mastercard). Gib NUR ein JSON-Objekt zurueck ohne Text davor oder danach: {"haendler":"Name des Haendlers oder Beschreibung","datum":"TT.MM.JJJJ","betrag":"Betrag mit Komma und Euro-Zeichen z.B. 49,90EUR"}';
+      +'{"haendler":"Name des Händlers oder Beschreibung der Transaktion","datum":"TT.MM.JJJJ","betrag":"Betrag mit Komma und Euro-Zeichen z.B. 49,90EUR"}';
+    var controller = new AbortController();
+    var timeout = setTimeout(function(){ controller.abort(); },30000);
+    var resp;
+    try {
+      resp = await fetch('https://api.anthropic.com/v1/messages',{
+        method:'POST', signal:controller.signal,
+        headers:{'Content-Type':'application/json','x-api-key':getKey(),'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+        body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:300,messages:[{role:'user',content:[
+          {type:'document',source:{type:'base64',media_type:'application/pdf',data:b64}},
+          {type:'text',text:prompt}
+        ]}]})
+      });
+    } finally { clearTimeout(timeout); }
+    if (!resp.ok) throw new Error('Server-Fehler: '+resp.status);
+    var data = await resp.json();
+    if (data.error) throw new Error(data.error.message);
+    var raw = (data.content||[]).map(function(c){return c.text||'';}).join('');
+    var parsed = JSON.parse(raw.replace(/```json|```/g,'').trim());
+    kkResults[i] = {haendler:parsed.haendler||'',datum:parsed.datum||'',betrag:parsed.betrag||'',confirmed:false};
+    kkReRender(i);
+  } catch(e) {
+    if (e.name==='AbortError' && attempt<2) {
+      kkResults[i] = {analyzing:true,retrying:true};
+      kkReRender(i);
+      return kkAnalyseOne(i,2);
+    }
+    kkResults[i] = {error:e.name==='AbortError'?'Zeitüberschreitung nach 2 Versuchen.':'Analysefehler: '+e.message};
+    kkReRender(i);
+  }
+}
+
+function kkEditName(i) {
+  var el = document.getElementById('kk-item-'+i); if(!el) return;
+  var rname = el.querySelector('.rname'); if(!rname) return;
+  var r = kkResults[i];
+  rname.contentEditable='true';
+  rname.style.background='var(--sur3)'; rname.style.color='var(--txt)'; rname.style.borderColor='var(--acc)';
+  rname.textContent = kkBuildName(r.haendler,r.datum,r.betrag)+'.pdf';
+  rname.focus();
+}
+
+function kkConfirm(i) {
+  var el = document.getElementById('kk-item-'+i);
+  if(el){var rname=el.querySelector('.rname');if(rname&&rname.contentEditable==='true'){var ed=rname.textContent.trim().replace(/\.pdf$/i,'');if(ed)kkResults[i]._customName=ed;}}
+  kkResults[i].confirmed=true; kkReRender(i); kkDlOne(i);
+}
+
+async function kkDlOne(i) {
+  var r = kkResults[i];
+  if (!r||!r.confirmed||!r.haendler) return;
+  var name = (r._customName||kkBuildName(r.haendler,r.datum,r.betrag))+'.pdf';
+  try {
+    var data = await kkFiles[i].arrayBuffer();
+    var blob = new Blob([data],{type:'application/pdf'});
+    var a = document.createElement('a');
+    a.href=URL.createObjectURL(blob); a.download=name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+    toast('⬇️ '+name,'tok');
+    var el=document.getElementById('kk-item-'+i);
+    if(el){
+      el.innerHTML='<div style="display:flex;align-items:center;gap:8px;padding:10px 16px;">'
+        +'<span style="font-size:.88rem;color:var(--ok);font-weight:500">✅ Heruntergeladen — </span>'
+        +'<span style="font-size:.82rem;color:var(--mut);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">'+esc(name)+'</span>'
+        +'</div>';
+      el.className='fitem s-ok'; el.style.transition='opacity 0.4s';
+      (function(el,idx){ setTimeout(function(){ el.style.opacity='0'; setTimeout(function(){ kkRemoveFile(idx); },420); },2000); })(el,i);
+    }
+  } catch(e) { toast('Download fehlgeschlagen.','ter'); }
+}
+
+async function kkDlAll() {
+  var count=0;
+  for(var i=0;i<kkFiles.length;i++){
+    if(kkResults[i]&&kkResults[i].confirmed&&kkResults[i].haendler){
+      await kkDlOne(i); count++;
+      await new Promise(function(r){setTimeout(r,400);});
+    }
+  }
+  if(count) toast(count+' Kreditkartenbeleg(e) heruntergeladen.','tok');
 }
 
 // ═══════════════════════════════ INIT ════════════════════════════════
