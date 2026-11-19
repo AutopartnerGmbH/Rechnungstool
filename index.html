@@ -257,6 +257,15 @@ main{max-width:1100px;margin:0 auto;padding:32px 24px}
       </div>
       <div class="hintbox" style="margin-top:10px">💡 Tipp: In Chrome → Einstellungen → Downloads → Speicherort auf deinen Rechnungsordner setzen.</div>
     </div>
+    <div class="card">
+      <div class="ctitle">🏪 Lieferanten-Datensicherung</div>
+      <p style="font-size:.85rem;color:var(--mut);margin-bottom:12px">Lieferantendaten werden im Browser-Cache gespeichert. Exportiere sie regelmäßig, damit beim Löschen des Caches keine Daten verloren gehen.</p>
+      <div class="irow" style="gap:10px">
+        <button class="btn btn-ok" onclick="exportSups()">📤 Lieferanten exportieren</button>
+        <label class="btn" style="cursor:pointer">📥 Lieferanten importieren<input type="file" id="imp-sups-file" accept=".json" style="display:none" onchange="importSups(this)"></label>
+      </div>
+      <div id="sup-backup-status" style="font-size:.82rem;margin-top:8px"></div>
+    </div>
   </div>
 </main>
 <div id="toast"></div>
@@ -835,7 +844,7 @@ function exportXML(){
     var amt=sk.applies?sk.netto:(parseFloat((row.betrag||'0').replace(/[^\d,]/g,'').replace(',','.'))||0);
     if(!amt){toast('Ungültiger Betrag bei "'+row.steller+'".','ter');return;}
     updateSupBank(row.steller||'',iban,bic,'');
-    txs.push({steller:row.steller||'',iban:iban,bic:bic,amt:amt,nr:row.nr||'',execDate:toISODate(rawDate),datum:row.datum||'',kundennr:row.kundennr||'',skontoPct:sk.skontoPct,skontoApplied:sk.applies});
+    txs.push({steller:row.steller||'',iban:iban,bic:bic,amt:amt,nr:row.nr||'',execDate:new Date().toISOString().slice(0,10),datum:row.datum||'',kundennr:row.kundennr||'',skontoPct:sk.skontoPct,skontoApplied:sk.applies});
   }
   if(!txs.length){toast('Keine Überweisungen vorhanden.','ter');return;}
   var msgId='AUTOP-'+Date.now(), creDate=new Date().toISOString().slice(0,19);
@@ -894,6 +903,48 @@ function addStoredTransfer(r,fileName){
 // ═══════════════════════════════ SUPPLIERS ═══════════════════════════
 function getSups(){try{return JSON.parse(localStorage.getItem('re_sups')||'[]');}catch(e){return[];}}
 function saveSupList(s){localStorage.setItem('re_sups',JSON.stringify(s));}
+
+function exportSups(){
+  var sups=getSups();
+  if(!sups.length){toast('Keine Lieferanten vorhanden.','ter');return;}
+  var blob=new Blob([JSON.stringify(sups,null,2)],{type:'application/json'});
+  var a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='lieferanten_'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('✅ '+sups.length+' Lieferanten exportiert.','tok');
+}
+
+function importSups(input){
+  var file=input.files[0];
+  if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    try{
+      var data=JSON.parse(e.target.result);
+      if(!Array.isArray(data))throw new Error('Kein Array');
+      var existing=getSups();
+      var added=0,updated=0;
+      data.forEach(function(imp){
+        if(!imp.short)return;
+        var idx=existing.findIndex(function(s){return s.short===imp.short;});
+        if(idx>=0){existing[idx]=Object.assign({},existing[idx],imp);updated++;}
+        else{existing.push(imp);added++;}
+      });
+      saveSupList(existing);
+      var msg='Import: '+added+' neu, '+updated+' aktualisiert.';
+      document.getElementById('sup-backup-status').textContent='✅ '+msg;
+      toast('✅ '+msg,'tok');
+      if(document.getElementById('pg-lieferanten').classList.contains('on'))renderSups();
+    }catch(err){
+      document.getElementById('sup-backup-status').textContent='❌ Fehler: Ungültige JSON-Datei.';
+      toast('❌ Import fehlgeschlagen: '+err.message,'ter');
+    }
+    input.value='';
+  };
+  reader.readAsText(file);
+}
 
 function renderSups(){
   var allSups=getSups();
